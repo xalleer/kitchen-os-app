@@ -9,7 +9,6 @@ export default function AuthLayout() {
                 headerTintColor: Colors.secondary,
                 headerShadowVisible: false,
                 headerTitle: '',
-                headerBackTitleVisible: false,
                 headerBackButtonDisplayMode: 'minimal',
                 contentStyle: { backgroundColor: Colors.background }
             }}

@@ -6,7 +6,7 @@ export const SharedStyles = StyleSheet.create({
         flex: 1,
         backgroundColor: Colors.background,
         paddingHorizontal: 24,
-        paddingTop: 60,
+        paddingTop: 24,
     },
     containerCentered: {
         flex: 1,

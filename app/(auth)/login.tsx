@@ -60,7 +60,7 @@ export default function Login() {
                             <Text style={{ color: Colors.textGray }}>{ t('FORGOT_PASSWORD') }</Text>
                         </TouchableOpacity>
 
-                        <PrimaryButton title={t('SIGN_IN')} showArrow onPress={() => {}} />
+                        <PrimaryButton title={t('SIGN_IN')} showArrow onPress={() => router.push('/(tabs)')} />
 
                         <View style={styles.divider}>
                             <View style={styles.line} />
