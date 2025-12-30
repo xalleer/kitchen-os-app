@@ -10,9 +10,12 @@ import { useOnboarding } from '@/context/OnboardingContext';
 import { StepHeader } from '@/components/navigation/StepHeader';
 import { StepLayout } from '@/components/ui/StepLayout';
 import { Ionicons } from '@expo/vector-icons';
+import {useTranslation} from "react-i18next";
 
 export default function Step4() {
     const router = useRouter();
+    const { t } = useTranslation();
+
     const { data, updateData } = useOnboarding();
     const [isLoading, setIsLoading] = useState(false);
 
@@ -46,7 +49,7 @@ export default function Step4() {
         <StepLayout
             footer={
                 <PrimaryButton
-                    title="Завершити налаштування"
+                    title={t('BUTTONS.FINISH')}
                     onPress={handleFinish}
                     loading={isLoading}
                     disabled={isLoading}
@@ -54,7 +57,7 @@ export default function Step4() {
             }
         >
             <Stack.Screen options={{
-                headerTitle: () => <StepHeader currentStep={4} totalSteps={4} />
+                headerTitle: () => <StepHeader currentStep={4} />
             }} />
 
             <Ionicons
@@ -64,20 +67,20 @@ export default function Step4() {
                 style={{ alignSelf: 'center', marginBottom: 20 }}
             />
 
-            <Text style={SharedStyles.title}>Твій Household</Text>
-            <Text style={SharedStyles.subtitle}>Налаштуй параметри для своєї сім'ї.</Text>
+            <Text style={SharedStyles.title}>{t('HOUSEHOLD')}</Text>
+            <Text style={SharedStyles.subtitle}>{t('STEP4_TITLE')}</Text>
 
             <Stepper
-                label="Членів сім'ї"
+                label={t('FAMILY_MEMBERS')}
                 value={data.familySize || 1}
                 onValueChange={(val) => updateData({ familySize: val })}
             />
 
             <View style={styles.budgetCard}>
                 <View style={SharedStyles.rowBetween}>
-                    <Text style={styles.budgetLabel}>Тижневий бюджет</Text>
+                    <Text style={styles.budgetLabel}>{t('WEEKLY_BUDGET')}</Text>
                     <Text style={styles.budgetValue}>
-                        {localBudget} <Text style={{fontSize: 16}}>UAH</Text>
+                        {localBudget} <Text style={{fontSize: 16}}>{t('CURRENCY.UAH')}</Text>
                     </Text>
                 </View>
                 <Slider
@@ -92,7 +95,7 @@ export default function Step4() {
                     maximumTrackTintColor={Colors.inputBorder}
                     thumbTintColor={Colors.primary}
                 />
-                <Text style={styles.hint}>AI підбере рецепти, щоб вписатися в цю суму.</Text>
+                <Text style={styles.hint}>{t('STEP4_SUBTITLE')}</Text>
             </View>
         </StepLayout>
     );

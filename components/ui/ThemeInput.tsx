@@ -1,11 +1,12 @@
-import React, { forwardRef, useState } from 'react';
+import React, { forwardRef, useState, useRef } from 'react';
 import {
     TextInput,
     TextInputProps,
     StyleSheet,
     View,
     Text,
-    Animated
+    Animated,
+    Platform,
 } from 'react-native';
 import { Colors } from '@/constants/Colors';
 
@@ -20,14 +21,26 @@ const ThemeInputComponent = forwardRef<TextInput, EnhancedInputProps>((props, re
     const { label, error, leftIcon, rightIcon, onFocus, onBlur, ...rest } = props;
     const [isFocused, setIsFocused] = useState(false);
 
-    // Обробка фокусу для зміни стилів
+    // Анімація прозорості (підтримує native driver)
+    const focusAnim = useRef(new Animated.Value(0)).current;
+
     const handleFocus = (e: any) => {
         setIsFocused(true);
+        Animated.timing(focusAnim, {
+            toValue: 1,
+            duration: 200,
+            useNativeDriver: true, // Тепер працює на UI thread
+        }).start();
         if (onFocus) onFocus(e);
     };
 
     const handleBlur = (e: any) => {
         setIsFocused(false);
+        Animated.timing(focusAnim, {
+            toValue: 0,
+            duration: 200,
+            useNativeDriver: true,
+        }).start();
         if (onBlur) onBlur(e);
     };
 
@@ -35,23 +48,33 @@ const ThemeInputComponent = forwardRef<TextInput, EnhancedInputProps>((props, re
         <View style={styles.container}>
             {label && <Text style={styles.label}>{label}</Text>}
 
-            <View style={[
-                styles.inputWrapper,
-                isFocused && styles.inputFocused,
-                error ? styles.inputError : null
-            ]}>
-                {leftIcon && <View style={styles.iconLeft}>{leftIcon}</View>}
+            <View style={styles.wrapperContainer}>
+                {/* Статичний базовий бордер */}
+                <View style={[
+                    styles.inputWrapper,
+                    error ? { borderColor: '#FF3B30' } : null
+                ]}>
+                    {leftIcon && <View style={styles.iconLeft}>{leftIcon}</View>}
+                    <TextInput
+                        ref={ref}
+                        style={styles.input}
+                        placeholderTextColor={Colors.textGray || '#999'}
+                        onFocus={handleFocus}
+                        onBlur={handleBlur}
+                        underlineColorAndroid="transparent"
+                        {...rest}
+                    />
+                    {rightIcon && <View style={styles.iconRight}>{rightIcon}</View>}
+                </View>
 
-                <TextInput
-                    ref={ref}
-                    style={styles.input}
-                    placeholderTextColor={Colors.textGray || '#999'}
-                    onFocus={handleFocus}
-                    onBlur={handleBlur}
-                    {...rest}
+                {/* Анімований активний бордер (накладається зверху) */}
+                <Animated.View
+                    pointerEvents="none" // Щоб не заважало натисканню
+                    style={[
+                        styles.focusBorder,
+                        { opacity: focusAnim, borderColor: Colors.primary || '#007AFF' }
+                    ]}
                 />
-
-                {rightIcon && <View style={styles.iconRight}>{rightIcon}</View>}
             </View>
 
             {error && <Text style={styles.errorText}>{error}</Text>}
@@ -60,12 +83,11 @@ const ThemeInputComponent = forwardRef<TextInput, EnhancedInputProps>((props, re
 });
 
 ThemeInputComponent.displayName = 'ThemeInput';
-
 export const ThemeInput = ThemeInputComponent;
 
 const styles = StyleSheet.create({
     container: {
-        marginBottom: 20,
+        marginBottom: 16,
         width: '100%',
     },
     label: {
@@ -75,41 +97,39 @@ const styles = StyleSheet.create({
         marginBottom: 8,
         marginLeft: 4,
     },
+    wrapperContainer: {
+        position: 'relative',
+        minHeight: 56,
+    },
     inputWrapper: {
         flexDirection: 'row',
         alignItems: 'center',
         backgroundColor: Colors.inputBackground || '#F5F5F5',
         borderRadius: 12,
         borderWidth: 1.5,
-        borderColor: Colors.inputBorder || 'transparent',
+        borderColor: Colors.inputBorder || '#E0E0E0',
         paddingHorizontal: 16,
-        // Легка тінь для глибини (iOS)
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.05,
-        shadowRadius: 8,
-        // Тінь для Android
-        elevation: 2,
+        height: 56,
     },
-    inputFocused: {
-        borderColor: Colors.primary || '#007AFF', // Колір акценту при фокусі
-        backgroundColor: '#FFF',
-    },
-    inputError: {
-        borderColor: '#FF3B30', // Колір помилки
+    focusBorder: {
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        borderRadius: 12,
+        borderWidth: 2,
     },
     input: {
         flex: 1,
-        paddingVertical: 14,
+        height: '100%',
         fontSize: 16,
         color: Colors.secondary || '#333',
+        textAlignVertical: 'center',
+        paddingVertical: Platform.OS === 'ios' ? 0 : 4,
     },
-    iconLeft: {
-        marginRight: 12,
-    },
-    iconRight: {
-        marginLeft: 12,
-    },
+    iconLeft: { marginRight: 12 },
+    iconRight: { marginLeft: 12 },
     errorText: {
         color: '#FF3B30',
         fontSize: 12,

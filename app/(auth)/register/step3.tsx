@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, TouchableOpacity } from 'react-native';
+import { View, Text } from 'react-native';
 import { useRouter, Stack } from 'expo-router';
 import { Colors } from '@/constants/Colors';
 import { SharedStyles } from '@/constants/SharedStyles';
@@ -7,18 +7,21 @@ import { PrimaryButton } from '@/components/ui/PrimaryButton';
 import { SelectableCard } from '@/components/ui/SelectableCard';
 import { StepHeader } from '@/components/navigation/StepHeader';
 import { StepLayout } from '@/components/ui/StepLayout';
-import { useOnboarding, GoalType } from '@/context/OnboardingContext';
+import { useOnboarding } from '@/context/OnboardingContext';
 import { Ionicons } from '@expo/vector-icons';
+import {useTranslation} from "react-i18next";
 
 export default function Step3() {
     const router = useRouter();
     const { data, updateData } = useOnboarding();
+    const { t } = useTranslation();
+
 
     return (
         <StepLayout
             footer={
                 <PrimaryButton
-                    title="Продовжити"
+                    title={t('BUTTONS.CONTINUE')}
                     showArrow
                     disabled={!data.goal}
                     onPress={() => router.push('/(auth)/register/step4')}
@@ -26,23 +29,23 @@ export default function Step3() {
             }
         >
             <Stack.Screen options={{
-                headerTitle: () => <StepHeader currentStep={3} totalSteps={4} />,
+                headerTitle: () => <StepHeader currentStep={3} />,
             }} />
 
             <Ionicons name="flag-outline" size={48} color={Colors.primary} style={{ alignSelf: 'center', marginBottom: 20 }} />
 
-            <Text style={SharedStyles.title}>Яка твоя мета?</Text>
-            <Text style={SharedStyles.subtitle}>Ми адаптуємо плани під твій вибір.</Text>
+            <Text style={SharedStyles.title}>{t('YOUR_TARGET')}</Text>
+            <Text style={SharedStyles.subtitle}>{t('STEP3_TITLE')}</Text>
 
             <View style={{ flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'space-between', marginTop: 20 }}>
                 <SelectableCard
-                    title="Схуднення"
+                    title={t('TARGETS.EMACIATION')}
                     iconName="body"
                     isSelected={data.goal === 'loss'}
                     onPress={() => updateData({ goal: 'loss' })}
                 />
                 <SelectableCard
-                    title="Набір ваги"
+                    title={t('TARGETS.WEIGHT_GAIN')}
                     iconName="barbell"
                     isSelected={data.goal === 'gain'}
                     onPress={() => updateData({ goal: 'gain' })}

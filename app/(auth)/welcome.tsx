@@ -6,6 +6,7 @@ import { Colors } from '@/constants/Colors';
 import { SharedStyles } from '@/constants/SharedStyles';
 import { PrimaryButton } from '@/components/ui/PrimaryButton';
 import { SocialButton } from '@/components/ui/SocialButton';
+import {useTranslation} from "react-i18next";
 
 const PlaceholderBackground = ({children}: any) => (
     <View style={{flex: 1,}}>{children}</View>
@@ -14,24 +15,26 @@ const PlaceholderBackground = ({children}: any) => (
 export default function Welcome() {
     const router = useRouter();
 
+    const { t } = useTranslation();
+
     return (
         <ImageBackground source={require('@/assets/images/welcome.png')} style={styles.bg}>
         <PlaceholderBackground>
             <View style={styles.overlayContent}>
                 <View style={SharedStyles.glassCard}>
                     <Ionicons name="nutrition" size={48} color={Colors.primary} style={{ marginBottom: 20 }} />
-                    <Text style={styles.cardTitle}>Kitchen OS</Text>
-                    <Text style={styles.cardSubtitle}>Your AI Kitchen Commander.{'\n'}Eat smart, save money.</Text>
+                    <Text style={styles.cardTitle}>{t('APP_NAME')}</Text>
+                    <Text style={styles.cardSubtitle}>{t('WELCOME_TITLE')}</Text>
 
                     <PrimaryButton
-                        title="Get Started"
+                        title={t('GET_STARTED')}
                         onPress={() => router.push('/(auth)/register/step1')}
                         style={{ marginBottom: 16 }}
                     />
 
                     <View style={styles.divider}>
                         <View style={styles.line} />
-                        <Text style={styles.dividerText}>Or continue with</Text>
+                        <Text style={styles.dividerText}>{t('CONTINUE_WITH')}</Text>
                         <View style={styles.line} />
                     </View>
 
@@ -49,9 +52,9 @@ export default function Welcome() {
                     </View>
 
                     <View style={{ flexDirection: 'row' }}>
-                        <Text style={{ color: Colors.textGray }}>Already have an account? </Text>
+                        <Text style={{ color: Colors.textGray }}>{t('HAVE_ACCOUNT')} </Text>
                         <TouchableOpacity onPress={() => router.push('/(auth)/login')}>
-                            <Text style={{ color: Colors.primary, fontWeight: '600' }}>Sign In</Text>
+                            <Text style={{ color: Colors.primary, fontWeight: '600' }}>{t('SIGN_IN')}</Text>
                         </TouchableOpacity>
                     </View>
                 </View>

@@ -9,6 +9,9 @@ import { useOnboarding } from '@/context/OnboardingContext';
 import { StepHeader } from '@/components/navigation/StepHeader';
 import { StepLayout } from '@/components/ui/StepLayout';
 import { Ionicons } from '@expo/vector-icons';
+import {useTranslation} from "react-i18next";
+
+
 
 const calculateBMI = (weight: number, height: number): number => {
     return parseFloat((weight / ((height / 100) ** 2)).toFixed(1));
@@ -24,6 +27,7 @@ const getBmiStatus = (bmi: number) => {
 export default function Step2() {
     const router = useRouter();
     const { data, updateData } = useOnboarding();
+    const { t } = useTranslation();
 
     const [localHeight, setLocalHeight] = useState(data.height);
     const [localWeight, setLocalWeight] = useState(data.weight);
@@ -54,7 +58,7 @@ export default function Step2() {
         <StepLayout
             footer={
                 <PrimaryButton
-                    title="Continue"
+                    title={t('BUTTONS.CONTINUE')}
                     showArrow
                     onPress={() => router.push('/(auth)/register/step3')}
                 />
@@ -71,14 +75,14 @@ export default function Step2() {
                 style={{ alignSelf: 'center', marginBottom: 20 }}
             />
 
-            <Text style={SharedStyles.title}>Body Metrics</Text>
-            <Text style={SharedStyles.subtitle}>Help Kitchen OS calibrate your nutritional needs.</Text>
+            <Text style={SharedStyles.title}>{t('BODY_METRICS')}</Text>
+            <Text style={SharedStyles.subtitle}>{t('STEP2_TITLE')}</Text>
 
             <View style={styles.metricCard}>
                 <View style={SharedStyles.rowBetween}>
-                    <Text style={styles.metricLabel}>Height</Text>
+                    <Text style={styles.metricLabel}>{t('HEIGHT')}</Text>
                     <Text style={styles.metricValue}>
-                        {localHeight} <Text style={styles.metricUnit}>CM</Text>
+                        {localHeight} <Text style={styles.metricUnit}>{t('UNITS.SM')}</Text>
                     </Text>
                 </View>
                 <Slider
@@ -97,9 +101,9 @@ export default function Step2() {
 
             <View style={styles.metricCard}>
                 <View style={SharedStyles.rowBetween}>
-                    <Text style={styles.metricLabel}>Weight</Text>
+                    <Text style={styles.metricLabel}>{t('WEIGHT')}</Text>
                     <Text style={styles.metricValue}>
-                        {localWeight} <Text style={styles.metricUnit}>KG</Text>
+                        {localWeight} <Text style={styles.metricUnit}>{t('UNITS.KG')}</Text>
                     </Text>
                 </View>
                 <Slider
@@ -118,7 +122,7 @@ export default function Step2() {
 
             <View style={[styles.metricCard, SharedStyles.rowBetween, { backgroundColor: Colors.inputBackground }]}>
                 <View>
-                    <Text style={{color: Colors.textGray, fontSize: 12}}>Estimated BMI</Text>
+                    <Text style={{color: Colors.textGray, fontSize: 12}}>{t('ESTIMATED')} BMI</Text>
                     <View style={{flexDirection: 'row', alignItems: 'center', marginTop: 4}}>
                         <Text style={{fontSize: 24, fontWeight: '700', color: Colors.secondary, marginRight: 8}}>
                             {bmiValue}
@@ -130,7 +134,7 @@ export default function Step2() {
                             borderRadius: 8
                         }}>
                             <Text style={{color: status.color, fontSize: 12, fontWeight: '600'}}>
-                                {status.label}
+                                {t(`BMI.${status.label}`)}
                             </Text>
                         </View>
                     </View>

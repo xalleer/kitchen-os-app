@@ -17,9 +17,11 @@ import { ThemeInput } from '@/components/ui/ThemeInput';
 import { PrimaryButton } from '@/components/ui/PrimaryButton';
 import { SocialButton } from '@/components/ui/SocialButton';
 import { Ionicons } from '@expo/vector-icons';
+import {useTranslation} from "react-i18next";
 
 export default function Login() {
     const router = useRouter();
+    const { t } = useTranslation();
 
     return (
         <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
@@ -35,33 +37,34 @@ export default function Login() {
                 />
 
                 <KeyboardAvoidingView
-                    behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+                    behavior={Platform.OS === 'ios' ? 'padding' : undefined}
                     style={{ flex: 1 }}
+                    keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : 0}
                 >
                     <ScrollView
-                        contentContainerStyle={[SharedStyles.containerMain, { justifyContent: 'center', flexGrow: 1 }]}
+                        automaticallyAdjustKeyboardInsets={true}
+                        contentContainerStyle={[SharedStyles.containerMain, { flexGrow: 1 }]}
                         keyboardShouldPersistTaps="handled"
+                        keyboardDismissMode="on-drag"
                     >
                         <Ionicons name="restaurant" size={48} color={Colors.primary} style={{ alignSelf: 'center', marginBottom: 20 }} />
 
-                        <Text style={SharedStyles.title}>Welcome Back</Text>
-                        <Text style={SharedStyles.subtitle}>Sign in to access your Kitchen OS.</Text>
+                        <Text style={SharedStyles.title}>{t('WELCOME_BACK')}</Text>
+                        <Text style={SharedStyles.subtitle}>{t('SIGN_IN_TITLE')}</Text>
 
-                        <Text style={styles.label}>Email</Text>
-                        <ThemeInput placeholder="Enter your email" keyboardType="email-address" />
+                        <ThemeInput label={t('EMAIL')} placeholder={t('PLACEHOLDERS.EMAIL')} keyboardType="email-address" />
 
-                        <Text style={styles.label}>Password</Text>
-                        <ThemeInput placeholder="Enter your password" secureTextEntry />
+                        <ThemeInput label={t('PASSWORD')} placeholder={t('PLACEHOLDERS.PASSWORD')} secureTextEntry />
 
                         <TouchableOpacity style={{ alignSelf: 'flex-end', marginBottom: 30 }}>
-                            <Text style={{ color: Colors.textGray }}>Forgot Password?</Text>
+                            <Text style={{ color: Colors.textGray }}>{ t('FORGOT_PASSWORD') }</Text>
                         </TouchableOpacity>
 
-                        <PrimaryButton title="Log In" showArrow onPress={() => {}} />
+                        <PrimaryButton title={t('SIGN_IN')} showArrow onPress={() => {}} />
 
                         <View style={styles.divider}>
                             <View style={styles.line} />
-                            <Text style={styles.dividerText}>Or continue with</Text>
+                            <Text style={styles.dividerText}>{t('CONTINUE_WITH')}</Text>
                             <View style={styles.line} />
                         </View>
 
@@ -79,9 +82,9 @@ export default function Login() {
                         </View>
 
                         <View style={styles.footer}>
-                            <Text style={{ color: Colors.textGray }}>Don&apos;t have an account? </Text>
+                            <Text style={{ color: Colors.textGray }}>{t('DONT_HAVE_ACCOUNT')}</Text>
                             <TouchableOpacity onPress={() => router.push('/(auth)/register/step1')}>
-                                <Text style={{ color: Colors.primary, fontWeight: '600' }}>Sign up</Text>
+                                <Text style={{ color: Colors.primary, fontWeight: '600' }}>{t('SIGN_UP')}</Text>
                             </TouchableOpacity>
                         </View>
                     </ScrollView>

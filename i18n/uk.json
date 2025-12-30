@@ -1,0 +1,75 @@
+{
+  "APP_NAME": "Kitchen OS",
+  "WELCOME_TITLE": "Ваш ШІ-командир на кухні. Харчуйтеся розумно, заощаджуйте гроші.",
+  "GET_STARTED": "Розпочати",
+  "CONTINUE_WITH": "Або продовжити як",
+  "HAVE_ACCOUNT": "Вже маєте аккаунт?",
+  "SIGN_IN": "Увійти",
+  "WELCOME_BACK": "Ласкаво Просимо",
+  "SIGN_IN_TITLE": "Увійдіть до свого аккаунту",
+  "EMAIL": "Пошта",
+  "PASSWORD": "Пароль",
+  "FORGOT_PASSWORD": "Забули пароль?",
+  "DONT_HAVE_ACCOUNT": "Не маєте аккаунту?",
+  "SIGN_UP": "Зареєструватись",
+  "LETS_MEET": "Давайте знайомитись",
+  "STEP1_TITLE": "Створи свій аккаунт для Kitchen OS",
+  "YOUR_NAME": "Ваше ім'я",
+  "BODY_METRICS": "Показники тіла",
+  "STEP2_TITLE": "Допоможи Kitchen OS налаштувати під ваші потреби",
+  "HEIGHT": "Ріст",
+  "WEIGHT": "Вага",
+  "ESTIMATED": "Оцінюваний",
+  "YOUR_TARGET": "Яка твоя мета?",
+  "STEP3_TITLE": "Ми адаптуємо плани під твій вибір.",
+  "HOUSEHOLD": "Побут",
+  "STEP4_TITLE": "Налаштуй параметри для своєї сім'ї",
+  "FAMILY_MEMBERS": "Членів сім'ї",
+  "WEEKLY_BUDGET": "Тижневий бюджет",
+  "STEP4_SUBTITLE": "AI підбере рецепти, щоб вписатися в цю суму.",
+
+  "TARGETS": {
+    "EMACIATION": "Схуднення",
+    "WEIGHT_GAIN": "Набір ваги"
+  },
+
+  "CURRENCY": {
+    "UAH": "грн"
+  },
+
+  "UNITS": {
+    "KG": "кг",
+    "SM": "см"
+  },
+
+  "BMI": {
+    "NORMAL": "Нормальний",
+    "UNDERWEIGHT": "Недостатня вага",
+    "OBESE": "Ожиріння",
+    "OVERWEIGHT": "Надмірна вага"
+  },
+
+  "PLACEHOLDERS": {
+    "EMAIL": "Введіть вашу пошту",
+    "PASSWORD": "Введіть ваш пароль",
+    "NAME": "Введи ім'я",
+    "MIN_LEN": "Мінімум 6 символів",
+    "EMAIL_EXAMPLE": "example@mail.com"
+  },
+
+  "BUTTONS": {
+    "CONTINUE": "Продовжити",
+    "FINISH": "Завершити налаштування"
+  },
+
+  "VALIDATORS": {
+    "NAME": "Ім'я має бути більше 1 символу",
+    "EMAIL": "Введіть коректну пошту",
+    "PASSWORD": "Пароль має містити мінімум 6 символів"
+  }
+
+
+
+
+
+}

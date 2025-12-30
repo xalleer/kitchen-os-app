@@ -22,7 +22,7 @@ const StepLayoutComponent = ({ children, footer }: StepLayoutProps) => {
     return (
         <View style={styles.container}>
             <KeyboardAvoidingView
-                behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+                behavior={Platform.OS === 'ios' ? 'padding' : undefined}
                 style={styles.keyboardView}
                 keyboardVerticalOffset={Platform.OS === 'ios' ? 90 : 0}
             >
@@ -33,11 +33,13 @@ const StepLayoutComponent = ({ children, footer }: StepLayoutProps) => {
                             contentContainerStyle={[
                                 styles.scrollContent,
                                 {
-                                    paddingTop: Math.max(insets.top, 20) + 20,
-                                    paddingBottom: footer ? 0 : Math.max(insets.bottom, 20)
+                                    paddingTop: 20,
+                                    flexGrow: 1,
+                                    paddingBottom: 20
                                 }
                             ]}
                             bounces={true}
+                            automaticallyAdjustKeyboardInsets={false}
                             showsVerticalScrollIndicator={false}
                             keyboardShouldPersistTaps="handled"
                             keyboardDismissMode="interactive"
@@ -52,11 +54,6 @@ const StepLayoutComponent = ({ children, footer }: StepLayoutProps) => {
                                 styles.footerContainer,
                                 {
                                     paddingBottom: Math.max(insets.bottom, 20),
-                                    shadowColor: '#000',
-                                    shadowOffset: { width: 0, height: -2 },
-                                    shadowOpacity: 0.05,
-                                    shadowRadius: 8,
-                                    elevation: 5,
                                 }
                             ]}>
                                 {footer}
@@ -88,10 +85,6 @@ const styles = StyleSheet.create({
         flexGrow: 1
     },
     footerContainer: {
-        position: 'absolute',
-        bottom: 0,
-        left: 0,
-        right: 0,
         backgroundColor: Colors.background,
         paddingHorizontal: 24,
         paddingTop: 16,

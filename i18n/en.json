@@ -1,0 +1,71 @@
+{
+  "APP_NAME": "Kitchen OS",
+  "WELCOME_TITLE": "Your AI Kitchen Commander. Eat smart, save money.",
+  "GET_STARTED": "Get Started",
+  "CONTINUE_WITH": "Or continue with",
+  "HAVE_ACCOUNT": "Already have an account?",
+  "SIGN_IN": "Sign In",
+  "WELCOME_BACK": "Welcome Back",
+  "SIGN_IN_TITLE": "Sign in to your account",
+  "EMAIL": "Email",
+  "PASSWORD": "Password",
+  "FORGOT_PASSWORD": "Forgot password?",
+  "DONT_HAVE_ACCOUNT": "Don't have an account?",
+  "SIGN_UP": "Sign Up",
+  "LETS_MEET": "Let's get to know you",
+  "STEP1_TITLE": "Create your Kitchen OS account",
+  "YOUR_NAME": "Your Name",
+  "BODY_METRICS": "Body Metrics",
+  "STEP2_TITLE": "Help Kitchen OS customize for your needs",
+  "HEIGHT": "Height",
+  "WEIGHT": "Weight",
+  "ESTIMATED": "Estimated",
+  "YOUR_TARGET": "What is your goal?",
+  "STEP3_TITLE": "We adapt plans based on your choice.",
+  "HOUSEHOLD": "Household",
+  "STEP4_TITLE": "Set up preferences for your family",
+  "FAMILY_MEMBERS": "Family members",
+  "WEEKLY_BUDGET": "Weekly budget",
+  "STEP4_SUBTITLE": "AI will pick recipes to fit this budget.",
+
+  "TARGETS": {
+    "EMACIATION": "Weight Loss",
+    "WEIGHT_GAIN": "Weight Gain"
+  },
+
+  "CURRENCY": {
+    "UAH": "uah"
+  },
+
+  "UNITS": {
+    "KG": "kg",
+    "SM": "cm"
+  },
+
+  "BMI": {
+    "NORMAL": "Normal",
+    "UNDERWEIGHT": "Underweight",
+    "OBESE": "Obese",
+    "OVERWEIGHT": "Overweight"
+
+  },
+
+  "PLACEHOLDERS": {
+    "EMAIL": "Enter your email",
+    "PASSWORD": "Enter your password",
+    "NAME": "Enter your name",
+    "MIN_LEN": "Minimum 6 characters",
+    "EMAIL_EXAMPLE": "example@mail.com"
+  },
+
+  "BUTTONS": {
+    "CONTINUE": "Continue",
+    "FINISH": "Finish Setup"
+  },
+
+  "VALIDATORS": {
+    "NAME": "Name must be longer than 1 character",
+    "EMAIL": "Please enter a valid email address",
+    "PASSWORD": "Password must be at least 6 characters long"
+  }
+}
