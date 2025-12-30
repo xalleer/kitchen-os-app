@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo, useState, useCallback } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { useRouter, Stack } from 'expo-router';
 import Slider from '@react-native-community/slider';
@@ -10,20 +10,45 @@ import { StepHeader } from '@/components/navigation/StepHeader';
 import { StepLayout } from '@/components/ui/StepLayout';
 import { Ionicons } from '@expo/vector-icons';
 
+const calculateBMI = (weight: number, height: number): number => {
+    return parseFloat((weight / ((height / 100) ** 2)).toFixed(1));
+};
+
+const getBmiStatus = (bmi: number) => {
+    if (bmi < 18.5) return { label: 'UNDERWEIGHT', color: '#FFC107' };
+    if (bmi < 25) return { label: 'NORMAL', color: Colors.primary };
+    if (bmi < 30) return { label: 'OVERWEIGHT', color: '#FF9800' };
+    return { label: 'OBESE', color: '#F44336' };
+};
+
 export default function Step2() {
     const router = useRouter();
     const { data, updateData } = useOnboarding();
 
-    const bmiValue = parseFloat((data.weight / ((data.height / 100) * (data.height / 100))).toFixed(1));
+    const [localHeight, setLocalHeight] = useState(data.height);
+    const [localWeight, setLocalWeight] = useState(data.weight);
 
-    const getBmiStatus = (bmi: number) => {
-        if (bmi < 18.5) return { label: 'UNDERWEIGHT', color: '#FFC107' };
-        if (bmi < 25) return { label: 'NORMAL', color: Colors.primary };
-        if (bmi < 30) return { label: 'OVERWEIGHT', color: '#FF9800' };
-        return { label: 'OBESE', color: '#F44336' };
-    };
+    const bmiValue = useMemo(() => {
+        return calculateBMI(localWeight, localHeight);
+    }, [localWeight, localHeight]);
 
-    const status = getBmiStatus(bmiValue);
+    const status = useMemo(() => getBmiStatus(bmiValue), [bmiValue]);
+
+    const handleHeightChange = useCallback((val: number) => {
+        setLocalHeight(val);
+    }, []);
+
+    const handleWeightChange = useCallback((val: number) => {
+        setLocalWeight(val);
+    }, []);
+
+    const handleHeightComplete = useCallback((val: number) => {
+        updateData({ height: val });
+    }, [updateData]);
+
+    const handleWeightComplete = useCallback((val: number) => {
+        updateData({ weight: val });
+    }, [updateData]);
 
     return (
         <StepLayout
@@ -39,7 +64,12 @@ export default function Step2() {
                 headerTitle: () => <StepHeader currentStep={2} />
             }} />
 
-            <Ionicons name="body-outline" size={48} color={Colors.primary} style={{ alignSelf: 'center', marginBottom: 20 }} />
+            <Ionicons
+                name="body-outline"
+                size={48}
+                color={Colors.primary}
+                style={{ alignSelf: 'center', marginBottom: 20 }}
+            />
 
             <Text style={SharedStyles.title}>Body Metrics</Text>
             <Text style={SharedStyles.subtitle}>Help Kitchen OS calibrate your nutritional needs.</Text>
@@ -47,15 +77,18 @@ export default function Step2() {
             <View style={styles.metricCard}>
                 <View style={SharedStyles.rowBetween}>
                     <Text style={styles.metricLabel}>Height</Text>
-                    <Text style={styles.metricValue}>{data.height} <Text style={styles.metricUnit}>CM</Text></Text>
+                    <Text style={styles.metricValue}>
+                        {localHeight} <Text style={styles.metricUnit}>CM</Text>
+                    </Text>
                 </View>
                 <Slider
                     style={{ width: '100%', height: 40 }}
                     minimumValue={140}
                     maximumValue={220}
                     step={1}
-                    value={data.height}
-                    onValueChange={(val) => updateData({ height: val })}
+                    value={localHeight}
+                    onValueChange={handleHeightChange}
+                    onSlidingComplete={handleHeightComplete}
                     minimumTrackTintColor={Colors.primary}
                     maximumTrackTintColor={Colors.inputBorder}
                     thumbTintColor={Colors.primary}
@@ -65,15 +98,18 @@ export default function Step2() {
             <View style={styles.metricCard}>
                 <View style={SharedStyles.rowBetween}>
                     <Text style={styles.metricLabel}>Weight</Text>
-                    <Text style={styles.metricValue}>{data.weight} <Text style={styles.metricUnit}>KG</Text></Text>
+                    <Text style={styles.metricValue}>
+                        {localWeight} <Text style={styles.metricUnit}>KG</Text>
+                    </Text>
                 </View>
                 <Slider
                     style={{ width: '100%', height: 40 }}
                     minimumValue={40}
                     maximumValue={150}
                     step={1}
-                    value={data.weight}
-                    onValueChange={(val) => updateData({ weight: val })}
+                    value={localWeight}
+                    onValueChange={handleWeightChange}
+                    onSlidingComplete={handleWeightComplete}
                     minimumTrackTintColor={Colors.primary}
                     maximumTrackTintColor={Colors.inputBorder}
                     thumbTintColor={Colors.primary}
@@ -84,9 +120,18 @@ export default function Step2() {
                 <View>
                     <Text style={{color: Colors.textGray, fontSize: 12}}>Estimated BMI</Text>
                     <View style={{flexDirection: 'row', alignItems: 'center', marginTop: 4}}>
-                        <Text style={{fontSize: 24, fontWeight: '700', color: Colors.secondary, marginRight: 8}}>{bmiValue}</Text>
-                        <View style={{backgroundColor: status.color + '20', paddingHorizontal: 8, paddingVertical: 4, borderRadius: 8}}>
-                            <Text style={{color: status.color, fontSize: 12, fontWeight: '600'}}>{status.label}</Text>
+                        <Text style={{fontSize: 24, fontWeight: '700', color: Colors.secondary, marginRight: 8}}>
+                            {bmiValue}
+                        </Text>
+                        <View style={{
+                            backgroundColor: status.color + '20',
+                            paddingHorizontal: 8,
+                            paddingVertical: 4,
+                            borderRadius: 8
+                        }}>
+                            <Text style={{color: status.color, fontSize: 12, fontWeight: '600'}}>
+                                {status.label}
+                            </Text>
                         </View>
                     </View>
                 </View>

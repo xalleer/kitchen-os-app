@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useCallback } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { useRouter, Stack } from 'expo-router';
 import Slider from '@react-native-community/slider';
@@ -14,11 +14,33 @@ import { Ionicons } from '@expo/vector-icons';
 export default function Step4() {
     const router = useRouter();
     const { data, updateData } = useOnboarding();
+    const [isLoading, setIsLoading] = useState(false);
 
-    const handleFinish = async () => {
-        console.log('Відправка на NestJS:', data);
-        router.replace('/(tabs)');
-    };
+    const [localBudget, setLocalBudget] = useState(data.budget);
+
+    const handleBudgetComplete = useCallback((val: number) => {
+        updateData({ budget: val });
+    }, [updateData]);
+
+    const handleFinish = useCallback(async () => {
+        setIsLoading(true);
+        try {
+            console.log('Відправка на NestJS:', data);
+
+            // Тут має бути API запит
+            // await api.register(data);
+
+            // Симулюємо затримку мережі
+            await new Promise(resolve => setTimeout(resolve, 1000));
+
+            router.replace('/(tabs)');
+        } catch (error) {
+            console.error('Registration error:', error);
+            // Тут має бути обробка помилок
+        } finally {
+            setIsLoading(false);
+        }
+    }, [data, router]);
 
     return (
         <StepLayout
@@ -26,6 +48,8 @@ export default function Step4() {
                 <PrimaryButton
                     title="Завершити налаштування"
                     onPress={handleFinish}
+                    loading={isLoading}
+                    disabled={isLoading}
                 />
             }
         >
@@ -33,7 +57,12 @@ export default function Step4() {
                 headerTitle: () => <StepHeader currentStep={4} totalSteps={4} />
             }} />
 
-            <Ionicons name="home-outline" size={48} color={Colors.primary} style={{ alignSelf: 'center', marginBottom: 20 }} />
+            <Ionicons
+                name="home-outline"
+                size={48}
+                color={Colors.primary}
+                style={{ alignSelf: 'center', marginBottom: 20 }}
+            />
 
             <Text style={SharedStyles.title}>Твій Household</Text>
             <Text style={SharedStyles.subtitle}>Налаштуй параметри для своєї сім'ї.</Text>
@@ -47,16 +76,20 @@ export default function Step4() {
             <View style={styles.budgetCard}>
                 <View style={SharedStyles.rowBetween}>
                     <Text style={styles.budgetLabel}>Тижневий бюджет</Text>
-                    <Text style={styles.budgetValue}>{data.budget} <Text style={{fontSize: 16}}>UAH</Text></Text>
+                    <Text style={styles.budgetValue}>
+                        {localBudget} <Text style={{fontSize: 16}}>UAH</Text>
+                    </Text>
                 </View>
                 <Slider
                     style={{ width: '100%', height: 40, marginTop: 10 }}
                     minimumValue={500}
                     maximumValue={10000}
                     step={100}
-                    value={data.budget}
-                    onValueChange={(val) => updateData({ budget: val })}
+                    value={localBudget}
+                    onValueChange={setLocalBudget}
+                    onSlidingComplete={handleBudgetComplete}
                     minimumTrackTintColor={Colors.primary}
+                    maximumTrackTintColor={Colors.inputBorder}
                     thumbTintColor={Colors.primary}
                 />
                 <Text style={styles.hint}>AI підбере рецепти, щоб вписатися в цю суму.</Text>
