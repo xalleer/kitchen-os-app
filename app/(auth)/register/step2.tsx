@@ -6,37 +6,30 @@ import { Colors } from '@/constants/Colors';
 import { SharedStyles } from '@/constants/SharedStyles';
 import { PrimaryButton } from '@/components/ui/PrimaryButton';
 import { useOnboarding } from '@/context/OnboardingContext';
+import { StepHeader } from '@/components/navigation/StepHeader';
+
 
 export default function Step2() {
     const router = useRouter();
     const { data, updateData } = useOnboarding();
 
-    // Простий розрахунок BMI для прикладу
     const bmi = (data.weight / ((data.height / 100) * (data.height / 100))).toFixed(1);
 
     return (
         <View style={SharedStyles.containerMain}>
-            {/* Кастомний хедер з прогресом та Skip */}
             <Stack.Screen options={{
+
                 headerRight: () => (
                     <TouchableOpacity onPress={() => router.push('/(tabs)')}>
                         <Text style={{ color: Colors.primary, fontWeight: '600', fontSize: 16 }}>Skip</Text>
                     </TouchableOpacity>
                 ),
-                headerTitle: () => (
-                    // Тут можна намалювати точки прогресу
-                    <View style={{flexDirection: 'row', gap: 8}}>
-                        <View style={[styles.dot, styles.dotActive]} />
-                        <View style={styles.dot} />
-                        <View style={styles.dot} />
-                    </View>
-                )
+                headerTitle: () => <StepHeader currentStep={2} />
             }} />
 
             <Text style={SharedStyles.title}>Body Metrics</Text>
             <Text style={SharedStyles.subtitle}>Help Kitchen OS calibrate your nutritional needs.</Text>
 
-            {/* Height Slider Card */}
             <View style={styles.metricCard}>
                 <View style={SharedStyles.rowBetween}>
                     <Text style={styles.metricLabel}>Height</Text>
@@ -54,14 +47,12 @@ export default function Step2() {
                     thumbTintColor={Colors.primary}
                 />
                 <View style={styles.rulerContainer}>
-                    {/* Імітація лінійки */}
                     {[...Array(11)].map((_, i) => (
                         <View key={i} style={[styles.rulerMark, i % 5 === 0 ? { height: 10 } : {}]} />
                     ))}
                 </View>
             </View>
 
-            {/* Weight Slider Card */}
             <View style={styles.metricCard}>
                 <View style={SharedStyles.rowBetween}>
                     <Text style={styles.metricLabel}>Weight</Text>
@@ -85,7 +76,6 @@ export default function Step2() {
                 </View>
             </View>
 
-            {/* BMI Info */}
             <View style={[styles.metricCard, SharedStyles.rowBetween, { backgroundColor: Colors.inputBackground }]}>
                 <View>
                     <Text style={{color: Colors.textGray, fontSize: 12}}>Estimated BMI</Text>
