@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet, ScrollView } from 'react-native';
+import { View, Text, StyleSheet } from 'react-native';
 import { useRouter, Stack } from 'expo-router';
 import Slider from '@react-native-community/slider';
 import { Colors } from '@/constants/Colors';
@@ -8,7 +8,8 @@ import { PrimaryButton } from '@/components/ui/PrimaryButton';
 import { Stepper } from '@/components/ui/Stepper';
 import { useOnboarding } from '@/context/OnboardingContext';
 import { StepHeader } from '@/components/navigation/StepHeader';
-
+import { StepLayout } from '@/components/ui/StepLayout';
+import { Ionicons } from '@expo/vector-icons';
 
 export default function Step4() {
     const router = useRouter();
@@ -16,16 +17,23 @@ export default function Step4() {
 
     const handleFinish = async () => {
         console.log('Відправка на NestJS:', data);
-        // Тут буде твій запит:
-        // await axios.post('http://your-api/auth/register', data);
-        router.replace('/(tabs)'); // Після успіху йдемо в додаток
+        router.replace('/(tabs)');
     };
 
     return (
-        <ScrollView style={SharedStyles.containerMain}>
+        <StepLayout
+            footer={
+                <PrimaryButton
+                    title="Завершити налаштування"
+                    onPress={handleFinish}
+                />
+            }
+        >
             <Stack.Screen options={{
                 headerTitle: () => <StepHeader currentStep={4} totalSteps={4} />
             }} />
+
+            <Ionicons name="home-outline" size={48} color={Colors.primary} style={{ alignSelf: 'center', marginBottom: 20 }} />
 
             <Text style={SharedStyles.title}>Твій Household</Text>
             <Text style={SharedStyles.subtitle}>Налаштуй параметри для своєї сім'ї.</Text>
@@ -53,14 +61,7 @@ export default function Step4() {
                 />
                 <Text style={styles.hint}>AI підбере рецепти, щоб вписатися в цю суму.</Text>
             </View>
-
-            <View style={{ height: 40 }} />
-            <PrimaryButton
-                title="Завершити налаштування"
-                onPress={handleFinish}
-                style={{ marginBottom: 50 }}
-            />
-        </ScrollView>
+        </StepLayout>
     );
 }
 
@@ -71,10 +72,9 @@ const styles = StyleSheet.create({
         padding: 24,
         borderWidth: 1,
         borderColor: Colors.inputBorder,
+        marginTop: 20
     },
     budgetLabel: { fontSize: 18, fontWeight: '600', color: Colors.secondary },
     budgetValue: { fontSize: 28, fontWeight: '800', color: Colors.primary },
     hint: { color: Colors.textGray, fontSize: 14, marginTop: 10, textAlign: 'center' },
-    dot: { width: 8, height: 8, borderRadius: 4, backgroundColor: Colors.inputBorder },
-    dotActive: { backgroundColor: Colors.primary, width: 24 }
 });

@@ -37,8 +37,8 @@ const styles = StyleSheet.create({
         padding: 20,
         alignItems: 'center',
         justifyContent: 'center',
-        width: '47%', // Майже половина екрану
-        aspectRatio: 1, // Квадратна форма
+        width: '47%',
+        aspectRatio: 1,
         marginBottom: 20,
         shadowColor: Colors.cardShadow,
         shadowOffset: { width: 0, height: 4 },

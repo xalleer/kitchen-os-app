@@ -7,6 +7,8 @@ import { PrimaryButton } from '@/components/ui/PrimaryButton';
 import { StepHeader } from '@/components/navigation/StepHeader';
 import { StepLayout } from '@/components/ui/StepLayout';
 import { useOnboarding } from '@/context/OnboardingContext';
+import { Colors } from '@/constants/Colors';
+import { Ionicons } from '@expo/vector-icons';
 
 export default function Step1() {
     const router = useRouter();
@@ -23,7 +25,7 @@ export default function Step1() {
                 <PrimaryButton
                     title="Продовжити"
                     showArrow
-                    // disabled={!isFormValid}
+                    disabled={!isFormValid}
                     onPress={() => router.push('/(auth)/register/step2')}
                 />
             }
@@ -32,6 +34,8 @@ export default function Step1() {
                 headerTitle: () => <StepHeader currentStep={1} />,
 
             }} />
+
+            <Ionicons name="person-add-outline" size={48} color={Colors.primary} style={{ alignSelf: 'center', marginBottom: 20 }} />
 
             <Text style={SharedStyles.title}>Давай знайомитись</Text>
             <Text style={SharedStyles.subtitle}>Створи свій акаунт для Kitchen OS.</Text>

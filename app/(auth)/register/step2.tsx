@@ -1,25 +1,45 @@
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet } from 'react-native';
 import { useRouter, Stack } from 'expo-router';
-import Slider from '@react-native-community/slider'; // Не забудь встановити!
+import Slider from '@react-native-community/slider';
 import { Colors } from '@/constants/Colors';
 import { SharedStyles } from '@/constants/SharedStyles';
 import { PrimaryButton } from '@/components/ui/PrimaryButton';
 import { useOnboarding } from '@/context/OnboardingContext';
 import { StepHeader } from '@/components/navigation/StepHeader';
-
+import { StepLayout } from '@/components/ui/StepLayout';
+import { Ionicons } from '@expo/vector-icons';
 
 export default function Step2() {
     const router = useRouter();
     const { data, updateData } = useOnboarding();
 
-    const bmi = (data.weight / ((data.height / 100) * (data.height / 100))).toFixed(1);
+    const bmiValue = parseFloat((data.weight / ((data.height / 100) * (data.height / 100))).toFixed(1));
+
+    const getBmiStatus = (bmi: number) => {
+        if (bmi < 18.5) return { label: 'UNDERWEIGHT', color: '#FFC107' };
+        if (bmi < 25) return { label: 'NORMAL', color: Colors.primary };
+        if (bmi < 30) return { label: 'OVERWEIGHT', color: '#FF9800' };
+        return { label: 'OBESE', color: '#F44336' };
+    };
+
+    const status = getBmiStatus(bmiValue);
 
     return (
-        <View style={SharedStyles.containerMain}>
+        <StepLayout
+            footer={
+                <PrimaryButton
+                    title="Continue"
+                    showArrow
+                    onPress={() => router.push('/(auth)/register/step3')}
+                />
+            }
+        >
             <Stack.Screen options={{
                 headerTitle: () => <StepHeader currentStep={2} />
             }} />
+
+            <Ionicons name="body-outline" size={48} color={Colors.primary} style={{ alignSelf: 'center', marginBottom: 20 }} />
 
             <Text style={SharedStyles.title}>Body Metrics</Text>
             <Text style={SharedStyles.subtitle}>Help Kitchen OS calibrate your nutritional needs.</Text>
@@ -40,11 +60,6 @@ export default function Step2() {
                     maximumTrackTintColor={Colors.inputBorder}
                     thumbTintColor={Colors.primary}
                 />
-                <View style={styles.rulerContainer}>
-                    {[...Array(11)].map((_, i) => (
-                        <View key={i} style={[styles.rulerMark, i % 5 === 0 ? { height: 10 } : {}]} />
-                    ))}
-                </View>
             </View>
 
             <View style={styles.metricCard}>
@@ -63,28 +78,20 @@ export default function Step2() {
                     maximumTrackTintColor={Colors.inputBorder}
                     thumbTintColor={Colors.primary}
                 />
-                <View style={styles.rulerContainer}>
-                    {[...Array(11)].map((_, i) => (
-                        <View key={i} style={[styles.rulerMark, i % 5 === 0 ? { height: 10 } : {}]} />
-                    ))}
-                </View>
             </View>
 
             <View style={[styles.metricCard, SharedStyles.rowBetween, { backgroundColor: Colors.inputBackground }]}>
                 <View>
                     <Text style={{color: Colors.textGray, fontSize: 12}}>Estimated BMI</Text>
                     <View style={{flexDirection: 'row', alignItems: 'center', marginTop: 4}}>
-                        <Text style={{fontSize: 24, fontWeight: '700', color: Colors.secondary, marginRight: 8}}>{bmi}</Text>
-                        <View style={{backgroundColor: Colors.lightGreen, paddingHorizontal: 8, paddingVertical: 4, borderRadius: 8}}>
-                            <Text style={{color: Colors.primary, fontSize: 12, fontWeight: '600'}}>NORMAL</Text>
+                        <Text style={{fontSize: 24, fontWeight: '700', color: Colors.secondary, marginRight: 8}}>{bmiValue}</Text>
+                        <View style={{backgroundColor: status.color + '20', paddingHorizontal: 8, paddingVertical: 4, borderRadius: 8}}>
+                            <Text style={{color: status.color, fontSize: 12, fontWeight: '600'}}>{status.label}</Text>
                         </View>
                     </View>
                 </View>
             </View>
-
-            <View style={{ flex: 1 }} />
-            <PrimaryButton title="Continue" showArrow onPress={() => router.push('/(auth)/register/step3')} style={{marginBottom: 30}} />
-        </View>
+        </StepLayout>
     );
 }
 
@@ -97,37 +104,7 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         borderColor: Colors.inputBorder,
     },
-    metricLabel: {
-        fontSize: 18,
-        color: Colors.secondary,
-        fontWeight: '600',
-    },
-    metricValue: {
-        fontSize: 32,
-        fontWeight: '700',
-        color: Colors.secondary,
-    },
-    metricUnit: {
-        fontSize: 16,
-        color: Colors.textGray,
-        fontWeight: '500',
-    },
-    rulerContainer: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        paddingHorizontal: 10,
-        marginTop: -10,
-    },
-    rulerMark: {
-        width: 2,
-        height: 6,
-        backgroundColor: Colors.inputBorder,
-        borderRadius: 2,
-    },
-    dot: {
-        width: 8, height: 8, borderRadius: 4, backgroundColor: Colors.inputBorder
-    },
-    dotActive: {
-        backgroundColor: Colors.primary, width: 24
-    }
+    metricLabel: { fontSize: 18, color: Colors.secondary, fontWeight: '600' },
+    metricValue: { fontSize: 32, fontWeight: '700', color: Colors.secondary },
+    metricUnit: { fontSize: 16, color: Colors.textGray, fontWeight: '500' },
 });

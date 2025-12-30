@@ -6,7 +6,6 @@ export default function RootLayout() {
       <OnboardingProvider>
         <Stack screenOptions={{ headerShown: false }}>
           <Stack.Screen name="(auth)" />
-          {/* Додай інші екрани сюди */}
         </Stack>
       </OnboardingProvider>
   );

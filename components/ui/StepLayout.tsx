@@ -28,10 +28,9 @@ export const StepLayout = ({ children, footer }: StepLayoutProps) => {
                         showsVerticalScrollIndicator={false}
                     >
                         {children}
-                        {/* Spacer для проштовхування футера донизу */}
-                        <View style={{ flex: 1, minHeight: 40 }} />
+                        <View style={{ flex: 1, minHeight: 10 }} />
                         {footer && (
-                            <View style={{ paddingBottom: Math.max(insets.bottom, 20), marginTop: 20 }}>
+                            <View style={{ paddingBottom: Math.max(insets.bottom, 20), marginTop: 10 }}>
                                 {footer}
                             </View>
                         )}

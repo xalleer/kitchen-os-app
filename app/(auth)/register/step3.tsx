@@ -8,6 +8,7 @@ import { SelectableCard } from '@/components/ui/SelectableCard';
 import { StepHeader } from '@/components/navigation/StepHeader';
 import { StepLayout } from '@/components/ui/StepLayout';
 import { useOnboarding, GoalType } from '@/context/OnboardingContext';
+import { Ionicons } from '@expo/vector-icons';
 
 export default function Step3() {
     const router = useRouter();
@@ -28,6 +29,8 @@ export default function Step3() {
                 headerTitle: () => <StepHeader currentStep={3} totalSteps={4} />,
             }} />
 
+            <Ionicons name="flag-outline" size={48} color={Colors.primary} style={{ alignSelf: 'center', marginBottom: 20 }} />
+
             <Text style={SharedStyles.title}>Яка твоя мета?</Text>
             <Text style={SharedStyles.subtitle}>Ми адаптуємо плани під твій вибір.</Text>
 
@@ -44,7 +47,6 @@ export default function Step3() {
                     isSelected={data.goal === 'gain'}
                     onPress={() => updateData({ goal: 'gain' })}
                 />
-                {/* Додай інші цілі аналогічно */}
             </View>
         </StepLayout>
     );
