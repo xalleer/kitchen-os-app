@@ -31,7 +31,6 @@ export default function Login() {
                         headerTintColor: Colors.secondary,
                         headerShadowVisible: false,
                         headerBackTitle: '',
-                        headerBackTitleVisible: false,
                     }}
                 />
 
@@ -80,7 +79,7 @@ export default function Login() {
                         </View>
 
                         <View style={styles.footer}>
-                            <Text style={{ color: Colors.textGray }}>Don't have an account? </Text>
+                            <Text style={{ color: Colors.textGray }}>Don&apos;t have an account? </Text>
                             <TouchableOpacity onPress={() => router.push('/(auth)/register/step1')}>
                                 <Text style={{ color: Colors.primary, fontWeight: '600' }}>Sign up</Text>
                             </TouchableOpacity>
