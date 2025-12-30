@@ -22,9 +22,9 @@ const StepLayoutComponent = ({ children, footer }: StepLayoutProps) => {
     return (
         <View style={styles.container}>
             <KeyboardAvoidingView
-                behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+                behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
                 style={styles.keyboardView}
-                keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : 0}
+                keyboardVerticalOffset={Platform.OS === 'ios' ? 90 : 0}
             >
                 <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
                     <View style={styles.innerContainer}>
@@ -33,24 +33,35 @@ const StepLayoutComponent = ({ children, footer }: StepLayoutProps) => {
                             contentContainerStyle={[
                                 styles.scrollContent,
                                 {
-                                    paddingTop: insets.top + 20,
-                                    paddingBottom: Math.max(insets.bottom, 20)
+                                    paddingTop: Math.max(insets.top, 20) + 20,
+                                    paddingBottom: footer ? 0 : Math.max(insets.bottom, 20)
                                 }
                             ]}
-                            bounces={false}
+                            bounces={true}
                             showsVerticalScrollIndicator={false}
                             keyboardShouldPersistTaps="handled"
+                            keyboardDismissMode="interactive"
                         >
                             {children}
 
-                            <View style={styles.spacer} />
-
-                            {footer && (
-                                <View style={styles.footerContainer}>
-                                    {footer}
-                                </View>
-                            )}
+                            {footer && <View style={{ height: 100 }} />}
                         </ScrollView>
+
+                        {footer && (
+                            <View style={[
+                                styles.footerContainer,
+                                {
+                                    paddingBottom: Math.max(insets.bottom, 20),
+                                    shadowColor: '#000',
+                                    shadowOffset: { width: 0, height: -2 },
+                                    shadowOpacity: 0.05,
+                                    shadowRadius: 8,
+                                    elevation: 5,
+                                }
+                            ]}>
+                                {footer}
+                            </View>
+                        )}
                     </View>
                 </TouchableWithoutFeedback>
             </KeyboardAvoidingView>
@@ -76,12 +87,16 @@ const styles = StyleSheet.create({
     scrollContent: {
         flexGrow: 1
     },
-    spacer: {
-        flex: 1,
-        minHeight: 10
-    },
     footerContainer: {
-        marginTop: 10
+        position: 'absolute',
+        bottom: 0,
+        left: 0,
+        right: 0,
+        backgroundColor: Colors.background,
+        paddingHorizontal: 24,
+        paddingTop: 16,
+        borderTopWidth: 1,
+        borderTopColor: Colors.inputBorder,
     }
 });
 

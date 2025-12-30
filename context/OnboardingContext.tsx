@@ -2,7 +2,7 @@ import React, { createContext, useState, useContext, useCallback, useMemo } from
 
 export type GoalType = 'loss' | 'gain' | 'healthy' | 'budget' | null;
 
-interface OnboardingData {
+export interface OnboardingData {
     name: string;
     email: string;
     password: string;

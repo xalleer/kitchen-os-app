@@ -1,16 +1,21 @@
-import React from 'react';
+import React, { forwardRef } from 'react';
 import { TextInput, TextInputProps, StyleSheet } from 'react-native';
 import { Colors } from '@/constants/Colors';
 
-export const ThemeInput: React.FC<TextInputProps> = (props) => {
+const ThemeInputComponent = forwardRef<TextInput, TextInputProps>((props, ref) => {
     return (
         <TextInput
+            ref={ref}
             style={styles.input}
             placeholderTextColor={Colors.textGray}
             {...props}
         />
     );
-};
+});
+
+ThemeInputComponent.displayName = 'ThemeInput';
+
+export const ThemeInput = ThemeInputComponent;
 
 const styles = StyleSheet.create({
     input: {
