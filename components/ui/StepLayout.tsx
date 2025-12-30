@@ -4,6 +4,7 @@ import {
     Keyboard, ScrollView, View
 } from 'react-native';
 import { SharedStyles } from '@/constants/SharedStyles';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 interface StepLayoutProps {
     children: React.ReactNode;
@@ -11,23 +12,29 @@ interface StepLayoutProps {
 }
 
 export const StepLayout = ({ children, footer }: StepLayoutProps) => {
+    const insets = useSafeAreaInsets();
+
     return (
         <KeyboardAvoidingView
             behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-            style={{ flex: 1 }}
-            keyboardVerticalOffset={Platform.OS === 'ios' ? 100 : 0}
+            style={{ flex: 1, backgroundColor: SharedStyles.containerMain.backgroundColor }}
         >
             <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
                 <View style={{ flex: 1 }}>
                     <ScrollView
-                        contentContainerStyle={[SharedStyles.containerMain, { flexGrow: 1 }]}
+                        style={SharedStyles.containerMain}
+                        contentContainerStyle={{ flexGrow: 1, paddingTop: insets.top + 20 }}
                         bounces={false}
                         showsVerticalScrollIndicator={false}
-                        keyboardShouldPersistTaps="handled"
                     >
                         {children}
-                        <View style={{ flex: 1 }} />
-                        {footer && <View style={{ paddingBottom: 30 }}>{footer}</View>}
+                        {/* Spacer для проштовхування футера донизу */}
+                        <View style={{ flex: 1, minHeight: 40 }} />
+                        {footer && (
+                            <View style={{ paddingBottom: Math.max(insets.bottom, 20), marginTop: 20 }}>
+                                {footer}
+                            </View>
+                        )}
                     </ScrollView>
                 </View>
             </TouchableWithoutFeedback>

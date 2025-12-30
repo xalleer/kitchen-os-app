@@ -18,12 +18,6 @@ export default function Step2() {
     return (
         <View style={SharedStyles.containerMain}>
             <Stack.Screen options={{
-
-                headerRight: () => (
-                    <TouchableOpacity onPress={() => router.push('/(tabs)')}>
-                        <Text style={{ color: Colors.primary, fontWeight: '600', fontSize: 16 }}>Skip</Text>
-                    </TouchableOpacity>
-                ),
                 headerTitle: () => <StepHeader currentStep={2} />
             }} />
 

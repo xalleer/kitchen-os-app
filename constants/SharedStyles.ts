@@ -20,12 +20,24 @@ export const SharedStyles = StyleSheet.create({
         textAlign: 'center',
         marginBottom: 12,
     },
+    label: {
+        fontSize: 16,
+        fontWeight: '700',
+        color: Colors.secondary,
+        marginBottom: 10,
+        marginLeft: 4,
+    },
     subtitle: {
         fontSize: 16,
         color: Colors.textGray,
         textAlign: 'center',
         marginBottom: 32,
         lineHeight: 24,
+    },
+    skipText: {
+        color: Colors.primary,
+        fontWeight: '600',
+        fontSize: 16,
     },
     glassCard: {
         backgroundColor: 'rgba(255, 255, 255, 0.85)',

@@ -7,6 +7,8 @@ import { SharedStyles } from '@/constants/SharedStyles';
 import { PrimaryButton } from '@/components/ui/PrimaryButton';
 import { Stepper } from '@/components/ui/Stepper';
 import { useOnboarding } from '@/context/OnboardingContext';
+import { StepHeader } from '@/components/navigation/StepHeader';
+
 
 export default function Step4() {
     const router = useRouter();
@@ -22,14 +24,7 @@ export default function Step4() {
     return (
         <ScrollView style={SharedStyles.containerMain}>
             <Stack.Screen options={{
-                headerTitle: () => (
-                    <View style={{flexDirection: 'row', gap: 8}}>
-                        <View style={styles.dot} />
-                        <View style={styles.dot} />
-                        <View style={styles.dot} />
-                        <View style={[styles.dot, styles.dotActive]} />
-                    </View>
-                )
+                headerTitle: () => <StepHeader currentStep={4} totalSteps={4} />
             }} />
 
             <Text style={SharedStyles.title}>Твій Household</Text>

@@ -26,11 +26,6 @@ export default function Step3() {
         >
             <Stack.Screen options={{
                 headerTitle: () => <StepHeader currentStep={3} totalSteps={4} />,
-                headerRight: () => (
-                    <TouchableOpacity onPress={() => router.push('/(tabs)')}>
-                        <Text style={{ color: Colors.primary, fontWeight: '600' }}>Skip</Text>
-                    </TouchableOpacity>
-                )
             }} />
 
             <Text style={SharedStyles.title}>Яка твоя мета?</Text>
