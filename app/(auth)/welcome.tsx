@@ -5,16 +5,17 @@ import { Ionicons } from '@expo/vector-icons';
 import { Colors } from '@/constants/Colors';
 import { SharedStyles } from '@/constants/SharedStyles';
 import { PrimaryButton } from '@/components/ui/PrimaryButton';
+import { SocialButton } from '@/components/ui/SocialButton';
 
 const PlaceholderBackground = ({children}: any) => (
-    <View style={{flex: 1, backgroundColor: '#D5F5E3'}}>{children}</View>
+    <View style={{flex: 1,}}>{children}</View>
 );
 
 export default function Welcome() {
     const router = useRouter();
 
     return (
-        // <ImageBackground source={require('@/assets/images/welcome-bg.jpg')} style={styles.bg}>
+        <ImageBackground source={require('@/assets/images/welcome.png')} style={styles.bg}>
         <PlaceholderBackground>
             <View style={styles.overlayContent}>
                 <View style={SharedStyles.glassCard}>
@@ -28,6 +29,25 @@ export default function Welcome() {
                         style={{ marginBottom: 16 }}
                     />
 
+                    <View style={styles.divider}>
+                        <View style={styles.line} />
+                        <Text style={styles.dividerText}>Or continue with</Text>
+                        <View style={styles.line} />
+                    </View>
+
+                    <View style={{marginBottom: 16, gap: 16, width: '100%', justifyContent: 'center'}}>
+                        <SocialButton
+                            title="Google"
+                            icon="logo-google"
+                            onPress={() => console.log('Google login')}
+                        />
+                        <SocialButton
+                            title="Apple"
+                            icon="logo-apple"
+                            onPress={() => console.log('Apple login')}
+                        />
+                    </View>
+
                     <View style={{ flexDirection: 'row' }}>
                         <Text style={{ color: Colors.textGray }}>Already have an account? </Text>
                         <TouchableOpacity onPress={() => router.push('/(auth)/login')}>
@@ -37,7 +57,7 @@ export default function Welcome() {
                 </View>
             </View>
         </PlaceholderBackground>
-        // </ImageBackground>
+        </ImageBackground>
     );
 }
 
@@ -64,5 +84,21 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         marginBottom: 32,
         lineHeight: 24,
+    },
+
+    divider: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        marginVertical: 20,
+    },
+    line: {
+        flex: 1,
+        height: 1,
+        backgroundColor: Colors.inputBorder,
+    },
+    dividerText: {
+        marginHorizontal: 10,
+        color: Colors.textGray,
+        fontSize: 14,
     },
 });

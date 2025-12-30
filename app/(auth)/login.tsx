@@ -66,7 +66,7 @@ export default function Login() {
                             <View style={styles.line} />
                         </View>
 
-                        <View style={SharedStyles.rowBetween}>
+                        <View style={styles.socials}>
                             <SocialButton
                                 title="Google"
                                 icon="logo-google"
@@ -120,5 +120,10 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         marginTop: 40,
         paddingBottom: 20,
+    },
+    socials: {
+        alignItems: 'center',
+        gap: 16
+
     }
 });

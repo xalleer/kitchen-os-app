@@ -22,7 +22,7 @@ export const SocialButton = ({ title, icon, onPress, style }: SocialButtonProps)
 const styles = StyleSheet.create({
     socialBtn: {
         flexDirection: 'row',
-        width: '47%',
+        width: '100%',
         padding: 16,
         borderRadius: 16,
         borderWidth: 1,
