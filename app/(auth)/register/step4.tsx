@@ -1,5 +1,5 @@
 import React, { useState, useCallback } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, Alert } from 'react-native';
 import { useRouter, Stack } from 'expo-router';
 import Slider from '@react-native-community/slider';
 import { Colors } from '@/constants/Colors';
@@ -10,15 +10,14 @@ import { useOnboarding } from '@/context/OnboardingContext';
 import { StepHeader } from '@/components/navigation/StepHeader';
 import { StepLayout } from '@/components/ui/StepLayout';
 import { Ionicons } from '@expo/vector-icons';
-import {useTranslation} from "react-i18next";
+import { useTranslation } from "react-i18next";
+import authService from '@/services/auth.service';
 
 export default function Step4() {
     const router = useRouter();
     const { t } = useTranslation();
-
-    const { data, updateData } = useOnboarding();
+    const { data, updateData, resetData } = useOnboarding();
     const [isLoading, setIsLoading] = useState(false);
-
     const [localBudget, setLocalBudget] = useState(data.budget);
 
     const handleBudgetComplete = useCallback((val: number) => {
@@ -27,23 +26,47 @@ export default function Step4() {
 
     const handleFinish = useCallback(async () => {
         setIsLoading(true);
+
         try {
-            console.log('Відправка на NestJS:', data);
+            // Мапінг даних для API
+            const goalMapping = {
+                'loss': 'LOSE_WEIGHT',
+                'gain': 'GAIN_MUSCLE',
+                'healthy': 'MAINTAIN',
+            };
 
-            // Тут має бути API запит
-            // await api.register(data);
+            const registerData = {
+                email: data.email!,
+                password: data.password!,
+                name: data.name!,
+                familyName: `${data.name}'s Family`, // Генеруємо назву сім'ї
+                weeklyBudget: data.budget,
+                height: data.height,
+                weight: data.weight,
+                goal: goalMapping[data.goal as keyof typeof goalMapping] as any,
+            };
 
-            // Симулюємо затримку мережі
-            await new Promise(resolve => setTimeout(resolve, 1000));
+            // Відправляємо запит на реєстрацію
+            await authService.register(registerData);
 
+            // Очищуємо дані онбордингу
+            resetData();
+
+            // Переходимо на головний екран
             router.replace('/(tabs)');
-        } catch (error) {
+
+        } catch (error: any) {
             console.error('Registration error:', error);
-            // Тут має бути обробка помилок
+
+            Alert.alert(
+                'Помилка реєстрації',
+                error.message || 'Щось пішло не так. Спробуйте ще раз.',
+                [{ text: 'OK' }]
+            );
         } finally {
             setIsLoading(false);
         }
-    }, [data, router]);
+    }, [data, router, resetData]);
 
     return (
         <StepLayout

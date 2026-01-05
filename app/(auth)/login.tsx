@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
     View,
     Text,
@@ -8,7 +8,8 @@ import {
     Keyboard,
     KeyboardAvoidingView,
     Platform,
-    ScrollView
+    ScrollView,
+    Alert
 } from 'react-native';
 import { useRouter, Stack } from 'expo-router';
 import { Colors } from '@/constants/Colors';
@@ -17,11 +18,77 @@ import { ThemeInput } from '@/components/ui/ThemeInput';
 import { PrimaryButton } from '@/components/ui/PrimaryButton';
 import { SocialButton } from '@/components/ui/SocialButton';
 import { Ionicons } from '@expo/vector-icons';
-import {useTranslation} from "react-i18next";
+import { useTranslation } from "react-i18next";
+import authService from '@/services/auth.service';
 
 export default function Login() {
     const router = useRouter();
     const { t } = useTranslation();
+
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [isLoading, setIsLoading] = useState(false);
+    const [errors, setErrors] = useState({ email: '', password: '' });
+
+    const validateEmail = (email: string): boolean => {
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return emailRegex.test(email);
+    };
+
+    const handleLogin = async () => {
+        const newErrors = { email: '', password: '' };
+
+        if (!email.trim()) {
+            newErrors.email = t('VALIDATORS.EMAIL');
+        } else if (!validateEmail(email)) {
+            newErrors.email = t('VALIDATORS.EMAIL');
+        }
+
+        if (!password.trim()) {
+            newErrors.password = t('VALIDATORS.PASSWORD');
+        } else if (password.length < 6) {
+            newErrors.password = t('VALIDATORS.PASSWORD');
+        }
+
+        if (newErrors.email || newErrors.password) {
+            setErrors(newErrors);
+            return;
+        }
+
+        setErrors({ email: '', password: '' });
+        setIsLoading(true);
+
+        try {
+            await authService.login({ email, password });
+            router.replace('/(tabs)');
+        } catch (error: any) {
+            Alert.alert(
+                'Помилка входу',
+                error.message || 'Невірний email або пароль',
+                [{ text: 'OK' }]
+            );
+        } finally {
+            setIsLoading(false);
+        }
+    };
+
+    const handleGoogleLogin = async () => {
+        try {
+            await authService.loginWithGoogle();
+            router.replace('/(tabs)');
+        } catch (error: any) {
+            Alert.alert('Помилка', error.message);
+        }
+    };
+
+    const handleAppleLogin = async () => {
+        try {
+            await authService.loginWithApple();
+            router.replace('/(tabs)');
+        } catch (error: any) {
+            Alert.alert('Помилка', error.message);
+        }
+    };
 
     return (
         <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
@@ -47,20 +114,46 @@ export default function Login() {
                         keyboardShouldPersistTaps="handled"
                         keyboardDismissMode="on-drag"
                     >
-                        <Ionicons name="restaurant" size={48} color={Colors.primary} style={{ alignSelf: 'center', marginBottom: 20 }} />
+                        <Ionicons
+                            name="restaurant"
+                            size={48}
+                            color={Colors.primary}
+                            style={{ alignSelf: 'center', marginBottom: 20 }}
+                        />
 
                         <Text style={SharedStyles.title}>{t('WELCOME_BACK')}</Text>
                         <Text style={SharedStyles.subtitle}>{t('SIGN_IN_TITLE')}</Text>
 
-                        <ThemeInput label={t('EMAIL')} placeholder={t('PLACEHOLDERS.EMAIL')} keyboardType="email-address" />
+                        <ThemeInput
+                            label={t('EMAIL')}
+                            placeholder={t('PLACEHOLDERS.EMAIL')}
+                            keyboardType="email-address"
+                            autoCapitalize="none"
+                            value={email}
+                            onChangeText={setEmail}
+                            error={errors.email}
+                        />
 
-                        <ThemeInput label={t('PASSWORD')} placeholder={t('PLACEHOLDERS.PASSWORD')} secureTextEntry />
+                        <ThemeInput
+                            label={t('PASSWORD')}
+                            placeholder={t('PLACEHOLDERS.PASSWORD')}
+                            secureTextEntry
+                            value={password}
+                            onChangeText={setPassword}
+                            error={errors.password}
+                        />
 
                         <TouchableOpacity style={{ alignSelf: 'flex-end', marginBottom: 30 }}>
-                            <Text style={{ color: Colors.textGray }}>{ t('FORGOT_PASSWORD') }</Text>
+                            <Text style={{ color: Colors.textGray }}>{t('FORGOT_PASSWORD')}</Text>
                         </TouchableOpacity>
 
-                        <PrimaryButton title={t('SIGN_IN')} showArrow onPress={() => router.push('/(tabs)')} />
+                        <PrimaryButton
+                            title={t('SIGN_IN')}
+                            showArrow
+                            onPress={handleLogin}
+                            loading={isLoading}
+                            disabled={isLoading}
+                        />
 
                         <View style={styles.divider}>
                             <View style={styles.line} />
@@ -72,19 +165,21 @@ export default function Login() {
                             <SocialButton
                                 title="Google"
                                 icon="logo-google"
-                                onPress={() => console.log('Google login')}
+                                onPress={handleGoogleLogin}
                             />
                             <SocialButton
                                 title="Apple"
                                 icon="logo-apple"
-                                onPress={() => console.log('Apple login')}
+                                onPress={handleAppleLogin}
                             />
                         </View>
 
                         <View style={styles.footer}>
                             <Text style={{ color: Colors.textGray }}>{t('DONT_HAVE_ACCOUNT')}</Text>
                             <TouchableOpacity onPress={() => router.push('/(auth)/register/step1')}>
-                                <Text style={{ color: Colors.primary, fontWeight: '600' }}>{t('SIGN_UP')}</Text>
+                                <Text style={{ color: Colors.primary, fontWeight: '600' }}>
+                                    {t('SIGN_UP')}
+                                </Text>
                             </TouchableOpacity>
                         </View>
                     </ScrollView>
@@ -126,6 +221,5 @@ const styles = StyleSheet.create({
     socials: {
         alignItems: 'center',
         gap: 16
-
     }
 });
