@@ -3,21 +3,38 @@ import { View, Text, FlatList, TouchableOpacity, StyleSheet } from 'react-native
 import { Ionicons } from '@expo/vector-icons';
 import { Colors } from '@/constants/Colors';
 import { SharedStyles } from '@/constants/SharedStyles';
+import {FridgeItem} from "@/components/ui/FridgeItem";
 
 export default function Fridge() {
+    const isEmpty: boolean = false
+    const foodData = [
+        { id: '1', name: 'Oat Milk', exp: '5 Days', status: 'FRESH', freshness: 85, amount: 'x1', image: 'https://link-to-oat-milk.jpg' },
+        { id: '2', name: 'Baby Spinach', exp: 'Today', status: 'LOW', freshness: 10, amount: '!', image: 'https://link-to-spinach.jpg' },
+    ];
     return (
         <View style={{ flex: 1, backgroundColor: Colors.background }}>
             <View style={SharedStyles.containerMain}>
-                <Text style={SharedStyles.subtitle}>У вашому холодильнику 12 позицій</Text>
 
-                {/* Placeholder для списку */}
-                <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-                    <Ionicons name="leaf-outline" size={60} color={Colors.inputBorder} />
-                    <Text style={{ color: Colors.textGray, marginTop: 10 }}>Холодильник порожній</Text>
-                </View>
+                {isEmpty ? (
+                    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+                        <Ionicons name="leaf-outline" size={60} color={Colors.inputBorder} />
+                        <Text style={{ color: Colors.textGray, marginTop: 10 }}>Холодильник порожній</Text>
+                    </View>
+                ) : (
+                    <>
+                        <FlatList
+                            data={foodData}
+                            keyExtractor={(item) => item.id}
+                            numColumns={2}
+                            columnWrapperStyle={{ justifyContent: 'space-between' }}
+                            contentContainerStyle={{ paddingBottom: 100 }} // щоб FAB не перекривав
+                            renderItem={({ item }) => <FridgeItem item={item} />}
+                        />
+                    </>
+                )}
+
             </View>
 
-            {/* Floating Action Button для сканування */}
             <TouchableOpacity style={styles.fab}>
                 <Ionicons name="camera" size={28} color="white" />
                 <Text style={styles.fabText}>AI Scan</Text>
