@@ -6,6 +6,7 @@ export interface OnboardingData {
     name: string;
     email: string;
     password: string;
+    inviteCode?: string;
     height: number;
     weight: number;
     goal: GoalType;
@@ -23,6 +24,7 @@ const initialData: OnboardingData = {
     name: '',
     email: '',
     password: '',
+    inviteCode: '',
     height: 175,
     weight: 70,
     goal: null,

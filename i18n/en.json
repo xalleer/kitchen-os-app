@@ -27,42 +27,40 @@
   "FAMILY_MEMBERS": "Family members",
   "WEEKLY_BUDGET": "Weekly budget",
   "STEP4_SUBTITLE": "AI will pick recipes to fit this budget.",
-
+  "HAVE_INVITE_CODE": "Have an invite code?",
+  "INVITE_CODE": "Invite Code",
+  "INVITE_CODE_HINT": "If you have a code from a family, you'll automatically join them",
   "TARGETS": {
-    "EMACIATION": "Weight Loss",
-    "WEIGHT_GAIN": "Weight Gain"
+    "WEIGHT_LOSS": "Weight Loss",
+    "WEIGHT_GAIN": "Weight Gain",
+    "MAINTAIN_HEALTH": "Maintain Health",
+    "SAVE_BUDGET": "Save Budget"
   },
-
   "CURRENCY": {
     "UAH": "uah"
   },
-
   "UNITS": {
     "KG": "kg",
     "SM": "cm"
   },
-
   "BMI": {
     "NORMAL": "Normal",
     "UNDERWEIGHT": "Underweight",
     "OBESE": "Obese",
     "OVERWEIGHT": "Overweight"
-
   },
-
   "PLACEHOLDERS": {
     "EMAIL": "Enter your email",
     "PASSWORD": "Enter your password",
     "NAME": "Enter your name",
     "MIN_LEN": "Minimum 6 characters",
-    "EMAIL_EXAMPLE": "example@mail.com"
+    "EMAIL_EXAMPLE": "example@mail.com",
+    "INVITE_CODE": "AB12CD34"
   },
-
   "BUTTONS": {
     "CONTINUE": "Continue",
     "FINISH": "Finish Setup"
   },
-
   "VALIDATORS": {
     "NAME": "Name must be longer than 1 character",
     "EMAIL": "Please enter a valid email address",

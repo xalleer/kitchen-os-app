@@ -27,49 +27,43 @@
   "FAMILY_MEMBERS": "Членів сім'ї",
   "WEEKLY_BUDGET": "Тижневий бюджет",
   "STEP4_SUBTITLE": "AI підбере рецепти, щоб вписатися в цю суму.",
-
+  "HAVE_INVITE_CODE": "Маєте код запрошення?",
+  "INVITE_CODE": "Код запрошення",
+  "INVITE_CODE_HINT": "Якщо у вас є код від сім'ї, ви автоматично приєднаєтеся до неї",
   "TARGETS": {
-    "EMACIATION": "Схуднення",
-    "WEIGHT_GAIN": "Набір ваги"
+    "WEIGHT_LOSS": "Схуднення",
+    "WEIGHT_GAIN": "Набір ваги",
+    "MAINTAIN_HEALTH": "Підтримка здоров'я",
+    "SAVE_BUDGET": "Економія бюджету"
   },
-
   "CURRENCY": {
     "UAH": "грн"
   },
-
   "UNITS": {
     "KG": "кг",
     "SM": "см"
   },
-
   "BMI": {
     "NORMAL": "Нормальний",
     "UNDERWEIGHT": "Недостатня вага",
     "OBESE": "Ожиріння",
     "OVERWEIGHT": "Надмірна вага"
   },
-
   "PLACEHOLDERS": {
     "EMAIL": "Введіть вашу пошту",
     "PASSWORD": "Введіть ваш пароль",
     "NAME": "Введи ім'я",
     "MIN_LEN": "Мінімум 6 символів",
-    "EMAIL_EXAMPLE": "example@mail.com"
+    "EMAIL_EXAMPLE": "example@mail.com",
+    "INVITE_CODE": "AB12CD34"
   },
-
   "BUTTONS": {
     "CONTINUE": "Продовжити",
     "FINISH": "Завершити налаштування"
   },
-
   "VALIDATORS": {
     "NAME": "Ім'я має бути більше 1 символу",
     "EMAIL": "Введіть коректну пошту",
     "PASSWORD": "Пароль має містити мінімум 6 символів"
   }
-
-
-
-
-
 }
