@@ -6,7 +6,7 @@ import { ThemeInput } from '@/components/ui/ThemeInput';
 import { PrimaryButton } from '@/components/ui/PrimaryButton';
 import { StepHeader } from '@/components/navigation/StepHeader';
 import { StepLayout } from '@/components/ui/auth/StepLayout';
-import { useOnboarding } from '@/context/OnboardingContext';
+import { useOnboardingStore } from '@/store/onboardingStore';
 import { Colors } from '@/constants/Colors';
 import { Ionicons } from '@expo/vector-icons';
 import { useTranslation } from "react-i18next";
@@ -19,19 +19,18 @@ const validateEmail = (email: string): boolean => {
 export default function Step1() {
     const router = useRouter();
     const { t } = useTranslation();
-    const { data, updateData } = useOnboarding();
-    const [showInviteCode, setShowInviteCode] = useState(false);
+    const { name, email, password, updateData } = useOnboardingStore();
+
     const [touched, setTouched] = useState({
         name: false,
         email: false,
         password: false,
-        inviteCode: false
     });
 
     const validation = useMemo(() => {
-        const nameValid = (data.name?.trim().length || 0) > 1;
-        const emailValid = validateEmail(data.email || '');
-        const passwordValid = (data.password?.length || 0) >= 6;
+        const nameValid = (name?.trim().length || 0) > 1;
+        const emailValid = validateEmail(email || '');
+        const passwordValid = (password?.length || 0) >= 6;
 
         return {
             name: nameValid,
@@ -39,7 +38,7 @@ export default function Step1() {
             password: passwordValid,
             isFormValid: nameValid && emailValid && passwordValid
         };
-    }, [data.name, data.email, data.password]);
+    }, [name, email, password]);
 
     const handleNameBlur = () => setTouched(prev => ({ ...prev, name: true }));
     const handleEmailBlur = () => setTouched(prev => ({ ...prev, email: true }));
@@ -74,7 +73,7 @@ export default function Step1() {
                 <Text style={SharedStyles.label}>{t('YOUR_NAME')}</Text>
                 <ThemeInput
                     placeholder={t('PLACEHOLDERS.NAME')}
-                    value={data.name}
+                    value={name}
                     onChangeText={(val) => updateData({ name: val })}
                     onBlur={handleNameBlur}
                 />
@@ -89,7 +88,7 @@ export default function Step1() {
                     placeholder={t('PLACEHOLDERS.EMAIL_EXAMPLE')}
                     autoCapitalize="none"
                     keyboardType="email-address"
-                    value={data.email}
+                    value={email}
                     onChangeText={(val) => updateData({ email: val })}
                     onBlur={handleEmailBlur}
                 />
@@ -103,7 +102,7 @@ export default function Step1() {
                 <ThemeInput
                     placeholder={t('PLACEHOLDERS.MIN_LEN')}
                     secureTextEntry
-                    value={data.password}
+                    value={password}
                     onChangeText={(val) => updateData({ password: val })}
                     onBlur={handlePasswordBlur}
                 />
@@ -111,35 +110,6 @@ export default function Step1() {
                     <Text style={styles.errorText}>
                         {t('VALIDATORS.PASSWORD')}
                     </Text>
-                )}
-
-                <TouchableOpacity
-                    style={styles.inviteToggle}
-                    onPress={() => setShowInviteCode(!showInviteCode)}
-                >
-                    <Ionicons
-                        name={showInviteCode ? "chevron-down" : "chevron-forward"}
-                        size={20}
-                        color={Colors.primary}
-                    />
-                    <Text style={styles.inviteToggleText}>
-                        {t('HAVE_INVITE_CODE')}
-                    </Text>
-                </TouchableOpacity>
-
-                {showInviteCode && (
-                    <>
-                        <Text style={SharedStyles.label}>{t('INVITE_CODE')}</Text>
-                        <ThemeInput
-                            placeholder={t('PLACEHOLDERS.INVITE_CODE')}
-                            autoCapitalize="characters"
-                            value={data.inviteCode}
-                            onChangeText={(val) => updateData({ inviteCode: val.toUpperCase() })}
-                        />
-                        <Text style={styles.hintText}>
-                            {t('INVITE_CODE_HINT')}
-                        </Text>
-                    </>
                 )}
             </View>
         </StepLayout>
@@ -152,24 +122,5 @@ const styles = StyleSheet.create({
         fontSize: 12,
         marginTop: -12,
         marginBottom: 12,
-    },
-    inviteToggle: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        marginTop: 8,
-        marginBottom: 16,
-    },
-    inviteToggleText: {
-        color: Colors.primary,
-        fontSize: 15,
-        fontWeight: '600',
-        marginLeft: 8,
-    },
-    hintText: {
-        fontSize: 12,
-        color: Colors.textGray,
-        marginTop: -8,
-        marginBottom: 16,
-        marginLeft: 4,
     },
 });

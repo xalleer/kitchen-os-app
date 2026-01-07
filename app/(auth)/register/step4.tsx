@@ -1,63 +1,73 @@
 import React, { useState, useCallback } from 'react';
 import { View, Text, StyleSheet, Alert } from 'react-native';
 import { useRouter, Stack } from 'expo-router';
-import Slider from '@react-native-community/slider';
 import { Colors } from '@/constants/Colors';
 import { SharedStyles } from '@/constants/SharedStyles';
 import { PrimaryButton } from '@/components/ui/PrimaryButton';
-import { Stepper } from '@/components/ui/auth/Stepper';
-import { useOnboarding } from '@/context/OnboardingContext';
+import { useOnboardingStore } from '@/store/onboardingStore';
+import { useAuthStore } from '@/store/authStore';
 import { StepHeader } from '@/components/navigation/StepHeader';
 import { StepLayout } from '@/components/ui/auth/StepLayout';
 import { Ionicons } from '@expo/vector-icons';
 import { useTranslation } from "react-i18next";
 import authService from '@/services/auth.service';
+import { RegisterDto } from '@/types';
 
 export default function Step4() {
     const router = useRouter();
     const { t } = useTranslation();
-    const { data, updateData, resetData } = useOnboarding();
     const [isLoading, setIsLoading] = useState(false);
-    const [localBudget, setLocalBudget] = useState(data.budget);
 
-    const handleBudgetComplete = useCallback((val: number) => {
-        updateData({ budget: val });
-    }, [updateData]);
+    const onboardingData = useOnboardingStore((state) => ({
+        name: state.name,
+        email: state.email,
+        password: state.password,
+        age: state.age,
+        weight: state.weight,
+        height: state.height,
+        goal: state.goal,
+        allergies: state.allergies,
+        dislikedProducts: state.dislikedProducts,
+        eatsBreakfast: state.eatsBreakfast,
+        eatsLunch: state.eatsLunch,
+        eatsDinner: state.eatsDinner,
+        eatsSnack: state.eatsSnack,
+    }));
+
+    const resetOnboarding = useOnboardingStore((state) => state.resetData);
+    const { setToken } = useAuthStore();
 
     const handleFinish = useCallback(async () => {
         setIsLoading(true);
 
         try {
-            // Мапінг даних для API
-            const goalMapping = {
-                'loss': 'LOSE_WEIGHT',
-                'gain': 'GAIN_MUSCLE',
-                'healthy': 'MAINTAIN',
+            if (!onboardingData.goal) {
+                throw new Error('Goal is required');
+            }
+
+            const registerData: RegisterDto = {
+                email: onboardingData.email,
+                password: onboardingData.password,
+                name: onboardingData.name,
+                age: onboardingData.age,
+                weight: onboardingData.weight,
+                height: onboardingData.height,
+                goal: onboardingData.goal,
+                allergies: onboardingData.allergies,
+                dislikedProducts: onboardingData.dislikedProducts,
+                eatsBreakfast: onboardingData.eatsBreakfast,
+                eatsLunch: onboardingData.eatsLunch,
+                eatsDinner: onboardingData.eatsDinner,
+                eatsSnack: onboardingData.eatsSnack,
             };
 
-            const registerData = {
-                email: data.email!,
-                password: data.password!,
-                name: data.name!,
-                familyName: `${data.name}'s Family`, // Генеруємо назву сім'ї
-                weeklyBudget: data.budget,
-                height: data.height,
-                weight: data.weight,
-                goal: goalMapping[data.goal as keyof typeof goalMapping] as any,
-            };
-
-            // Відправляємо запит на реєстрацію
-            await authService.register(registerData);
-
-            // Очищуємо дані онбордингу
-            resetData();
-
-            // Переходимо на головний екран
+            const response = await authService.register(registerData);
+            await setToken(response.access_token);
+            resetOnboarding();
             router.replace('/(tabs)');
 
         } catch (error: any) {
             console.error('Registration error:', error);
-
             Alert.alert(
                 'Помилка реєстрації',
                 error.message || 'Щось пішло не так. Спробуйте ще раз.',
@@ -66,7 +76,7 @@ export default function Step4() {
         } finally {
             setIsLoading(false);
         }
-    }, [data, router, resetData]);
+    }, [onboardingData, router, resetOnboarding, setToken]);
 
     return (
         <StepLayout
@@ -84,48 +94,46 @@ export default function Step4() {
             }} />
 
             <Ionicons
-                name="home-outline"
+                name="checkmark-circle-outline"
                 size={48}
                 color={Colors.primary}
                 style={{ alignSelf: 'center', marginBottom: 20 }}
             />
 
-            <Text style={SharedStyles.title}>{t('HOUSEHOLD')}</Text>
+            <Text style={SharedStyles.title}>{t('ALMOST_DONE')}</Text>
             <Text style={SharedStyles.subtitle}>{t('STEP4_TITLE')}</Text>
 
-            <Stepper
-                label={t('FAMILY_MEMBERS')}
-                value={data.familySize || 1}
-                onValueChange={(val) => updateData({ familySize: val })}
-            />
+            <View style={styles.summaryCard}>
+                <Text style={styles.summaryTitle}>{t('YOUR_PROFILE')}</Text>
 
-            <View style={styles.budgetCard}>
-                <View style={SharedStyles.rowBetween}>
-                    <Text style={styles.budgetLabel}>{t('WEEKLY_BUDGET')}</Text>
-                    <Text style={styles.budgetValue}>
-                        {localBudget} <Text style={{fontSize: 16}}>{t('CURRENCY.UAH')}</Text>
+                <View style={styles.summaryRow}>
+                    <Text style={styles.summaryLabel}>{t('YOUR_NAME')}:</Text>
+                    <Text style={styles.summaryValue}>{onboardingData.name}</Text>
+                </View>
+
+                <View style={styles.summaryRow}>
+                    <Text style={styles.summaryLabel}>{t('HEIGHT')}:</Text>
+                    <Text style={styles.summaryValue}>{onboardingData.height} {t('UNITS.SM')}</Text>
+                </View>
+
+                <View style={styles.summaryRow}>
+                    <Text style={styles.summaryLabel}>{t('WEIGHT')}:</Text>
+                    <Text style={styles.summaryValue}>{onboardingData.weight} {t('UNITS.KG')}</Text>
+                </View>
+
+                <View style={styles.summaryRow}>
+                    <Text style={styles.summaryLabel}>{t('YOUR_TARGET')}:</Text>
+                    <Text style={styles.summaryValue}>
+                        {onboardingData.goal ? t(`TARGETS.${onboardingData.goal}`) : '-'}
                     </Text>
                 </View>
-                <Slider
-                    style={{ width: '100%', height: 40, marginTop: 10 }}
-                    minimumValue={500}
-                    maximumValue={10000}
-                    step={100}
-                    value={localBudget}
-                    onValueChange={setLocalBudget}
-                    onSlidingComplete={handleBudgetComplete}
-                    minimumTrackTintColor={Colors.primary}
-                    maximumTrackTintColor={Colors.inputBorder}
-                    thumbTintColor={Colors.primary}
-                />
-                <Text style={styles.hint}>{t('STEP4_SUBTITLE')}</Text>
             </View>
         </StepLayout>
     );
 }
 
 const styles = StyleSheet.create({
-    budgetCard: {
+    summaryCard: {
         backgroundColor: Colors.white,
         borderRadius: 24,
         padding: 24,
@@ -133,7 +141,25 @@ const styles = StyleSheet.create({
         borderColor: Colors.inputBorder,
         marginTop: 20
     },
-    budgetLabel: { fontSize: 18, fontWeight: '600', color: Colors.secondary },
-    budgetValue: { fontSize: 28, fontWeight: '800', color: Colors.primary },
-    hint: { color: Colors.textGray, fontSize: 14, marginTop: 10, textAlign: 'center' },
+    summaryTitle: {
+        fontSize: 20,
+        fontWeight: '700',
+        color: Colors.secondary,
+        marginBottom: 20,
+    },
+    summaryRow: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        marginBottom: 12,
+    },
+    summaryLabel: {
+        fontSize: 16,
+        color: Colors.textGray,
+    },
+    summaryValue: {
+        fontSize: 16,
+        fontWeight: '600',
+        color: Colors.secondary,
+    },
 });

@@ -7,14 +7,18 @@ import { PrimaryButton } from '@/components/ui/PrimaryButton';
 import { SelectableCard } from '@/components/ui/auth/SelectableCard';
 import { StepHeader } from '@/components/navigation/StepHeader';
 import { StepLayout } from '@/components/ui/auth/StepLayout';
-import { useOnboarding } from '@/context/OnboardingContext';
+import { useOnboardingStore } from '@/store/onboardingStore';
 import { Ionicons } from '@expo/vector-icons';
 import { useTranslation } from "react-i18next";
+import { Goal } from '@/types';
 
 export default function Step3() {
     const router = useRouter();
-    const { data, updateData } = useOnboarding();
     const { t } = useTranslation();
+
+    // Отримуємо дані зі store
+    const goal = useOnboardingStore((state) => state.goal);
+    const updateData = useOnboardingStore((state) => state.updateData);
 
     return (
         <StepLayout
@@ -22,7 +26,7 @@ export default function Step3() {
                 <PrimaryButton
                     title={t('BUTTONS.CONTINUE')}
                     showArrow
-                    disabled={!data.goal}
+                    disabled={!goal}
                     onPress={() => router.push('/(auth)/register/step4')}
                 />
             }
@@ -31,35 +35,40 @@ export default function Step3() {
                 headerTitle: () => <StepHeader currentStep={3} />,
             }} />
 
-            <Ionicons name="flag-outline" size={48} color={Colors.primary} style={{ alignSelf: 'center', marginBottom: 20 }} />
+            <Ionicons
+                name="flag-outline"
+                size={48}
+                color={Colors.primary}
+                style={{ alignSelf: 'center', marginBottom: 20 }}
+            />
 
             <Text style={SharedStyles.title}>{t('YOUR_TARGET')}</Text>
             <Text style={SharedStyles.subtitle}>{t('STEP3_TITLE')}</Text>
 
             <View style={{ flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'space-between', marginTop: 20 }}>
                 <SelectableCard
-                    title={t('TARGETS.WEIGHT_LOSS')}
+                    title={t('TARGETS.LOSE_WEIGHT')}
                     iconName="body"
-                    isSelected={data.goal === 'loss'}
-                    onPress={() => updateData({ goal: 'loss' })}
+                    isSelected={goal === Goal.LOSE_WEIGHT}
+                    onPress={() => updateData({ goal: Goal.LOSE_WEIGHT })}
                 />
                 <SelectableCard
-                    title={t('TARGETS.WEIGHT_GAIN')}
+                    title={t('TARGETS.GAIN_WEIGHT')}
                     iconName="barbell"
-                    isSelected={data.goal === 'gain'}
-                    onPress={() => updateData({ goal: 'gain' })}
+                    isSelected={goal === Goal.GAIN_WEIGHT}
+                    onPress={() => updateData({ goal: Goal.GAIN_WEIGHT })}
                 />
                 <SelectableCard
-                    title={t('TARGETS.MAINTAIN_HEALTH')}
+                    title={t('TARGETS.MAINTAIN')}
                     iconName="heart"
-                    isSelected={data.goal === 'healthy'}
-                    onPress={() => updateData({ goal: 'healthy' })}
+                    isSelected={goal === Goal.MAINTAIN}
+                    onPress={() => updateData({ goal: Goal.MAINTAIN })}
                 />
                 <SelectableCard
-                    title={t('TARGETS.SAVE_BUDGET')}
-                    iconName="wallet"
-                    isSelected={data.goal === 'budget'}
-                    onPress={() => updateData({ goal: 'budget' })}
+                    title={t('TARGETS.HEALTHY')}
+                    iconName="leaf"
+                    isSelected={goal === Goal.HEALTHY}
+                    onPress={() => updateData({ goal: Goal.HEALTHY })}
                 />
             </View>
         </StepLayout>

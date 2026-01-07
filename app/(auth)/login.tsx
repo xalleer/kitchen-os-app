@@ -20,10 +20,14 @@ import { SocialButton } from '@/components/ui/SocialButton';
 import { Ionicons } from '@expo/vector-icons';
 import { useTranslation } from "react-i18next";
 import authService from '@/services/auth.service';
+import { useAuthStore } from '@/store/authStore';
+import { useGoogleAuth } from '@/hooks/useGoogleAuth';
 
 export default function Login() {
     const router = useRouter();
     const { t } = useTranslation();
+    const { setToken } = useAuthStore();
+    const { login: googleLogin, isLoading: googleLoading } = useGoogleAuth();
 
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -59,7 +63,8 @@ export default function Login() {
         setIsLoading(true);
 
         try {
-            await authService.login({ email, password });
+            const response = await authService.login({ email, password });
+            await setToken(response.access_token);
             router.replace('/(tabs)');
         } catch (error: any) {
             Alert.alert(
@@ -74,17 +79,7 @@ export default function Login() {
 
     const handleGoogleLogin = async () => {
         try {
-            await authService.loginWithGoogle();
-            router.replace('/(tabs)');
-        } catch (error: any) {
-            Alert.alert('Помилка', error.message);
-        }
-    };
-
-    const handleAppleLogin = async () => {
-        try {
-            await authService.loginWithApple();
-            router.replace('/(tabs)');
+            await googleLogin();
         } catch (error: any) {
             Alert.alert('Помилка', error.message);
         }
@@ -106,7 +101,6 @@ export default function Login() {
                 <KeyboardAvoidingView
                     behavior={Platform.OS === 'ios' ? 'padding' : undefined}
                     style={{ flex: 1 }}
-                    keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : 0}
                 >
                     <ScrollView
                         automaticallyAdjustKeyboardInsets={true}
@@ -167,11 +161,6 @@ export default function Login() {
                                 icon="logo-google"
                                 onPress={handleGoogleLogin}
                             />
-                            <SocialButton
-                                title="Apple"
-                                icon="logo-apple"
-                                onPress={handleAppleLogin}
-                            />
                         </View>
 
                         <View style={styles.footer}>
@@ -190,13 +179,6 @@ export default function Login() {
 }
 
 const styles = StyleSheet.create({
-    label: {
-        fontSize: 16,
-        fontWeight: '600',
-        color: Colors.secondary,
-        marginBottom: 8,
-        marginLeft: 4,
-    },
     divider: {
         flexDirection: 'row',
         alignItems: 'center',

@@ -5,13 +5,11 @@ import Slider from '@react-native-community/slider';
 import { Colors } from '@/constants/Colors';
 import { SharedStyles } from '@/constants/SharedStyles';
 import { PrimaryButton } from '@/components/ui/PrimaryButton';
-import { useOnboarding } from '@/context/OnboardingContext';
+import { useOnboardingStore } from '@/store/onboardingStore';
 import { StepHeader } from '@/components/navigation/StepHeader';
 import { StepLayout } from '@/components/ui/auth/StepLayout';
 import { Ionicons } from '@expo/vector-icons';
-import {useTranslation} from "react-i18next";
-
-
+import { useTranslation } from "react-i18next";
 
 const calculateBMI = (weight: number, height: number): number => {
     return parseFloat((weight / ((height / 100) ** 2)).toFixed(1));
@@ -26,11 +24,16 @@ const getBmiStatus = (bmi: number) => {
 
 export default function Step2() {
     const router = useRouter();
-    const { data, updateData } = useOnboarding();
     const { t } = useTranslation();
 
-    const [localHeight, setLocalHeight] = useState(data.height);
-    const [localWeight, setLocalWeight] = useState(data.weight);
+    // Отримуємо дані та функції зі store
+    const height = useOnboardingStore((state) => state.height);
+    const weight = useOnboardingStore((state) => state.weight);
+    const updateData = useOnboardingStore((state) => state.updateData);
+
+    // Локальний стан для плавної роботи слайдерів
+    const [localHeight, setLocalHeight] = useState(height);
+    const [localWeight, setLocalWeight] = useState(weight);
 
     const bmiValue = useMemo(() => {
         return calculateBMI(localWeight, localHeight);

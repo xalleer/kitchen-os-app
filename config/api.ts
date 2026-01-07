@@ -23,21 +23,18 @@ apiClient.interceptors.request.use(
         }
         return config;
     },
-    (error) => {
-        return Promise.reject(error);
-    }
+    (error) => Promise.reject(error)
 );
 
 apiClient.interceptors.response.use(
-    (response) => {
-        return response.data?.data ? { ...response, data: response.data.data } : response;
-    },
+    (response) => response,
     async (error: AxiosError) => {
         if (error.response?.status === 401) {
             await SecureStore.deleteItemAsync('auth_token');
         }
 
         const message = (error.response?.data as any)?.message || error.message || 'Something went wrong';
+
         return Promise.reject({
             message: Array.isArray(message) ? message[0] : message,
             status: error.response?.status,
