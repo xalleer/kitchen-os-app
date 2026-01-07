@@ -7,7 +7,7 @@ import { SharedStyles } from '@/constants/SharedStyles';
 import { PrimaryButton } from '@/components/ui/PrimaryButton';
 import { useOnboarding } from '@/context/OnboardingContext';
 import { StepHeader } from '@/components/navigation/StepHeader';
-import { StepLayout } from '@/components/ui/StepLayout';
+import { StepLayout } from '@/components/ui/auth/StepLayout';
 import { Ionicons } from '@expo/vector-icons';
 import {useTranslation} from "react-i18next";
 

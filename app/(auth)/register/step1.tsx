@@ -5,7 +5,7 @@ import { SharedStyles } from '@/constants/SharedStyles';
 import { ThemeInput } from '@/components/ui/ThemeInput';
 import { PrimaryButton } from '@/components/ui/PrimaryButton';
 import { StepHeader } from '@/components/navigation/StepHeader';
-import { StepLayout } from '@/components/ui/StepLayout';
+import { StepLayout } from '@/components/ui/auth/StepLayout';
 import { useOnboarding } from '@/context/OnboardingContext';
 import { Colors } from '@/constants/Colors';
 import { Ionicons } from '@expo/vector-icons';
