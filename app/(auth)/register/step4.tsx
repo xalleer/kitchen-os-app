@@ -1,181 +1,336 @@
-import React, { useState, useCallback, useMemo } from 'react';
-import { View, Text, StyleSheet, Alert } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Modal, ActivityIndicator } from 'react-native';
 import { useRouter, Stack } from 'expo-router';
+import { useOnboardingStore } from '@/store/onboardingStore';
+import { StepLayout } from '@/components/ui/auth/StepLayout';
+import { StepHeader } from '@/components/navigation/StepHeader';
+import { PrimaryButton } from '@/components/ui/PrimaryButton';
+import { ThemeInput } from '@/components/ui/ThemeInput';
 import { Colors } from '@/constants/Colors';
 import { SharedStyles } from '@/constants/SharedStyles';
-import { PrimaryButton } from '@/components/ui/PrimaryButton';
-import { useOnboardingStore } from '@/store/onboardingStore';
-import { useAuthStore } from '@/store/authStore';
-import { StepHeader } from '@/components/navigation/StepHeader';
-import { StepLayout } from '@/components/ui/auth/StepLayout';
 import { Ionicons } from '@expo/vector-icons';
-import { useTranslation } from "react-i18next";
-import authService from '@/services/auth.service';
-import { RegisterDto } from '@/types';
+import { useTranslation } from 'react-i18next';
+import dictionaryService from '@/services/dictionary.service';
+import { Allergy } from '@/types/dictionaries';
+import { Gender } from '@/types/enums';
+
+type EditingTarget = { type: 'owner' } | { type: 'member'; index: number } | null;
 
 export default function Step4() {
     const router = useRouter();
     const { t } = useTranslation();
-    const [isLoading, setIsLoading] = useState(false);
 
-    // Fix: Select only the fields you need, not the entire state object
-    const name = useOnboardingStore((state) => state.name);
-    const email = useOnboardingStore((state) => state.email);
-    const password = useOnboardingStore((state) => state.password);
-    const age = useOnboardingStore((state) => state.age);
-    const weight = useOnboardingStore((state) => state.weight);
-    const height = useOnboardingStore((state) => state.height);
-    const goal = useOnboardingStore((state) => state.goal);
-    const allergies = useOnboardingStore((state) => state.allergies);
-    const dislikedProducts = useOnboardingStore((state) => state.dislikedProducts);
-    const eatsBreakfast = useOnboardingStore((state) => state.eatsBreakfast);
-    const eatsLunch = useOnboardingStore((state) => state.eatsLunch);
-    const eatsDinner = useOnboardingStore((state) => state.eatsDinner);
-    const eatsSnack = useOnboardingStore((state) => state.eatsSnack);
-    const resetOnboarding = useOnboardingStore((state) => state.resetData);
+    // Store Data
+    const {
+        ownerProfile, updateOwnerProfile,
+        familyMembers, addFamilyMember, removeFamilyMember, updateFamilyMember
+    } = useOnboardingStore();
 
-    const { setToken } = useAuthStore();
+    // Local State
+    const [allergies, setAllergies] = useState<Allergy[]>([]);
+    const [isLoadingAllergies, setIsLoadingAllergies] = useState(true);
 
-    // Memoize the data object to prevent unnecessary re-renders
-    const onboardingData = useMemo(() => ({
-        name,
-        email,
-        password,
-        age,
-        weight,
-        height,
-        goal,
-        allergies,
-        dislikedProducts,
-        eatsBreakfast,
-        eatsLunch,
-        eatsDinner,
-        eatsSnack,
-    }), [name, email, password, age, weight, height, goal, allergies, dislikedProducts, eatsBreakfast, eatsLunch, eatsDinner, eatsSnack]);
+    // Modals State
+    const [editingTarget, setEditingTarget] = useState<EditingTarget>(null);
+    const [isAddMemberModalVisible, setIsAddMemberModalVisible] = useState(false);
+    const [newMemberName, setNewMemberName] = useState('');
 
-    const handleFinish = useCallback(async () => {
-        setIsLoading(true);
+    useEffect(() => {
+        dictionaryService.getAllergies()
+            .then(setAllergies)
+            .catch(console.error)
+            .finally(() => setIsLoadingAllergies(false));
+    }, []);
 
-        try {
-            if (!onboardingData.goal) {
-                throw new Error('Goal is required');
-            }
+    // --- Logic for Adding Member ---
+    const handleAddMember = () => {
+        if (!newMemberName.trim()) return;
+        addFamilyMember({
+            name: newMemberName,
+            gender: Gender.UNSPECIFIED,
+            eatsBreakfast: true, eatsLunch: true, eatsDinner: true, eatsSnack: false,
+            allergyIds: []
+        });
+        setNewMemberName('');
+        setIsAddMemberModalVisible(false);
+    };
 
-            const registerData: RegisterDto = {
-                email: onboardingData.email,
-                password: onboardingData.password,
-                name: onboardingData.name,
-                age: onboardingData.age,
-                weight: onboardingData.weight,
-                height: onboardingData.height,
-                goal: onboardingData.goal,
-                allergies: onboardingData.allergies,
-                dislikedProducts: onboardingData.dislikedProducts,
-                eatsBreakfast: onboardingData.eatsBreakfast,
-                eatsLunch: onboardingData.eatsLunch,
-                eatsDinner: onboardingData.eatsDinner,
-                eatsSnack: onboardingData.eatsSnack,
-            };
+    // --- Helpers to get/set data for current target ---
+    const getCurrentData = () => {
+        if (!editingTarget) return null;
+        if (editingTarget.type === 'owner') return ownerProfile;
+        return familyMembers[editingTarget.index];
+    };
 
-            const response = await authService.register(registerData);
-            await setToken(response.access_token);
-            resetOnboarding();
-            router.replace('/(tabs)');
-
-        } catch (error: any) {
-            console.error('Registration error:', error);
-            Alert.alert(
-                'Помилка реєстрації',
-                error.message || 'Щось пішло не так. Спробуйте ще раз.',
-                [{ text: 'OK' }]
-            );
-        } finally {
-            setIsLoading(false);
+    const updateCurrentData = (data: any) => {
+        if (!editingTarget) return;
+        if (editingTarget.type === 'owner') {
+            updateOwnerProfile(data);
+        } else {
+            updateFamilyMember(editingTarget.index, data);
         }
-    }, [onboardingData, router, resetOnboarding, setToken]);
+    };
+
+    // --- Toggles ---
+    const toggleAllergy = (allergyId: string) => {
+        const current = getCurrentData()?.allergyIds || [];
+        const updated = current.includes(allergyId)
+            ? current.filter(id => id !== allergyId)
+            : [...current, allergyId];
+        updateCurrentData({ allergyIds: updated });
+    };
+
+    const toggleMeal = (mealKey: 'eatsBreakfast' | 'eatsLunch' | 'eatsDinner' | 'eatsSnack') => {
+        const currentData = getCurrentData();
+        if (!currentData) return;
+        updateCurrentData({ [mealKey]: !currentData[mealKey] });
+    };
+
+    const getEditingName = () => {
+        const data = getCurrentData();
+        return data?.name || (editingTarget?.type === 'owner' ? t('YOU') : '');
+    };
+
+    // Reusable Checkbox Component for this screen
+    const MealCheckbox = ({ label, isChecked, onPress }: { label: string, isChecked: boolean, onPress: () => void }) => (
+        <TouchableOpacity style={styles.mealCheckbox} onPress={onPress}>
+            <View style={[styles.checkboxIcon, isChecked && styles.checkboxIconChecked]}>
+                {isChecked && <Ionicons name="checkmark" size={16} color="white" />}
+            </View>
+            <Text style={styles.mealLabel}>{label}</Text>
+        </TouchableOpacity>
+    );
 
     return (
         <StepLayout
             footer={
                 <PrimaryButton
-                    title={t('BUTTONS.FINISH')}
-                    onPress={handleFinish}
-                    loading={isLoading}
-                    disabled={isLoading}
+                    title={t('BUTTONS.CONTINUE')}
+                    showArrow
+                    onPress={() => router.push('/(auth)/register/step5')}
                 />
             }
         >
-            <Stack.Screen options={{
-                headerTitle: () => <StepHeader currentStep={4} />
-            }} />
+            <Stack.Screen options={{ headerTitle: () => <StepHeader currentStep={4} /> }} />
 
-            <Ionicons
-                name="checkmark-circle-outline"
-                size={48}
-                color={Colors.primary}
-                style={{ alignSelf: 'center', marginBottom: 20 }}
-            />
+            <Text style={SharedStyles.title}>{t('FAMILY_AND_PREFERENCES')}</Text>
+            <Text style={SharedStyles.subtitle}>{t('STEP4_SUBTITLE')}</Text>
 
-            <Text style={SharedStyles.title}>{t('ALMOST_DONE')}</Text>
-            <Text style={SharedStyles.subtitle}>{t('STEP4_TITLE')}</Text>
+            {/* --- Cards List --- */}
+            <View style={{ marginTop: 20 }}>
+                {/* 1. Owner Card */}
+                <View style={styles.card}>
+                    <View style={styles.cardHeader}>
+                        <View style={[styles.avatar, { backgroundColor: Colors.primary }]}>
+                            <Ionicons name="person" size={20} color="#fff" />
+                        </View>
+                        <View style={{ marginLeft: 12, flex: 1 }}>
+                            <Text style={styles.cardName}>{ownerProfile.name} ({t('YOU')})</Text>
+                            <Text style={styles.cardRole}>{t('ROLES.OWNER')}</Text>
+                        </View>
+                    </View>
 
-            <View style={styles.summaryCard}>
-                <Text style={styles.summaryTitle}>{t('YOUR_PROFILE')}</Text>
-
-                <View style={styles.summaryRow}>
-                    <Text style={styles.summaryLabel}>{t('YOUR_NAME')}:</Text>
-                    <Text style={styles.summaryValue}>{onboardingData.name}</Text>
+                    <TouchableOpacity
+                        style={styles.editButton}
+                        onPress={() => setEditingTarget({ type: 'owner' })}
+                    >
+                        <Text style={styles.editButtonText}>
+                            {t('EDIT_PREFERENCES')}
+                        </Text>
+                        <Ionicons name="settings-outline" size={16} color={Colors.textGray} />
+                    </TouchableOpacity>
                 </View>
 
-                <View style={styles.summaryRow}>
-                    <Text style={styles.summaryLabel}>{t('HEIGHT')}:</Text>
-                    <Text style={styles.summaryValue}>{onboardingData.height} {t('UNITS.SM')}</Text>
-                </View>
+                {/* 2. Family Members Cards */}
+                {familyMembers.map((member, index) => (
+                    <View key={index} style={styles.card}>
+                        <View style={styles.cardHeader}>
+                            <View style={[styles.avatar, { backgroundColor: Colors.textGray }]}>
+                                <Ionicons name="people" size={20} color="#fff" />
+                            </View>
+                            <View style={{ marginLeft: 12, flex: 1 }}>
+                                <Text style={styles.cardName}>{member.name}</Text>
+                                <Text style={styles.cardRole}>{t('ROLES.MEMBER')}</Text>
+                            </View>
+                            <TouchableOpacity onPress={() => removeFamilyMember(index)} style={{ padding: 4 }}>
+                                <Ionicons name="trash-outline" size={20} color={Colors.danger} />
+                            </TouchableOpacity>
+                        </View>
 
-                <View style={styles.summaryRow}>
-                    <Text style={styles.summaryLabel}>{t('WEIGHT')}:</Text>
-                    <Text style={styles.summaryValue}>{onboardingData.weight} {t('UNITS.KG')}</Text>
-                </View>
+                        <TouchableOpacity
+                            style={styles.editButton}
+                            onPress={() => setEditingTarget({ type: 'member', index })}
+                        >
+                            <Text style={styles.editButtonText}>
+                                {t('EDIT_PREFERENCES')}
+                            </Text>
+                            <Ionicons name="settings-outline" size={16} color={Colors.textGray} />
+                        </TouchableOpacity>
+                    </View>
+                ))}
 
-                <View style={styles.summaryRow}>
-                    <Text style={styles.summaryLabel}>{t('YOUR_TARGET')}:</Text>
-                    <Text style={styles.summaryValue}>
-                        {onboardingData.goal ? t(`TARGETS.${onboardingData.goal}`) : '-'}
-                    </Text>
-                </View>
+                {/* 3. Add Button */}
+                <TouchableOpacity style={styles.addButton} onPress={() => setIsAddMemberModalVisible(true)}>
+                    <Ionicons name="add-circle-outline" size={24} color={Colors.primary} />
+                    <Text style={styles.addButtonLabel}>{t('ADD_FAMILY_MEMBER')}</Text>
+                </TouchableOpacity>
             </View>
+
+            {/* --- Modal: Add Member --- */}
+            <Modal visible={isAddMemberModalVisible} transparent animationType="fade">
+                <View style={styles.modalOverlay}>
+                    <View style={styles.modalContent}>
+                        <Text style={styles.modalTitle}>{t('ADD_FAMILY_MEMBER')}</Text>
+                        <ThemeInput
+                            placeholder={t('PLACEHOLDERS.NAME')}
+                            value={newMemberName}
+                            onChangeText={setNewMemberName}
+                            autoFocus
+                        />
+                        <View style={styles.modalButtons}>
+                            <TouchableOpacity onPress={() => setIsAddMemberModalVisible(false)} style={{ padding: 10 }}>
+                                <Text style={{ color: Colors.textGray }}>{t('BUTTONS.CANCEL')}</Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity onPress={handleAddMember} style={styles.modalPrimaryButton}>
+                                <Text style={{ color: '#fff', fontWeight: '600' }}>{t('BUTTONS.ADD')}</Text>
+                            </TouchableOpacity>
+                        </View>
+                    </View>
+                </View>
+            </Modal>
+
+            {/* --- Modal: Edit Preferences (Meals & Allergies) --- */}
+            <Modal visible={!!editingTarget} animationType="slide" presentationStyle="pageSheet">
+                <View style={styles.fullScreenModal}>
+                    <View style={styles.fsModalHeader}>
+                        <Text style={styles.fsModalTitle}>
+                            {getEditingName()}
+                        </Text>
+                        <TouchableOpacity onPress={() => setEditingTarget(null)}>
+                            <Ionicons name="close-circle" size={30} color={Colors.textGray} />
+                        </TouchableOpacity>
+                    </View>
+
+                    <ScrollView contentContainerStyle={{ padding: 20 }}>
+
+                        {/* 1. Meals Section */}
+                        <Text style={styles.sectionTitle}>{t('MEALS_TITLE')}</Text>
+                        <View style={styles.mealsContainer}>
+                            <MealCheckbox
+                                label={t('MEALS.BREAKFAST')}
+                                isChecked={getCurrentData()?.eatsBreakfast ?? true}
+                                onPress={() => toggleMeal('eatsBreakfast')}
+                            />
+                            <MealCheckbox
+                                label={t('MEALS.LUNCH')}
+                                isChecked={getCurrentData()?.eatsLunch ?? true}
+                                onPress={() => toggleMeal('eatsLunch')}
+                            />
+                            <MealCheckbox
+                                label={t('MEALS.DINNER')}
+                                isChecked={getCurrentData()?.eatsDinner ?? true}
+                                onPress={() => toggleMeal('eatsDinner')}
+                            />
+                            <MealCheckbox
+                                label={t('MEALS.SNACK')}
+                                isChecked={getCurrentData()?.eatsSnack ?? false}
+                                onPress={() => toggleMeal('eatsSnack')}
+                            />
+                        </View>
+
+                        <View style={styles.divider} />
+
+                        {/* 2. Allergies Section */}
+                        <Text style={styles.sectionTitle}>{t('ALLERGIES_TITLE')}</Text>
+                        <View style={styles.allergyGrid}>
+                            {isLoadingAllergies ? (
+                                <ActivityIndicator size="large" color={Colors.primary} />
+                            ) : (
+                                allergies.map(allergy => {
+                                    const selected = getCurrentData()?.allergyIds?.includes(allergy.id);
+                                    return (
+                                        <TouchableOpacity
+                                            key={allergy.id}
+                                            style={[styles.allergyChip, selected && styles.allergyChipSelected]}
+                                            onPress={() => toggleAllergy(allergy.id)}
+                                        >
+                                            <Text style={[styles.allergyText, selected && styles.allergyTextSelected]}>
+                                                {allergy.name}
+                                            </Text>
+                                        </TouchableOpacity>
+                                    )
+                                })
+                            )}
+                        </View>
+
+                    </ScrollView>
+
+                    <View style={styles.fsModalFooter}>
+                        <PrimaryButton title={t('BUTTONS.SAVE')} onPress={() => setEditingTarget(null)} />
+                    </View>
+                </View>
+            </Modal>
         </StepLayout>
     );
 }
 
 const styles = StyleSheet.create({
-    summaryCard: {
-        backgroundColor: Colors.white,
-        borderRadius: 24,
-        padding: 24,
-        borderWidth: 1,
-        borderColor: Colors.inputBorder,
-        marginTop: 20
+    card: {
+        backgroundColor: Colors.white, borderRadius: 16, padding: 16, marginBottom: 12,
+        borderWidth: 1, borderColor: Colors.inputBorder,
+        shadowColor: Colors.cardShadow, shadowOpacity: 0.05, shadowRadius: 4, elevation: 2
     },
-    summaryTitle: {
-        fontSize: 20,
-        fontWeight: '700',
-        color: Colors.secondary,
-        marginBottom: 20,
+    cardHeader: { flexDirection: 'row', alignItems: 'center' },
+    avatar: { width: 40, height: 40, borderRadius: 20, justifyContent: 'center', alignItems: 'center' },
+    cardName: { fontSize: 16, fontWeight: '600', color: Colors.secondary },
+    cardRole: { fontSize: 12, color: Colors.textGray },
+    editButton: {
+        marginTop: 12, paddingTop: 12, borderTopWidth: 1, borderTopColor: Colors.inputBackground,
+        flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'
     },
-    summaryRow: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        marginBottom: 12,
+    editButtonText: { color: Colors.textGray, fontSize: 14 },
+    addButton: {
+        flexDirection: 'row', alignItems: 'center', justifyContent: 'center',
+        padding: 16, borderStyle: 'dashed', borderWidth: 1, borderColor: Colors.primary,
+        borderRadius: 16, backgroundColor: Colors.inputBackground
     },
-    summaryLabel: {
-        fontSize: 16,
-        color: Colors.textGray,
+    addButtonLabel: { color: Colors.primary, fontWeight: '600', marginLeft: 8 },
+
+    // Modal Styles
+    modalOverlay: { flex: 1, backgroundColor: 'rgba(0,0,0,0.5)', justifyContent: 'center', padding: 20 },
+    modalContent: { backgroundColor: 'white', padding: 24, borderRadius: 24 },
+    modalTitle: { fontSize: 18, fontWeight: '700', marginBottom: 16, textAlign: 'center' },
+    modalButtons: { flexDirection: 'row', justifyContent: 'flex-end', alignItems: 'center', marginTop: 16, gap: 16 },
+    modalPrimaryButton: { backgroundColor: Colors.primary, paddingHorizontal: 20, paddingVertical: 10, borderRadius: 10 },
+
+    // Full Screen Modal
+    fullScreenModal: { flex: 1, backgroundColor: Colors.background },
+    fsModalHeader: {
+        padding: 20, paddingTop: 60, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center',
+        borderBottomWidth: 1, borderBottomColor: Colors.inputBorder
     },
-    summaryValue: {
-        fontSize: 16,
-        fontWeight: '600',
-        color: Colors.secondary,
+    fsModalTitle: { fontSize: 20, fontWeight: 'bold', color: Colors.secondary },
+    fsModalFooter: { padding: 20, paddingBottom: 40, borderTopWidth: 1, borderTopColor: Colors.inputBorder },
+    sectionTitle: { fontSize: 18, fontWeight: '700', marginBottom: 12, color: Colors.secondary },
+    divider: { height: 1, backgroundColor: Colors.inputBorder, marginVertical: 24 },
+
+    // Meals
+    mealsContainer: { gap: 12 },
+    mealCheckbox: { flexDirection: 'row', alignItems: 'center', paddingVertical: 8 },
+    checkboxIcon: {
+        width: 24, height: 24, borderRadius: 6, borderWidth: 2, borderColor: Colors.inputBorder,
+        marginRight: 12, justifyContent: 'center', alignItems: 'center'
     },
+    checkboxIconChecked: { backgroundColor: Colors.primary, borderColor: Colors.primary },
+    mealLabel: { fontSize: 16, color: Colors.secondary },
+
+    // Allergies
+    allergyGrid: { flexDirection: 'row', flexWrap: 'wrap', gap: 10 },
+    allergyChip: {
+        paddingHorizontal: 16, paddingVertical: 10, borderRadius: 20,
+        borderWidth: 1, borderColor: Colors.inputBorder, backgroundColor: Colors.white
+    },
+    allergyChipSelected: { backgroundColor: Colors.primary, borderColor: Colors.primary },
+    allergyText: { color: Colors.secondary },
+    allergyTextSelected: { color: Colors.white, fontWeight: '600' }
 });

@@ -22,11 +22,41 @@
   "ESTIMATED": "Estimated",
   "YOUR_TARGET": "What is your goal?",
   "STEP3_TITLE": "We adapt plans based on your choice.",
+  "FAMILY_AND_PREFERENCES": "Family & Preferences",
+  "STEP4_SUBTITLE": "Manage members, meals and allergies",
+  "EDIT_PREFERENCES": "Edit preferences",
+  "MEALS_TITLE": "Daily Meals",
+  "ALLERGIES_TITLE": "Food Allergies",
+  "MEALS": {
+    "BREAKFAST": "Breakfast",
+    "LUNCH": "Lunch",
+    "DINNER": "Dinner",
+    "SNACK": "Snack"
+  },
+  "BUDGET_AND_REVIEW": "Budget & Review",
+  "STEP5_SUBTITLE": "Finalize your setup",
   "ALMOST_DONE": "Almost Done!",
-  "STEP4_TITLE": "Review your information before completing",
   "YOUR_PROFILE": "Your Profile",
   "YOUR_AGE": "Your age",
   "OPTIONAL": "Optional",
+  "YOU": "You",
+  "ALLERGIES": "Allergies",
+  "ALLERGIES_FOR": "Allergies for",
+  "ADD_FAMILY_MEMBER": "Add Family Member",
+  "WEEKLY_BUDGET": "Weekly Budget",
+  "BUDGET_HINT": "We'll generate plans within this limit",
+  "SUMMARY": "Summary",
+  "ACCOUNT": "Account",
+  "GOAL": "Goal",
+  "FAMILY_SIZE": "Family Size",
+  "PEOPLE": "people",
+  "TOTAL_ALLERGIES": "Total Allergies",
+  "SELECTED": "selected",
+  "ADDED": "added",
+  "ROLES": {
+    "OWNER": "Owner",
+    "MEMBER": "Member"
+  },
   "TARGETS": {
     "LOSE_WEIGHT": "Weight Loss",
     "GAIN_WEIGHT": "Weight Gain",
@@ -35,7 +65,8 @@
     "HEALTHY": "Healthy Eating"
   },
   "CURRENCY": {
-    "UAH": "uah"
+    "UAH": "UAH",
+    "USD": "USD"
   },
   "UNITS": {
     "KG": "kg",
@@ -50,17 +81,23 @@
   "PLACEHOLDERS": {
     "EMAIL": "Enter your email",
     "PASSWORD": "Enter your password",
-    "NAME": "Enter your name",
+    "NAME": "Enter name",
     "MIN_LEN": "Minimum 6 characters",
     "EMAIL_EXAMPLE": "example@mail.com"
   },
   "BUTTONS": {
     "CONTINUE": "Continue",
-    "FINISH": "Finish Setup"
+    "FINISH": "Finish Setup",
+    "ADD": "Add",
+    "CANCEL": "Cancel",
+    "SAVE": "Save"
   },
   "VALIDATORS": {
     "NAME": "Name must be longer than 1 character",
     "EMAIL": "Please enter a valid email address",
     "PASSWORD": "Password must be at least 6 characters long"
+  },
+  "ERRORS": {
+    "REGISTRATION_FAILED": "Registration failed. Please try again."
   }
 }

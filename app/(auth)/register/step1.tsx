@@ -19,7 +19,7 @@ const validateEmail = (email: string): boolean => {
 export default function Step1() {
     const router = useRouter();
     const { t } = useTranslation();
-    const { name, email, password, updateData } = useOnboardingStore();
+    const { name, email, password, updateAccount, updateOwnerProfile } = useOnboardingStore();
 
     const [touched, setTouched] = useState({
         name: false,
@@ -27,6 +27,11 @@ export default function Step1() {
         password: false,
         age: false
     });
+
+    const handleNameChange = (val: string) => {
+        updateAccount({ name: val });
+        updateOwnerProfile({ name: val });
+    };
 
     const validation = useMemo(() => {
         const nameValid = (name?.trim().length || 0) > 1;
@@ -76,7 +81,7 @@ export default function Step1() {
                 <ThemeInput
                     placeholder={t('PLACEHOLDERS.NAME')}
                     value={name}
-                    onChangeText={(val) => updateData({ name: val })}
+                    onChangeText={handleNameChange}
                     onBlur={handleNameBlur}
                 />
                 {touched.name && !validation.name && (
@@ -85,14 +90,6 @@ export default function Step1() {
                     </Text>
                 )}
 
-                <Text style={SharedStyles.label}>{t('YOUR_AGE')} {'(' + t('OPTIONAL') + ')'}</Text>
-                <ThemeInput
-                    onChangeText={(val) => updateData({age: parseInt(val)})}
-                    onBlur={handleAgeBlur}
-                    keyboardType="numeric"
-                    placeholder={'ex: 20'}
-                ></ThemeInput>
-
 
                 <Text style={SharedStyles.label}>{t('EMAIL')}</Text>
                 <ThemeInput
@@ -100,7 +97,7 @@ export default function Step1() {
                     autoCapitalize="none"
                     keyboardType="email-address"
                     value={email}
-                    onChangeText={(val) => updateData({ email: val })}
+                    onChangeText={(val) => updateAccount({ email: val })}
                     onBlur={handleEmailBlur}
                 />
                 {touched.email && !validation.email && (
@@ -114,7 +111,7 @@ export default function Step1() {
                     placeholder={t('PLACEHOLDERS.MIN_LEN')}
                     secureTextEntry
                     value={password}
-                    onChangeText={(val) => updateData({ password: val })}
+                    onChangeText={(val) => updateAccount({ password: val })}
                     onBlur={handlePasswordBlur}
                 />
                 {touched.password && !validation.password && (

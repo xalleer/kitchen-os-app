@@ -3,7 +3,7 @@ import { View, StyleSheet } from 'react-native';
 import { Colors } from '@/constants/Colors';
 
 export const StepHeader = ({ currentStep }: { currentStep: number }) => {
-    const TOTAL_STEPS = 4;
+    const TOTAL_STEPS = 5;
     return (
         <View style={styles.container}>
             {Array.from({ length: TOTAL_STEPS }).map((_, i) => (

@@ -19,6 +19,7 @@ export default function AuthLayout() {
             <Stack.Screen name="register/step2" options={{ headerShown: true }} />
             <Stack.Screen name="register/step3" options={{ headerShown: true }} />
             <Stack.Screen name="register/step4" options={{ headerShown: true }} />
+            <Stack.Screen name="register/step5" options={{ headerShown: true }} />
         </Stack>
     );
 }

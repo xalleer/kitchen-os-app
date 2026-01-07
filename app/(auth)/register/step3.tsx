@@ -16,9 +16,8 @@ export default function Step3() {
     const router = useRouter();
     const { t } = useTranslation();
 
-    // Отримуємо дані зі store
-    const goal = useOnboardingStore((state) => state.goal);
-    const updateData = useOnboardingStore((state) => state.updateData);
+    const { ownerProfile, updateOwnerProfile } = useOnboardingStore();
+    const goal = ownerProfile.goal;
 
     return (
         <StepLayout
@@ -50,25 +49,25 @@ export default function Step3() {
                     title={t('TARGETS.LOSE_WEIGHT')}
                     iconName="body"
                     isSelected={goal === Goal.LOSE_WEIGHT}
-                    onPress={() => updateData({ goal: Goal.LOSE_WEIGHT })}
+                    onPress={() => updateOwnerProfile({ goal: Goal.LOSE_WEIGHT })}
                 />
                 <SelectableCard
                     title={t('TARGETS.GAIN_WEIGHT')}
                     iconName="barbell"
                     isSelected={goal === Goal.GAIN_WEIGHT}
-                    onPress={() => updateData({ goal: Goal.GAIN_WEIGHT })}
+                    onPress={() => updateOwnerProfile({ goal: Goal.GAIN_WEIGHT })}
                 />
                 <SelectableCard
                     title={t('TARGETS.MAINTAIN')}
                     iconName="heart"
                     isSelected={goal === Goal.MAINTAIN}
-                    onPress={() => updateData({ goal: Goal.MAINTAIN })}
+                    onPress={() => updateOwnerProfile({ goal: Goal.MAINTAIN })}
                 />
                 <SelectableCard
                     title={t('TARGETS.HEALTHY')}
                     iconName="leaf"
                     isSelected={goal === Goal.HEALTHY}
-                    onPress={() => updateData({ goal: Goal.HEALTHY })}
+                    onPress={() => updateOwnerProfile({ goal: Goal.HEALTHY })}
                 />
             </View>
         </StepLayout>

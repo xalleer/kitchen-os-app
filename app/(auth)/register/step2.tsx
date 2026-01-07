@@ -12,7 +12,8 @@ import { Ionicons } from '@expo/vector-icons';
 import { useTranslation } from "react-i18next";
 
 const calculateBMI = (weight: number, height: number): number => {
-    return parseFloat((weight / ((height / 100) ** 2)).toFixed(1));
+    if (!height) return 0;
+    return parseFloat((weight / Math.pow(height / 100, 2)).toFixed(1));
 };
 
 const getBmiStatus = (bmi: number) => {
@@ -26,14 +27,13 @@ export default function Step2() {
     const router = useRouter();
     const { t } = useTranslation();
 
-    // Отримуємо дані та функції зі store
-    const height = useOnboardingStore((state) => state.height);
-    const weight = useOnboardingStore((state) => state.weight);
-    const updateData = useOnboardingStore((state) => state.updateData);
+    const { ownerProfile, updateOwnerProfile } = useOnboardingStore();
 
-    // Локальний стан для плавної роботи слайдерів
-    const [localHeight, setLocalHeight] = useState(height);
-    const [localWeight, setLocalWeight] = useState(weight);
+    const initialHeight = Number(ownerProfile.height) || 170;
+    const initialWeight = Number(ownerProfile.weight) || 70;
+
+    const [localHeight, setLocalHeight] = useState(initialHeight);
+    const [localWeight, setLocalWeight] = useState(initialWeight);
 
     const bmiValue = useMemo(() => {
         return calculateBMI(localWeight, localHeight);
@@ -50,12 +50,12 @@ export default function Step2() {
     }, []);
 
     const handleHeightComplete = useCallback((val: number) => {
-        updateData({ height: val });
-    }, [updateData]);
+        updateOwnerProfile({ height: val });
+    }, [updateOwnerProfile]);
 
     const handleWeightComplete = useCallback((val: number) => {
-        updateData({ weight: val });
-    }, [updateData]);
+        updateOwnerProfile({ weight: val });
+    }, [updateOwnerProfile]);
 
     return (
         <StepLayout
@@ -85,7 +85,7 @@ export default function Step2() {
                 <View style={SharedStyles.rowBetween}>
                     <Text style={styles.metricLabel}>{t('HEIGHT')}</Text>
                     <Text style={styles.metricValue}>
-                        {localHeight} <Text style={styles.metricUnit}>{t('UNITS.SM')}</Text>
+                        {Math.round(localHeight)} <Text style={styles.metricUnit}>{t('UNITS.SM')}</Text>
                     </Text>
                 </View>
                 <Slider
@@ -93,7 +93,7 @@ export default function Step2() {
                     minimumValue={140}
                     maximumValue={220}
                     step={1}
-                    value={localHeight}
+                    value={localHeight} // Slider очікує number
                     onValueChange={handleHeightChange}
                     onSlidingComplete={handleHeightComplete}
                     minimumTrackTintColor={Colors.primary}
@@ -106,7 +106,7 @@ export default function Step2() {
                 <View style={SharedStyles.rowBetween}>
                     <Text style={styles.metricLabel}>{t('WEIGHT')}</Text>
                     <Text style={styles.metricValue}>
-                        {localWeight} <Text style={styles.metricUnit}>{t('UNITS.KG')}</Text>
+                        {Math.round(localWeight)} <Text style={styles.metricUnit}>{t('UNITS.KG')}</Text>
                     </Text>
                 </View>
                 <Slider
@@ -114,7 +114,7 @@ export default function Step2() {
                     minimumValue={40}
                     maximumValue={150}
                     step={1}
-                    value={localWeight}
+                    value={localWeight} // Slider очікує number
                     onValueChange={handleWeightChange}
                     onSlidingComplete={handleWeightComplete}
                     minimumTrackTintColor={Colors.primary}

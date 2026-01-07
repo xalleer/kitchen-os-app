@@ -1,68 +1,103 @@
 {
   "APP_NAME": "Kitchen OS",
-  "WELCOME_TITLE": "Ваш ШІ-командир на кухні. Харчуйтеся розумно, заощаджуйте гроші.",
+  "WELCOME_TITLE": "Твій ШІ Кухонний Командир. Їж розумно, заощаджуй.",
   "GET_STARTED": "Розпочати",
-  "CONTINUE_WITH": "Або продовжити як",
-  "HAVE_ACCOUNT": "Вже маєте аккаунт?",
+  "CONTINUE_WITH": "Або увійти через",
+  "HAVE_ACCOUNT": "Вже є акаунт?",
   "SIGN_IN": "Увійти",
-  "WELCOME_BACK": "Ласкаво Просимо",
-  "SIGN_IN_TITLE": "Увійдіть до свого аккаунту",
-  "EMAIL": "Пошта",
+  "WELCOME_BACK": "З поверненням",
+  "SIGN_IN_TITLE": "Увійдіть у свій акаунт",
+  "EMAIL": "Електронна пошта",
   "PASSWORD": "Пароль",
   "FORGOT_PASSWORD": "Забули пароль?",
-  "DONT_HAVE_ACCOUNT": "Не маєте аккаунту?",
+  "DONT_HAVE_ACCOUNT": "Немає акаунту?",
   "SIGN_UP": "Зареєструватись",
-  "LETS_MEET": "Давайте знайомитись",
-  "STEP1_TITLE": "Створи свій аккаунт для Kitchen OS",
-  "YOUR_NAME": "Ваше ім'я",
-  "BODY_METRICS": "Показники тіла",
-  "STEP2_TITLE": "Допоможи Kitchen OS налаштувати під ваші потреби",
-  "HEIGHT": "Ріст",
+  "LETS_MEET": "Давай знайомитись",
+  "STEP1_TITLE": "Створи свій акаунт Kitchen OS",
+  "YOUR_NAME": "Твоє Ім'я",
+  "BODY_METRICS": "Параметри тіла",
+  "STEP2_TITLE": "Допоможи адаптувати Kitchen OS під тебе",
+  "HEIGHT": "Зріст",
   "WEIGHT": "Вага",
-  "ESTIMATED": "Оцінюваний",
-  "YOUR_TARGET": "Яка твоя мета?",
-  "STEP3_TITLE": "Ми адаптуємо плани під твій вибір.",
-  "HOUSEHOLD": "Побут",
-  "ALMOST_DONE": "Майже готово",
-  "STEP4_TITLE": "Перевірте ваші дані перед завершенням",
-  "YOUR_PROFILE": "Ваш профіль",
-  "YOUR_AGE": "Ваш вік",
-  "OPTIONAL": "Необов'язково",
+  "ESTIMATED": "Приблизний",
+  "YOUR_TARGET": "Яка твоя ціль?",
+  "STEP3_TITLE": "Ми адаптуємо плани під твій вибір",
+  "FAMILY_AND_PREFERENCES": "Сім'я та Вподобання",
+  "STEP4_SUBTITLE": "Керуйте учасниками, прийомами їжі та алергіями",
+  "EDIT_PREFERENCES": "Налаштувати вподобання",
+  "MEALS_TITLE": "Прийоми їжі",
+  "ALLERGIES_TITLE": "Харчові алергії",
+  "MEALS": {
+    "BREAKFAST": "Сніданок",
+    "LUNCH": "Обід",
+    "DINNER": "Вечеря",
+    "SNACK": "Перекус"
+  },
+  "BUDGET_AND_REVIEW": "Бюджет та Огляд",
+  "STEP5_SUBTITLE": "Фіналізуйте налаштування",
+  "ALMOST_DONE": "Майже готово!",
+  "YOUR_PROFILE": "Твій Профіль",
+  "YOUR_AGE": "Твій вік",
+  "OPTIONAL": "Опціонально",
+  "YOU": "Ви",
+  "ALLERGIES": "Алергії",
+  "ALLERGIES_FOR": "Алергії для",
+  "ADD_FAMILY_MEMBER": "Додати члена сім'ї",
+  "WEEKLY_BUDGET": "Тижневий бюджет",
+  "BUDGET_HINT": "Ми сформуємо меню в межах ліміту",
+  "SUMMARY": "Підсумок",
+  "ACCOUNT": "Акаунт",
+  "GOAL": "Ціль",
+  "FAMILY_SIZE": "Розмір сім'ї",
+  "PEOPLE": "люд.",
+  "TOTAL_ALLERGIES": "Всього алергій",
+  "SELECTED": "обрано",
+  "ADDED": "додано",
+  "ROLES": {
+    "OWNER": "Власник",
+    "MEMBER": "Учасник"
+  },
   "TARGETS": {
     "LOSE_WEIGHT": "Схуднення",
     "GAIN_WEIGHT": "Набір маси",
-    "MAINTAIN": "Підтримка",
-    "SAVE_BUDGET": "Економія бюджету",
+    "MAINTAIN": "Підтримка ваги",
+    "SAVE_BUDGET": "Економія",
     "HEALTHY": "Здорове харчування"
   },
   "CURRENCY": {
-    "UAH": "грн"
+    "UAH": "грн",
+    "USD": "дол"
   },
   "UNITS": {
     "KG": "кг",
     "SM": "см"
   },
   "BMI": {
-    "NORMAL": "Нормальний",
-    "UNDERWEIGHT": "Недостатня вага",
+    "NORMAL": "Норма",
+    "UNDERWEIGHT": "Дефіцит",
     "OBESE": "Ожиріння",
-    "OVERWEIGHT": "Надмірна вага"
+    "OVERWEIGHT": "Надлишок"
   },
   "PLACEHOLDERS": {
-    "EMAIL": "Введіть вашу пошту",
-    "PASSWORD": "Введіть ваш пароль",
-    "NAME": "Введи ім'я",
+    "EMAIL": "Введіть email",
+    "PASSWORD": "Введіть пароль",
+    "NAME": "Введіть ім'я",
     "MIN_LEN": "Мінімум 6 символів",
-    "EMAIL_EXAMPLE": "example@mail.com",
-    "INVITE_CODE": "AB12CD34"
+    "EMAIL_EXAMPLE": "example@mail.com"
   },
   "BUTTONS": {
     "CONTINUE": "Продовжити",
-    "FINISH": "Завершити налаштування"
+    "FINISH": "Завершити",
+    "ADD": "Додати",
+    "CANCEL": "Скасувати",
+    "SAVE": "Зберегти"
   },
   "VALIDATORS": {
-    "NAME": "Ім'я має бути більше 1 символу",
-    "EMAIL": "Введіть коректну пошту",
-    "PASSWORD": "Пароль має містити мінімум 6 символів"
+    "NAME": "Ім'я має бути довшим за 1 символ",
+    "EMAIL": "Введіть коректну адресу",
+    "PASSWORD": "Пароль має бути мінімум 6 символів"
+  },
+  "ERRORS": {
+    "REGISTRATION_FAILED": "Помилка реєстрації. Спробуйте ще раз."
   }
 }

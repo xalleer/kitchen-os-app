@@ -1,21 +1,35 @@
 import { create } from 'zustand';
-import { OnboardingData, Goal } from '@/types';
+import { Gender, Goal } from '@/types/enums';
+import { FamilyMemberDto, OwnerProfileDto } from '@/types/family';
 
-interface OnboardingState extends OnboardingData {
-    updateData: (data: Partial<OnboardingData>) => void;
+interface OnboardingState {
+    email: string;
+    password: string;
+    name: string;
+
+    ownerProfile: OwnerProfileDto;
+    familyMembers: FamilyMemberDto[];
+    budgetLimit: number;
+
+    updateAccount: (data: Partial<{ email: string; password: string; name: string }>) => void;
+    updateOwnerProfile: (data: Partial<OwnerProfileDto>) => void;
+
+    addFamilyMember: (member: FamilyMemberDto) => void;
+    removeFamilyMember: (index: number) => void;
+    updateFamilyMember: (index: number, data: Partial<FamilyMemberDto>) => void;
+
+    setBudgetLimit: (limit: number) => void;
     resetData: () => void;
 }
 
-const initialState: OnboardingData = {
+const initialOwnerProfile: OwnerProfileDto = {
     name: '',
-    email: '',
-    password: '',
-    age: undefined,
+    gender: Gender.UNSPECIFIED,
     height: 175,
     weight: 70,
-    goal: null,
-    allergies: [],
-    dislikedProducts: [],
+    age: undefined,
+    goal: Goal.MAINTAIN,
+    allergyIds: [],
     eatsBreakfast: true,
     eatsLunch: true,
     eatsDinner: true,
@@ -23,13 +37,50 @@ const initialState: OnboardingData = {
 };
 
 export const useOnboardingStore = create<OnboardingState>((set) => ({
-    ...initialState,
+    email: '',
+    password: '',
+    name: '',
+    ownerProfile: { ...initialOwnerProfile },
+    familyMembers: [],
+    budgetLimit: 0,
 
-    updateData: (data) => {
-        set((state) => ({ ...state, ...data }));
-    },
+    updateAccount: (data) =>
+        set((state) => ({ ...state, ...data })),
 
-    resetData: () => {
-        set(initialState);
-    },
+    updateOwnerProfile: (data) =>
+        set((state) => ({
+            ownerProfile: { ...state.ownerProfile, ...data },
+            name: data.name ? data.name : state.name
+        })),
+
+    addFamilyMember: (member) =>
+        set((state) => ({
+            familyMembers: [...state.familyMembers, member]
+        })),
+
+    removeFamilyMember: (index) =>
+        set((state) => ({
+            familyMembers: state.familyMembers.filter((_, i) => i !== index)
+        })),
+
+    updateFamilyMember: (index, data) =>
+        set((state) => {
+            const updatedMembers = [...state.familyMembers];
+            if (updatedMembers[index]) {
+                updatedMembers[index] = { ...updatedMembers[index], ...data };
+            }
+            return { familyMembers: updatedMembers };
+        }),
+
+    setBudgetLimit: (limit) => set({ budgetLimit: limit }),
+
+    resetData: () =>
+        set({
+            email: '',
+            password: '',
+            name: '',
+            ownerProfile: { ...initialOwnerProfile },
+            familyMembers: [],
+            budgetLimit: 0,
+        }),
 }));
