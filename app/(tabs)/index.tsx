@@ -1,14 +1,16 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import { View, Text, StyleSheet, ScrollView, RefreshControl, ActivityIndicator, Alert } from 'react-native';
 import { Colors } from '@/constants/Colors';
+import {PrimaryButton} from "@/components/ui/PrimaryButton";
+import {useAuthStore} from "@/store/authStore";
 
 export default function Dashboard() {
-
+    const {logout} = useAuthStore()
 
 
     return (
        <View>
-
+           <PrimaryButton title={'Logout'} onPress={logout}></PrimaryButton>
        </View>
     );
 }

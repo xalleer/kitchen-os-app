@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useMemo } from 'react';
 import { View, Text, StyleSheet, Alert } from 'react-native';
 import { useRouter, Stack } from 'expo-router';
 import { Colors } from '@/constants/Colors';
@@ -18,24 +18,40 @@ export default function Step4() {
     const { t } = useTranslation();
     const [isLoading, setIsLoading] = useState(false);
 
-    const onboardingData = useOnboardingStore((state) => ({
-        name: state.name,
-        email: state.email,
-        password: state.password,
-        age: state.age,
-        weight: state.weight,
-        height: state.height,
-        goal: state.goal,
-        allergies: state.allergies,
-        dislikedProducts: state.dislikedProducts,
-        eatsBreakfast: state.eatsBreakfast,
-        eatsLunch: state.eatsLunch,
-        eatsDinner: state.eatsDinner,
-        eatsSnack: state.eatsSnack,
-    }));
-
+    // Fix: Select only the fields you need, not the entire state object
+    const name = useOnboardingStore((state) => state.name);
+    const email = useOnboardingStore((state) => state.email);
+    const password = useOnboardingStore((state) => state.password);
+    const age = useOnboardingStore((state) => state.age);
+    const weight = useOnboardingStore((state) => state.weight);
+    const height = useOnboardingStore((state) => state.height);
+    const goal = useOnboardingStore((state) => state.goal);
+    const allergies = useOnboardingStore((state) => state.allergies);
+    const dislikedProducts = useOnboardingStore((state) => state.dislikedProducts);
+    const eatsBreakfast = useOnboardingStore((state) => state.eatsBreakfast);
+    const eatsLunch = useOnboardingStore((state) => state.eatsLunch);
+    const eatsDinner = useOnboardingStore((state) => state.eatsDinner);
+    const eatsSnack = useOnboardingStore((state) => state.eatsSnack);
     const resetOnboarding = useOnboardingStore((state) => state.resetData);
+
     const { setToken } = useAuthStore();
+
+    // Memoize the data object to prevent unnecessary re-renders
+    const onboardingData = useMemo(() => ({
+        name,
+        email,
+        password,
+        age,
+        weight,
+        height,
+        goal,
+        allergies,
+        dislikedProducts,
+        eatsBreakfast,
+        eatsLunch,
+        eatsDinner,
+        eatsSnack,
+    }), [name, email, password, age, weight, height, goal, allergies, dislikedProducts, eatsBreakfast, eatsLunch, eatsDinner, eatsSnack]);
 
     const handleFinish = useCallback(async () => {
         setIsLoading(true);
