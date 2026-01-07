@@ -25,6 +25,7 @@ export default function Step1() {
         name: false,
         email: false,
         password: false,
+        age: false
     });
 
     const validation = useMemo(() => {
@@ -43,6 +44,7 @@ export default function Step1() {
     const handleNameBlur = () => setTouched(prev => ({ ...prev, name: true }));
     const handleEmailBlur = () => setTouched(prev => ({ ...prev, email: true }));
     const handlePasswordBlur = () => setTouched(prev => ({ ...prev, password: true }));
+    const handleAgeBlur = () => setTouched(prev => ({...prev, age: true}))
 
     return (
         <StepLayout
@@ -82,6 +84,15 @@ export default function Step1() {
                         {t('VALIDATORS.NAME')}
                     </Text>
                 )}
+
+                <Text style={SharedStyles.label}>{t('YOUR_AGE')} {'(' + t('OPTIONAL') + ')'}</Text>
+                <ThemeInput
+                    onChangeText={(val) => updateData({age: parseInt(val)})}
+                    onBlur={handleAgeBlur}
+                    keyboardType="numeric"
+                    placeholder={'ex: 20'}
+                ></ThemeInput>
+
 
                 <Text style={SharedStyles.label}>{t('EMAIL')}</Text>
                 <ThemeInput
