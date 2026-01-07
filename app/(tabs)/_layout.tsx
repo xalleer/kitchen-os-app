@@ -2,7 +2,6 @@ import { Tabs } from 'expo-router';
 import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import { StyleSheet } from 'react-native';
 import { Colors } from '@/constants/Colors';
-import {CustomHeader} from "@/components/ui/CustomHeader";
 
 
 export default function TabsLayout() {
@@ -28,7 +27,6 @@ export default function TabsLayout() {
                 tabBarStyle: styles.tabBar,
                 headerShown: true,
                 headerShadowVisible: true,
-                header: (nav) => <CustomHeader title={getRouteName(nav.route.name)} subtitle={'Kitchen OS'} showAvatar={true}/>,
                 tabBarHideOnKeyboard: true
             }}
         >

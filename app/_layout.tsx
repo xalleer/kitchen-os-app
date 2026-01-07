@@ -8,7 +8,6 @@ export default function RootLayout() {
       <OnboardingProvider>
         <Stack screenOptions={{ headerShown: false }}>
           <Stack.Screen name="(auth)" />
-          <Stack.Screen name="(profile)" />
           <Stack.Screen name="(tabs)" options={{
               contentStyle: { backgroundColor: Colors.background},
               gestureEnabled: false,
