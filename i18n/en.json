@@ -22,19 +22,15 @@
   "ESTIMATED": "Estimated",
   "YOUR_TARGET": "What is your goal?",
   "STEP3_TITLE": "We adapt plans based on your choice.",
-  "HOUSEHOLD": "Household",
-  "STEP4_TITLE": "Set up preferences for your family",
-  "FAMILY_MEMBERS": "Family members",
-  "WEEKLY_BUDGET": "Weekly budget",
-  "STEP4_SUBTITLE": "AI will pick recipes to fit this budget.",
-  "HAVE_INVITE_CODE": "Have an invite code?",
-  "INVITE_CODE": "Invite Code",
-  "INVITE_CODE_HINT": "If you have a code from a family, you'll automatically join them",
+  "ALMOST_DONE": "Almost Done!",
+  "STEP4_TITLE": "Review your information before completing",
+  "YOUR_PROFILE": "Your Profile",
   "TARGETS": {
-    "WEIGHT_LOSS": "Weight Loss",
-    "WEIGHT_GAIN": "Weight Gain",
-    "MAINTAIN_HEALTH": "Maintain Health",
-    "SAVE_BUDGET": "Save Budget"
+    "LOSE_WEIGHT": "Weight Loss",
+    "GAIN_WEIGHT": "Weight Gain",
+    "MAINTAIN": "Maintain Weight",
+    "SAVE_BUDGET": "Save Budget",
+    "HEALTHY": "Healthy Eating"
   },
   "CURRENCY": {
     "UAH": "uah"
@@ -54,8 +50,7 @@
     "PASSWORD": "Enter your password",
     "NAME": "Enter your name",
     "MIN_LEN": "Minimum 6 characters",
-    "EMAIL_EXAMPLE": "example@mail.com",
-    "INVITE_CODE": "AB12CD34"
+    "EMAIL_EXAMPLE": "example@mail.com"
   },
   "BUTTONS": {
     "CONTINUE": "Continue",
