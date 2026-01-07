@@ -52,6 +52,11 @@ class AuthService {
         };
     }
 
+    async isExistentUser(email: string): Promise<boolean> {
+        const response = await apiClient.get(`/auth/check-if-exist-user?email=${email}`);
+        return response.data;
+    }
+
     /**
      * Check if user is authenticated
      */

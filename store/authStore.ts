@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { User } from '@/types';
+import { FamilyMemberDto as User } from '@/types';
 import * as SecureStore from 'expo-secure-store';
 
 interface AuthState {
@@ -38,6 +38,7 @@ export const useAuthStore = create<AuthState>((set, get) => ({
         await SecureStore.deleteItemAsync('auth_token');
         set({ user: null, token: null, isAuthenticated: false });
     },
+
 
     initialize: async () => {
         try {

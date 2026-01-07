@@ -1,5 +1,5 @@
 import React, { useMemo, useState } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import {View, Text, TouchableOpacity, StyleSheet, Alert} from 'react-native';
 import { useRouter, Stack } from 'expo-router';
 import { SharedStyles } from '@/constants/SharedStyles';
 import { ThemeInput } from '@/components/ui/ThemeInput';
@@ -10,6 +10,7 @@ import { useOnboardingStore } from '@/store/onboardingStore';
 import { Colors } from '@/constants/Colors';
 import { Ionicons } from '@expo/vector-icons';
 import { useTranslation } from "react-i18next";
+import authService from '@/services/auth.service';
 
 const validateEmail = (email: string): boolean => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -21,6 +22,9 @@ export default function Step1() {
     const { t } = useTranslation();
     const { name, email, password, updateAccount, updateOwnerProfile } = useOnboardingStore();
 
+    const [isCheckingEmail, setIsCheckingEmail] = useState(false);
+    const [emailExistsError, setEmailExistsError] = useState(false);
+
     const [touched, setTouched] = useState({
         name: false,
         email: false,
@@ -31,6 +35,28 @@ export default function Step1() {
     const handleNameChange = (val: string) => {
         updateAccount({ name: val });
         updateOwnerProfile({ name: val });
+    };
+
+    const handleContinue = async () => {
+        if (!validation.isFormValid) return;
+
+        setIsCheckingEmail(true);
+        setEmailExistsError(false);
+
+        try {
+            const exists = await authService.isExistentUser(email);
+            console.log(exists)
+            if (exists) {
+                setEmailExistsError(true);
+                Alert.alert('Error', 'Email already exists. Please choose another one.')
+            } else {
+                router.push('/(auth)/register/step2');
+            }
+        } catch (error) {
+            console.error("Помилка перевірки емейлу:", error);
+        } finally {
+            setIsCheckingEmail(false);
+        }
     };
 
     const validation = useMemo(() => {
@@ -46,10 +72,14 @@ export default function Step1() {
         };
     }, [name, email, password]);
 
+    const onInputEmail = (email: string) => {
+        updateAccount({ email: email });
+        setEmailExistsError(false);
+    }
+
     const handleNameBlur = () => setTouched(prev => ({ ...prev, name: true }));
     const handleEmailBlur = () => setTouched(prev => ({ ...prev, email: true }));
     const handlePasswordBlur = () => setTouched(prev => ({ ...prev, password: true }));
-    const handleAgeBlur = () => setTouched(prev => ({...prev, age: true}))
 
     return (
         <StepLayout
@@ -57,8 +87,9 @@ export default function Step1() {
                 <PrimaryButton
                     title={t('BUTTONS.CONTINUE')}
                     showArrow
-                    disabled={!validation.isFormValid}
-                    onPress={() => router.push('/(auth)/register/step2')}
+                    loading={isCheckingEmail}
+                    disabled={!validation.isFormValid || emailExistsError}
+                    onPress={handleContinue}
                 />
             }
         >
@@ -97,7 +128,8 @@ export default function Step1() {
                     autoCapitalize="none"
                     keyboardType="email-address"
                     value={email}
-                    onChangeText={(val) => updateAccount({ email: val })}
+                    onChangeText={(val) => onInputEmail(val)}
+                    // onChangeText={(val) => updateAccount({ email: val })}
                     onBlur={handleEmailBlur}
                 />
                 {touched.email && !validation.email && (
