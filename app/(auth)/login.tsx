@@ -80,6 +80,7 @@ export default function Login() {
     const handleGoogleLogin = async () => {
         try {
             await googleLogin();
+            console.log(process.env.IOS_GOOGLE_CLIENT_ID)
         } catch (error: any) {
             Alert.alert('Помилка', error.message);
         }

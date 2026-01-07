@@ -8,10 +8,10 @@ WebBrowser.maybeCompleteAuthSession();
 
 class AuthService {
     private googleConfig = {
-        expoClientId: 'YOUR_EXPO_CLIENT_ID',
-        iosClientId: 'YOUR_IOS_CLIENT_ID',
-        androidClientId: 'YOUR_ANDROID_CLIENT_ID',
-        webClientId: '347183790808-qoku2uckfkco4u10hvpjfsdvrmv0snlf.apps.googleusercontent.com',
+        expoClientId: process.env.EXPO_PUBLIC_WEB_GOOGLE_CLIENT_ID as string,
+        iosClientId: process.env.EXPO_PUBLIC_IOS_GOOGLE_CLIENT_ID as string,
+        androidClientId: '',
+        webClientId: process.env.EXPO_PUBLIC_WEB_GOOGLE_CLIENT_ID as string,
     };
 
     /**
