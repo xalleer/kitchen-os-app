@@ -93,7 +93,8 @@
     "FINISH": "Finish Setup",
     "ADD": "Add",
     "CANCEL": "Cancel",
-    "SAVE": "Save"
+    "SAVE": "Save",
+    "CLOSE": "Close"
   },
   "VALIDATORS": {
     "NAME": "Name must be longer than 1 character",
@@ -109,11 +110,17 @@
     "GENERIC": "Error",
     "TRY_AGAIN": "Something went wrong. Please try again.",
     "FAILED_TO_LOAD_ALLERGIES": "Failed to load allergies",
-    "NAME_REQUIRED": "Please enter a name"
+    "NAME_REQUIRED": "Please enter a name",
+    "ACCEPT_TERMS": "Please accept the Terms of Use and the Privacy Policy."
   },
   "SUCCESS": {
     "MEMBER_ADDED": "Family member added successfully",
     "MEMBER_REMOVED": "Family member removed",
-    "PREFERENCES_SAVED": "Preferences saved successfully"
-  }
+    "PREFERENCES_SAVED": "Preferences saved successfully",
+    "REGISTRATION_COMPLETE": "Welcome to Kitchen OS!"
+  },
+  "I_AGREE_TO": "I agree to",
+  "AND": "and",
+  "TERMS_OF_USE": "Terms of Use",
+  "PRIVACY_POLICY": "Privacy Policy"
 }

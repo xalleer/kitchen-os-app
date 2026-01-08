@@ -1,5 +1,5 @@
 import React, { useState, useCallback } from 'react';
-import { View, Text, Alert } from 'react-native';
+import { View, Text } from 'react-native';
 import { useRouter, Stack } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { useTranslation } from 'react-i18next';
@@ -9,19 +9,22 @@ import { SharedStyles } from '@/constants/SharedStyles';
 import { CardStyles } from '@/constants/CardStyles';
 import { PrimaryButton } from '@/components/ui/PrimaryButton';
 import { ThemeInput } from '@/components/ui/ThemeInput';
+import { TermsPrivacyAgreement } from '@/components/ui/TermsPrivacyAgreement';
 import { useOnboardingStore } from '@/store/onboardingStore';
 import { useAuthStore } from '@/store/authStore';
 import { StepHeader } from '@/components/navigation/StepHeader';
 import { StepLayout } from '@/components/ui/auth/StepLayout';
+import { useToast } from '@/components/ui/ToastProvider';
 import authService from '@/services/auth.service';
 import { RegisterDto } from '@/types/auth';
-import {useToast} from "@/components/ui/ToastProvider";
 
 export default function Step5() {
     const router = useRouter();
     const { t } = useTranslation();
+    const { showToast } = useToast();
+
     const [isLoading, setIsLoading] = useState(false);
-    const {showToast} = useToast();
+    const [termsAccepted, setTermsAccepted] = useState(false);
 
     const { email, password, name, ownerProfile, familyMembers, budgetLimit, setBudgetLimit, resetData } =
         useOnboardingStore();
@@ -29,6 +32,15 @@ export default function Step5() {
     const { setToken } = useAuthStore();
 
     const handleFinish = useCallback(async () => {
+        if (!termsAccepted) {
+            showToast({
+                message: t('ERRORS.ACCEPT_TERMS'),
+                type: 'warning',
+                icon: 'alert-circle'
+            });
+            return;
+        }
+
         setIsLoading(true);
         try {
             const registerPayload: RegisterDto = {
@@ -43,17 +55,24 @@ export default function Step5() {
             const response = await authService.register(registerPayload);
             await setToken(response.access_token);
             resetData();
+
+            showToast({
+                message: t('SUCCESS.REGISTRATION_COMPLETE'),
+                type: 'success',
+                icon: 'checkmark-circle'
+            });
+
             router.replace('/(tabs)');
         } catch (error: any) {
             console.error('Registration error:', error);
             showToast({
-                message: (t('ERRORS.REGISTRATION_FAILED'), error.message || t('ERRORS.TRY_AGAIN')),
+                message: error.message || t('ERRORS.TRY_AGAIN'),
                 type: 'error'
-            })
+            });
         } finally {
             setIsLoading(false);
         }
-    }, [email, password, name, ownerProfile, familyMembers, budgetLimit, router, resetData, setToken, t]);
+    }, [email, password, name, ownerProfile, familyMembers, budgetLimit, router, resetData, setToken, t, termsAccepted, showToast]);
 
     const getTotalAllergies = () => {
         const ownerAllergies = ownerProfile.allergyIds?.length || 0;
@@ -68,7 +87,7 @@ export default function Step5() {
                     title={t('BUTTONS.FINISH')}
                     onPress={handleFinish}
                     loading={isLoading}
-                    disabled={isLoading}
+                    disabled={isLoading || !termsAccepted}
                 />
             }
         >
@@ -127,6 +146,11 @@ export default function Step5() {
                     <Text style={CardStyles.summaryValue}>{getTotalAllergies()}</Text>
                 </View>
             </View>
+
+            <TermsPrivacyAgreement
+                isChecked={termsAccepted}
+                onToggle={() => setTermsAccepted(!termsAccepted)}
+            />
         </StepLayout>
     );
 }
