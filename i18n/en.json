@@ -155,5 +155,16 @@
   "CURRENT_BUDGET": "Current weekly budget",
   "NEW_BUDGET": "New budget",
   "LANGUAGE_DESCRIPTION": "Choose your preferred language for the app interface",
-  "LANGUAGE_INFO": "Changes will take effect immediately. All menus, settings, and content will be displayed in the selected language."
+  "LANGUAGE_INFO": "Changes will take effect immediately. All menus, settings, and content will be displayed in the selected language.",
+  "FORGOT_PASSWORD_DESCRIPTION": "Enter your email address and we'll send you a verification code to reset your password.",
+  "FORGOT_PASSWORD_INFO": "Check your email inbox for the verification code. It may take a few minutes to arrive.",
+  "RESET_PASSWORD": "Reset Password",
+  "RESET_PASSWORD_DESCRIPTION": "Enter the 6-digit code sent to {{email}}",
+  "VERIFICATION_CODE": "Verification Code",
+  "CODE_EXPIRES_INFO": "The verification code expires in 15 minutes.",
+  "VALIDATORS.CODE": "Code must be exactly 6 digits",
+  "BUTTONS.SEND_CODE": "Send Code",
+  "BUTTONS.RESET_PASSWORD": "Reset Password",
+  "SUCCESS.CODE_SENT": "Verification code sent to your email",
+  "SUCCESS.PASSWORD_RESET": "Password successfully reset"
 }

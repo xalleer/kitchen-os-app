@@ -145,7 +145,10 @@ export default function Login() {
                             error={touched.password && !validation.password ? t('VALIDATORS.PASSWORD') : undefined}
                         />
 
-                        <TouchableOpacity style={{ alignSelf: 'flex-end', marginBottom: 30 }}>
+                        <TouchableOpacity
+                            style={{ alignSelf: 'flex-end', marginBottom: 30 }}
+                            onPress={() => router.push('/(auth)/forgot-password')}
+                        >
                             <Text style={{ color: Colors.textGray }}>{t('FORGOT_PASSWORD')}</Text>
                         </TouchableOpacity>
 

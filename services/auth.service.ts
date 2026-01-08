@@ -52,6 +52,17 @@ class AuthService {
         };
     }
 
+    async forgotPassword(email: string): Promise<void> {
+        await apiClient.post('/auth/forgot-password', { email });
+    }
+
+    /**
+     * Reset password with code
+     */
+    async resetPassword(data: ResetPasswordDto): Promise<void> {
+        await apiClient.post('/auth/reset-password', data);
+    }
+
     async isExistentUser(email: string): Promise<boolean> {
         const response = await apiClient.get(`/auth/check-if-exist-user?email=${email}`);
         return response.data;

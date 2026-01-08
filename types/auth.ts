@@ -21,3 +21,13 @@ export interface AuthResponse {
 export interface GoogleLoginDto {
     token: string;
 }
+
+export interface ForgotPasswordDto {
+    email: string;
+}
+
+export interface ResetPasswordDto {
+    email: string;
+    code: string;
+    newPassword: string;
+}
