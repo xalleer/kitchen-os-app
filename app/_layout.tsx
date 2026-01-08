@@ -4,6 +4,7 @@ import {useAuthStore} from '@/store/authStore';
 import '../i18n/i18n';
 import {Colors} from '@/constants/Colors';
 import {ToastProvider} from "@/components/ui/ToastProvider";
+import {DarkStatusBar} from "@/components/ui/ThemedStatusBar";
 
 export default function RootLayout() {
     const router = useRouter();
@@ -29,6 +30,7 @@ export default function RootLayout() {
 
     return (
         <ToastProvider>
+            <DarkStatusBar />
             <Stack screenOptions={{headerShown: false}}>
                 <Stack.Screen name="(auth)"/>
                 <Stack.Screen
