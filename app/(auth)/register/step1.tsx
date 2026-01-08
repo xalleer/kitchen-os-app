@@ -13,6 +13,7 @@ import { StepLayout } from '@/components/ui/auth/StepLayout';
 import { useOnboardingStore } from '@/store/onboardingStore';
 import authService from '@/services/auth.service';
 import { validateEmail, validateName, validatePassword } from '@/utils/validation';
+import {useToast} from "@/components/ui/ToastProvider";
 
 interface TouchedFields {
     name: boolean;
@@ -24,7 +25,7 @@ export default function Step1() {
     const router = useRouter();
     const { t } = useTranslation();
     const { name, email, password, updateAccount, updateOwnerProfile } = useOnboardingStore();
-
+    const { showToast } = useToast();
     const [isCheckingEmail, setIsCheckingEmail] = useState(false);
     const [emailExistsError, setEmailExistsError] = useState(false);
     const [touched, setTouched] = useState<TouchedFields>({
@@ -66,13 +67,19 @@ export default function Step1() {
             const exists = await authService.isExistentUser(email);
             if (exists) {
                 setEmailExistsError(true);
-                Alert.alert(t('ERRORS.EMAIL_EXISTS'), t('ERRORS.EMAIL_EXISTS_MESSAGE'));
+                showToast({
+                    message: (t('ERRORS.EMAIL_EXISTS'), t('ERRORS.EMAIL_EXISTS_MESSAGE')),
+                    type: 'error',
+                });
             } else {
                 router.push('/(auth)/register/step2');
             }
         } catch (error) {
             console.error('Error checking email:', error);
-            Alert.alert(t('ERRORS.GENERIC'), t('ERRORS.TRY_AGAIN'));
+            showToast({
+                message: (t('ERRORS.GENERIC'), t('ERRORS.TRY_AGAIN')),
+                type: 'error',
+            });
         } finally {
             setIsCheckingEmail(false);
         }

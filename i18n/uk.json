@@ -27,11 +27,14 @@
   "EDIT_PREFERENCES": "Налаштувати вподобання",
   "MEALS_TITLE": "Прийоми їжі",
   "ALLERGIES_TITLE": "Харчові алергії",
+  "MEAL": "прийом",
+  "ALLERGY": "алергія",
   "MEALS": {
     "BREAKFAST": "Сніданок",
     "LUNCH": "Обід",
     "DINNER": "Вечеря",
-    "SNACK": "Перекус"
+    "SNACK": "Перекус",
+    "TITLE": "прийоми"
   },
   "BUDGET_AND_REVIEW": "Бюджет та Огляд",
   "STEP5_SUBTITLE": "Фіналізуйте налаштування",
@@ -104,6 +107,13 @@
     "EMAIL_EXISTS": "Email вже існує",
     "EMAIL_EXISTS_MESSAGE": "Цей email вже зареєстрований. Використайте інший або увійдіть.",
     "GENERIC": "Помилка",
-    "TRY_AGAIN": "Щось пішло не так. Спробуйте ще раз."
+    "TRY_AGAIN": "Щось пішло не так. Спробуйте ще раз.",
+    "FAILED_TO_LOAD_ALLERGIES": "Не вдалося завантажити алергії",
+    "NAME_REQUIRED": "Введіть ім'я"
+  },
+  "SUCCESS": {
+    "MEMBER_ADDED": "Члена сім'ї успішно додано",
+    "MEMBER_REMOVED": "Члена сім'ї видалено",
+    "PREFERENCES_SAVED": "Налаштування збережено"
   }
 }

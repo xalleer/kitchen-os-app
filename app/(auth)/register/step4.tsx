@@ -12,6 +12,7 @@ import { ThemeInput } from '@/components/ui/ThemeInput';
 import { Modal, ModalActions } from '@/components/ui/Modal';
 import { Checkbox } from '@/components/ui/Checkbox';
 import { MemberCard } from '@/components/ui/MemberCard';
+import { useToast } from '@/components/ui/ToastProvider';
 import { Colors } from '@/constants/Colors';
 import { SharedStyles } from '@/constants/SharedStyles';
 import dictionaryService from '@/services/dictionary.service';
@@ -23,6 +24,7 @@ type EditingTarget = { type: 'owner' } | { type: 'member'; index: number } | nul
 export default function Step4() {
     const router = useRouter();
     const { t } = useTranslation();
+    const { showToast } = useToast();
 
     const {
         ownerProfile,
@@ -43,12 +45,24 @@ export default function Step4() {
         dictionaryService
             .getAllergies()
             .then(setAllergies)
-            .catch(console.error)
+            .catch((error) => {
+                console.error(error);
+                showToast({
+                    message: t('ERRORS.FAILED_TO_LOAD_ALLERGIES'),
+                    type: 'error',
+                });
+            })
             .finally(() => setIsLoadingAllergies(false));
     }, []);
 
     const handleAddMember = () => {
-        if (!newMemberName.trim()) return;
+        if (!newMemberName.trim()) {
+            showToast({
+                message: t('ERRORS.NAME_REQUIRED'),
+                type: 'warning',
+            });
+            return;
+        }
         addFamilyMember({
             name: newMemberName,
             gender: Gender.UNSPECIFIED,
@@ -60,6 +74,20 @@ export default function Step4() {
         });
         setNewMemberName('');
         setIsAddMemberModalVisible(false);
+        showToast({
+            message: t('SUCCESS.MEMBER_ADDED'),
+            type: 'success',
+            icon: 'person-add',
+        });
+    };
+
+    const handleDeleteMember = (index: number) => {
+        removeFamilyMember(index);
+        showToast({
+            message: t('SUCCESS.MEMBER_REMOVED'),
+            type: 'success',
+            icon: 'trash',
+        });
     };
 
     const getCurrentData = () => {
@@ -96,6 +124,24 @@ export default function Step4() {
         return data?.name || (editingTarget?.type === 'owner' ? t('YOU') : '');
     };
 
+    const getMealsCount = (data: any) => {
+        let count = 0;
+        if (data?.eatsBreakfast) count++;
+        if (data?.eatsLunch) count++;
+        if (data?.eatsDinner) count++;
+        if (data?.eatsSnack) count++;
+        return count;
+    };
+
+    const handleSavePreferences = () => {
+        setEditingTarget(null);
+        showToast({
+            message: t('SUCCESS.PREFERENCES_SAVED'),
+            type: 'success',
+            icon: 'checkmark-circle',
+        });
+    };
+
     return (
         <StepLayout
             footer={
@@ -117,6 +163,8 @@ export default function Step4() {
                     role={t('ROLES.OWNER')}
                     isOwner
                     onEdit={() => setEditingTarget({ type: 'owner' })}
+                    mealsCount={getMealsCount(ownerProfile)}
+                    allergiesCount={ownerProfile.allergyIds?.length || 0}
                 />
 
                 {familyMembers.map((member, index) => (
@@ -125,7 +173,9 @@ export default function Step4() {
                         name={member.name}
                         role={t('ROLES.MEMBER')}
                         onEdit={() => setEditingTarget({ type: 'member', index })}
-                        onDelete={() => removeFamilyMember(index)}
+                        onDelete={() => handleDeleteMember(index)}
+                        mealsCount={getMealsCount(member)}
+                        allergiesCount={member.allergyIds?.length || 0}
                     />
                 ))}
 
@@ -220,7 +270,7 @@ export default function Step4() {
                     </ScrollView>
 
                     <View style={styles.fsModalFooter}>
-                        <PrimaryButton title={t('BUTTONS.SAVE')} onPress={() => setEditingTarget(null)} />
+                        <PrimaryButton title={t('BUTTONS.SAVE')} onPress={handleSavePreferences} />
                     </View>
                 </View>
             </Modal>

@@ -1,13 +1,14 @@
-import { useEffect } from 'react';
-import { Stack, useRouter, useSegments } from 'expo-router';
-import { useAuthStore } from '@/store/authStore';
+import {useEffect} from 'react';
+import {Stack, useRouter, useSegments} from 'expo-router';
+import {useAuthStore} from '@/store/authStore';
 import '../i18n/i18n';
-import { Colors } from '@/constants/Colors';
+import {Colors} from '@/constants/Colors';
+import {ToastProvider} from "@/components/ui/ToastProvider";
 
 export default function RootLayout() {
     const router = useRouter();
     const segments = useSegments();
-    const { isAuthenticated, isLoading, initialize } = useAuthStore();
+    const {isAuthenticated, isLoading, initialize} = useAuthStore();
 
     useEffect(() => {
         initialize();
@@ -27,16 +28,18 @@ export default function RootLayout() {
     }, [isAuthenticated, isLoading, segments]);
 
     return (
-        <Stack screenOptions={{ headerShown: false }}>
-            <Stack.Screen name="(auth)" />
-            <Stack.Screen
-                name="(tabs)"
-                options={{
-                    contentStyle: { backgroundColor: Colors.background },
-                    gestureEnabled: false,
-                    animation: 'fade',
-                }}
-            />
-        </Stack>
+        <ToastProvider>
+            <Stack screenOptions={{headerShown: false}}>
+                <Stack.Screen name="(auth)"/>
+                <Stack.Screen
+                    name="(tabs)"
+                    options={{
+                        contentStyle: {backgroundColor: Colors.background},
+                        gestureEnabled: false,
+                        animation: 'fade',
+                    }}
+                />
+            </Stack>
+        </ToastProvider>
     );
 }

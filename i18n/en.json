@@ -27,11 +27,14 @@
   "EDIT_PREFERENCES": "Edit preferences",
   "MEALS_TITLE": "Daily Meals",
   "ALLERGIES_TITLE": "Food Allergies",
+  "MEAL": "meal",
+  "ALLERGY": "allergy",
   "MEALS": {
     "BREAKFAST": "Breakfast",
     "LUNCH": "Lunch",
     "DINNER": "Dinner",
-    "SNACK": "Snack"
+    "SNACK": "Snack",
+    "TITLE": "meals"
   },
   "BUDGET_AND_REVIEW": "Budget & Review",
   "STEP5_SUBTITLE": "Finalize your setup",
@@ -104,6 +107,13 @@
     "EMAIL_EXISTS": "Email already exists",
     "EMAIL_EXISTS_MESSAGE": "This email is already registered. Please use another one or sign in.",
     "GENERIC": "Error",
-    "TRY_AGAIN": "Something went wrong. Please try again."
+    "TRY_AGAIN": "Something went wrong. Please try again.",
+    "FAILED_TO_LOAD_ALLERGIES": "Failed to load allergies",
+    "NAME_REQUIRED": "Please enter a name"
+  },
+  "SUCCESS": {
+    "MEMBER_ADDED": "Family member added successfully",
+    "MEMBER_REMOVED": "Family member removed",
+    "PREFERENCES_SAVED": "Preferences saved successfully"
   }
 }

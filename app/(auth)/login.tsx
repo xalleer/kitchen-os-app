@@ -24,6 +24,7 @@ import authService from '@/services/auth.service';
 import { useAuthStore } from '@/store/authStore';
 import { useGoogleAuth } from '@/hooks/useGoogleAuth';
 import { validateEmail, validatePassword } from '@/utils/validation';
+import {useToast} from "@/components/ui/ToastProvider";
 
 interface TouchedFields {
     email: boolean;
@@ -35,6 +36,7 @@ export default function Login() {
     const { t } = useTranslation();
     const { setToken } = useAuthStore();
     const { login: googleLogin, isLoading: googleLoading } = useGoogleAuth();
+    const { showToast } = useToast();
 
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -68,11 +70,10 @@ export default function Login() {
             await setToken(response.access_token);
             router.replace('/(tabs)');
         } catch (error: any) {
-            Alert.alert(
-                t('ERRORS.LOGIN_FAILED'),
-                error.message || t('ERRORS.INVALID_CREDENTIALS'),
-                [{ text: 'OK' }]
-            );
+            showToast({
+                message: (t('ERRORS.LOGIN_FAILED'), t('ERRORS.INVALID_CREDENTIALS')),
+                type: 'error'
+            })
         } finally {
             setIsLoading(false);
         }
@@ -80,9 +81,12 @@ export default function Login() {
 
     const handleGoogleLogin = async () => {
         try {
-            await googleLogin();
+            googleLogin();
         } catch (error: any) {
-            Alert.alert(t('ERRORS.GENERIC'), error.message);
+            showToast({
+                message: error.message,
+                type: 'error'
+            })
         }
     };
 

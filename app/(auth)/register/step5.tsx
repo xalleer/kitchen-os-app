@@ -15,11 +15,13 @@ import { StepHeader } from '@/components/navigation/StepHeader';
 import { StepLayout } from '@/components/ui/auth/StepLayout';
 import authService from '@/services/auth.service';
 import { RegisterDto } from '@/types/auth';
+import {useToast} from "@/components/ui/ToastProvider";
 
 export default function Step5() {
     const router = useRouter();
     const { t } = useTranslation();
     const [isLoading, setIsLoading] = useState(false);
+    const {showToast} = useToast();
 
     const { email, password, name, ownerProfile, familyMembers, budgetLimit, setBudgetLimit, resetData } =
         useOnboardingStore();
@@ -44,11 +46,10 @@ export default function Step5() {
             router.replace('/(tabs)');
         } catch (error: any) {
             console.error('Registration error:', error);
-            Alert.alert(
-                t('ERRORS.REGISTRATION_FAILED'),
-                error.message || t('ERRORS.TRY_AGAIN'),
-                [{ text: 'OK' }]
-            );
+            showToast({
+                message: (t('ERRORS.REGISTRATION_FAILED'), error.message || t('ERRORS.TRY_AGAIN')),
+                type: 'error'
+            })
         } finally {
             setIsLoading(false);
         }
