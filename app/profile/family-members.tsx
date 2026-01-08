@@ -141,8 +141,6 @@ export default function FamilyMembersScreen() {
                 options={{
                     headerShown: true,
                     headerTitle: t('FAMILY_MEMBERS'),
-                    headerTintColor: Colors.secondary,
-                    headerShadowVisible: false,
                 }}
             />
 

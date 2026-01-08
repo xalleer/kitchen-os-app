@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, KeyboardAvoidingView, Platform } from 'react-native';
 import { useRouter, Stack } from 'expo-router';
 import { useTranslation } from 'react-i18next';
 
@@ -70,19 +70,25 @@ export default function ChangePasswordScreen() {
     };
 
     return (
-        <View style={styles.container}>
+        <KeyboardAvoidingView
+            style={styles.container}
+            behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+            keyboardVerticalOffset={Platform.OS === 'ios' ? 90 : 0}
+        >
             <Stack.Screen
                 options={{
                     headerShown: true,
                     headerTitle: t('CHANGE_PASSWORD'),
                     headerTintColor: Colors.secondary,
                     headerShadowVisible: false,
+                    headerBackTitle: '',
                 }}
             />
 
             <ScrollView
                 style={styles.scrollView}
                 contentContainerStyle={styles.content}
+                keyboardShouldPersistTaps="handled"
             >
                 <Text style={styles.description}>
                     {t('CHANGE_PASSWORD_DESCRIPTION')}
@@ -138,7 +144,7 @@ export default function ChangePasswordScreen() {
                     disabled={isLoading || !validation.isFormValid}
                 />
             </View>
-        </View>
+        </KeyboardAvoidingView>
     );
 }
 
@@ -152,6 +158,7 @@ const styles = StyleSheet.create({
     },
     content: {
         padding: 20,
+        paddingBottom: 120,
     },
     description: {
         fontSize: 14,

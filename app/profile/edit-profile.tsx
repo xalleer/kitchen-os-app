@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, KeyboardAvoidingView, Platform } from 'react-native';
 import { useRouter, Stack } from 'expo-router';
 import { useTranslation } from 'react-i18next';
 
@@ -51,19 +51,25 @@ export default function EditProfileScreen() {
     };
 
     return (
-        <View style={styles.container}>
+        <KeyboardAvoidingView
+            style={styles.container}
+            behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+            keyboardVerticalOffset={Platform.OS === 'ios' ? 90 : 0}
+        >
             <Stack.Screen
                 options={{
                     headerShown: true,
                     headerTitle: t('EDIT_PROFILE'),
                     headerTintColor: Colors.secondary,
                     headerShadowVisible: false,
+                    headerBackTitle: '',
                 }}
             />
 
             <ScrollView
                 style={styles.scrollView}
                 contentContainerStyle={styles.content}
+                keyboardShouldPersistTaps="handled"
             >
                 <Text style={styles.sectionTitle}>{t('BASIC_INFO')}</Text>
 
@@ -96,7 +102,7 @@ export default function EditProfileScreen() {
                     disabled={isLoading || !validateName(name) || !validateEmail(email)}
                 />
             </View>
-        </View>
+        </KeyboardAvoidingView>
     );
 }
 
@@ -110,6 +116,7 @@ const styles = StyleSheet.create({
     },
     content: {
         padding: 20,
+        paddingBottom: 120,
     },
     sectionTitle: {
         fontSize: 18,

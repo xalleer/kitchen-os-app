@@ -2,6 +2,7 @@ import { Tabs } from 'expo-router';
 import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import { StyleSheet } from 'react-native';
 import { Colors } from '@/constants/Colors';
+import { ProfileHeader } from '@/components/navigation/ProfileHeader';
 
 export default function TabsLayout() {
     return (
@@ -20,7 +21,8 @@ export default function TabsLayout() {
                 name="index"
                 options={{
                     tabBarLabel: 'Головна',
-                    headerTitle: 'Головна',
+                    headerTitle: '',
+                    header: () => <ProfileHeader />,
                     tabBarIcon: ({ color }) => (
                         <Ionicons name="home-sharp" size={24} color={color} />
                     ),
@@ -63,11 +65,7 @@ export default function TabsLayout() {
             <Tabs.Screen
                 name="profile"
                 options={{
-                    tabBarLabel: 'Профіль',
-                    headerTitle: 'Мій профіль',
-                    tabBarIcon: ({ color }) => (
-                        <Ionicons name="person" size={24} color={color} />
-                    ),
+                    href: null,
                 }}
             />
         </Tabs>
