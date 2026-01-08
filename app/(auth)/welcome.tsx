@@ -44,11 +44,11 @@ export default function Welcome() {
                             icon="logo-google"
                             onPress={() => console.log('Google login')}
                         />
-                        <SocialButton
-                            title="Apple"
-                            icon="logo-apple"
-                            onPress={() => console.log('Apple login')}
-                        />
+                        {/*<SocialButton*/}
+                        {/*    title="Apple"*/}
+                        {/*    icon="logo-apple"*/}
+                        {/*    onPress={() => console.log('Apple login')}*/}
+                        {/*/>*/}
                     </View>
 
                     <View style={{ flexDirection: 'row' }}>

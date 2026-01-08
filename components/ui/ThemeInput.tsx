@@ -7,7 +7,9 @@ import {
     Text,
     Animated,
     Platform,
+    TouchableOpacity,
 } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
 import { Colors } from '@/constants/Colors';
 
 interface EnhancedInputProps extends TextInputProps {
@@ -18,10 +20,10 @@ interface EnhancedInputProps extends TextInputProps {
 }
 
 const ThemeInputComponent = forwardRef<TextInput, EnhancedInputProps>((props, ref) => {
-    const { label, error, leftIcon, rightIcon, onFocus, onBlur, ...rest } = props;
+    const { label, error, leftIcon, rightIcon, onFocus, onBlur, secureTextEntry, ...rest } = props;
     const [isFocused, setIsFocused] = useState(false);
+    const [isPasswordVisible, setIsPasswordVisible] = useState(false);
 
-    // Анімація прозорості (підтримує native driver)
     const focusAnim = useRef(new Animated.Value(0)).current;
 
     const handleFocus = (e: any) => {
@@ -29,7 +31,7 @@ const ThemeInputComponent = forwardRef<TextInput, EnhancedInputProps>((props, re
         Animated.timing(focusAnim, {
             toValue: 1,
             duration: 200,
-            useNativeDriver: true, // Тепер працює на UI thread
+            useNativeDriver: true,
         }).start();
         if (onFocus) onFocus(e);
     };
@@ -44,12 +46,18 @@ const ThemeInputComponent = forwardRef<TextInput, EnhancedInputProps>((props, re
         if (onBlur) onBlur(e);
     };
 
+    const togglePasswordVisibility = () => {
+        setIsPasswordVisible(!isPasswordVisible);
+    };
+
+    const showPasswordToggle = secureTextEntry && !rightIcon;
+    const actualSecureTextEntry = secureTextEntry && !isPasswordVisible;
+
     return (
         <View style={styles.container}>
             {label && <Text style={styles.label}>{label}</Text>}
 
             <View style={styles.wrapperContainer}>
-                {/* Статичний базовий бордер */}
                 <View style={[
                     styles.inputWrapper,
                     error ? { borderColor: '#FF3B30' } : null
@@ -61,15 +69,28 @@ const ThemeInputComponent = forwardRef<TextInput, EnhancedInputProps>((props, re
                         placeholderTextColor={Colors.textGray || '#999'}
                         onFocus={handleFocus}
                         onBlur={handleBlur}
+                        secureTextEntry={actualSecureTextEntry}
                         underlineColorAndroid="transparent"
                         {...rest}
                     />
+                    {showPasswordToggle && (
+                        <TouchableOpacity
+                            onPress={togglePasswordVisibility}
+                            style={styles.iconRight}
+                            activeOpacity={0.7}
+                        >
+                            <Ionicons
+                                name={isPasswordVisible ? 'eye-off-outline' : 'eye-outline'}
+                                size={22}
+                                color={Colors.textGray}
+                            />
+                        </TouchableOpacity>
+                    )}
                     {rightIcon && <View style={styles.iconRight}>{rightIcon}</View>}
                 </View>
 
-                {/* Анімований активний бордер (накладається зверху) */}
                 <Animated.View
-                    pointerEvents="none" // Щоб не заважало натисканню
+                    pointerEvents="none"
                     style={[
                         styles.focusBorder,
                         { opacity: focusAnim, borderColor: Colors.primary || '#007AFF' }
@@ -128,8 +149,14 @@ const styles = StyleSheet.create({
         textAlignVertical: 'center',
         paddingVertical: Platform.OS === 'ios' ? 0 : 4,
     },
-    iconLeft: { marginRight: 12 },
-    iconRight: { marginLeft: 12 },
+    iconLeft: {
+        marginRight: 12
+    },
+    iconRight: {
+        marginLeft: 12,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
     errorText: {
         color: '#FF3B30',
         fontSize: 12,
