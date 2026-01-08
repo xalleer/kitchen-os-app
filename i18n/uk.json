@@ -98,6 +98,12 @@
     "PASSWORD": "Пароль має бути мінімум 6 символів"
   },
   "ERRORS": {
-    "REGISTRATION_FAILED": "Помилка реєстрації. Спробуйте ще раз."
+    "REGISTRATION_FAILED": "Помилка реєстрації. Спробуйте ще раз.",
+    "LOGIN_FAILED": "Помилка входу",
+    "INVALID_CREDENTIALS": "Невірний email або пароль",
+    "EMAIL_EXISTS": "Email вже існує",
+    "EMAIL_EXISTS_MESSAGE": "Цей email вже зареєстрований. Використайте інший або увійдіть.",
+    "GENERIC": "Помилка",
+    "TRY_AGAIN": "Щось пішло не так. Спробуйте ще раз."
   }
 }

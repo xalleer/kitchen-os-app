@@ -1,21 +1,24 @@
 import React, { useMemo, useState } from 'react';
-import {View, Text, TouchableOpacity, StyleSheet, Alert} from 'react-native';
+import { View, Text, Alert } from 'react-native';
 import { useRouter, Stack } from 'expo-router';
+import { Ionicons } from '@expo/vector-icons';
+import { useTranslation } from 'react-i18next';
+
 import { SharedStyles } from '@/constants/SharedStyles';
+import { Colors } from '@/constants/Colors';
 import { ThemeInput } from '@/components/ui/ThemeInput';
 import { PrimaryButton } from '@/components/ui/PrimaryButton';
 import { StepHeader } from '@/components/navigation/StepHeader';
 import { StepLayout } from '@/components/ui/auth/StepLayout';
 import { useOnboardingStore } from '@/store/onboardingStore';
-import { Colors } from '@/constants/Colors';
-import { Ionicons } from '@expo/vector-icons';
-import { useTranslation } from "react-i18next";
 import authService from '@/services/auth.service';
+import { validateEmail, validateName, validatePassword } from '@/utils/validation';
 
-const validateEmail = (email: string): boolean => {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return emailRegex.test(email);
-};
+interface TouchedFields {
+    name: boolean;
+    email: boolean;
+    password: boolean;
+}
 
 export default function Step1() {
     const router = useRouter();
@@ -24,17 +27,33 @@ export default function Step1() {
 
     const [isCheckingEmail, setIsCheckingEmail] = useState(false);
     const [emailExistsError, setEmailExistsError] = useState(false);
-
-    const [touched, setTouched] = useState({
+    const [touched, setTouched] = useState<TouchedFields>({
         name: false,
         email: false,
         password: false,
-        age: false
     });
+
+    const validation = useMemo(() => {
+        const nameValid = validateName(name || '');
+        const emailValid = validateEmail(email || '');
+        const passwordValid = validatePassword(password || '');
+
+        return {
+            name: nameValid,
+            email: emailValid,
+            password: passwordValid,
+            isFormValid: nameValid && emailValid && passwordValid,
+        };
+    }, [name, email, password]);
 
     const handleNameChange = (val: string) => {
         updateAccount({ name: val });
         updateOwnerProfile({ name: val });
+    };
+
+    const handleEmailChange = (val: string) => {
+        updateAccount({ email: val });
+        setEmailExistsError(false);
     };
 
     const handleContinue = async () => {
@@ -45,41 +64,23 @@ export default function Step1() {
 
         try {
             const exists = await authService.isExistentUser(email);
-            console.log(exists)
             if (exists) {
                 setEmailExistsError(true);
-                Alert.alert('Error', 'Email already exists. Please choose another one.')
+                Alert.alert(t('ERRORS.EMAIL_EXISTS'), t('ERRORS.EMAIL_EXISTS_MESSAGE'));
             } else {
                 router.push('/(auth)/register/step2');
             }
         } catch (error) {
-            console.error("Помилка перевірки емейлу:", error);
+            console.error('Error checking email:', error);
+            Alert.alert(t('ERRORS.GENERIC'), t('ERRORS.TRY_AGAIN'));
         } finally {
             setIsCheckingEmail(false);
         }
     };
 
-    const validation = useMemo(() => {
-        const nameValid = (name?.trim().length || 0) > 1;
-        const emailValid = validateEmail(email || '');
-        const passwordValid = (password?.length || 0) >= 6;
-
-        return {
-            name: nameValid,
-            email: emailValid,
-            password: passwordValid,
-            isFormValid: nameValid && emailValid && passwordValid
-        };
-    }, [name, email, password]);
-
-    const onInputEmail = (email: string) => {
-        updateAccount({ email: email });
-        setEmailExistsError(false);
-    }
-
-    const handleNameBlur = () => setTouched(prev => ({ ...prev, name: true }));
-    const handleEmailBlur = () => setTouched(prev => ({ ...prev, email: true }));
-    const handlePasswordBlur = () => setTouched(prev => ({ ...prev, password: true }));
+    const handleBlur = (field: keyof TouchedFields) => {
+        setTouched((prev) => ({ ...prev, [field]: true }));
+    };
 
     return (
         <StepLayout
@@ -93,9 +94,11 @@ export default function Step1() {
                 />
             }
         >
-            <Stack.Screen options={{
-                headerTitle: () => <StepHeader currentStep={1} />,
-            }} />
+            <Stack.Screen
+                options={{
+                    headerTitle: () => <StepHeader currentStep={1} />,
+                }}
+            />
 
             <Ionicons
                 name="person-add-outline"
@@ -108,59 +111,42 @@ export default function Step1() {
             <Text style={SharedStyles.subtitle}>{t('STEP1_TITLE')}</Text>
 
             <View>
-                <Text style={SharedStyles.label}>{t('YOUR_NAME')}</Text>
                 <ThemeInput
+                    label={t('YOUR_NAME')}
                     placeholder={t('PLACEHOLDERS.NAME')}
                     value={name}
                     onChangeText={handleNameChange}
-                    onBlur={handleNameBlur}
+                    onBlur={() => handleBlur('name')}
+                    error={touched.name && !validation.name ? t('VALIDATORS.NAME') : undefined}
                 />
-                {touched.name && !validation.name && (
-                    <Text style={styles.errorText}>
-                        {t('VALIDATORS.NAME')}
-                    </Text>
-                )}
 
-
-                <Text style={SharedStyles.label}>{t('EMAIL')}</Text>
                 <ThemeInput
+                    label={t('EMAIL')}
                     placeholder={t('PLACEHOLDERS.EMAIL_EXAMPLE')}
                     autoCapitalize="none"
                     keyboardType="email-address"
                     value={email}
-                    onChangeText={(val) => onInputEmail(val)}
-                    // onChangeText={(val) => updateAccount({ email: val })}
-                    onBlur={handleEmailBlur}
+                    onChangeText={handleEmailChange}
+                    onBlur={() => handleBlur('email')}
+                    error={
+                        emailExistsError
+                            ? t('ERRORS.EMAIL_EXISTS')
+                            : touched.email && !validation.email
+                                ? t('VALIDATORS.EMAIL')
+                                : undefined
+                    }
                 />
-                {touched.email && !validation.email && (
-                    <Text style={styles.errorText}>
-                        {t('VALIDATORS.EMAIL')}
-                    </Text>
-                )}
 
-                <Text style={SharedStyles.label}>{t('PASSWORD')}</Text>
                 <ThemeInput
+                    label={t('PASSWORD')}
                     placeholder={t('PLACEHOLDERS.MIN_LEN')}
                     secureTextEntry
                     value={password}
                     onChangeText={(val) => updateAccount({ password: val })}
-                    onBlur={handlePasswordBlur}
+                    onBlur={() => handleBlur('password')}
+                    error={touched.password && !validation.password ? t('VALIDATORS.PASSWORD') : undefined}
                 />
-                {touched.password && !validation.password && (
-                    <Text style={styles.errorText}>
-                        {t('VALIDATORS.PASSWORD')}
-                    </Text>
-                )}
             </View>
         </StepLayout>
     );
 }
-
-const styles = StyleSheet.create({
-    errorText: {
-        color: Colors.danger,
-        fontSize: 12,
-        marginTop: -12,
-        marginBottom: 12,
-    },
-});

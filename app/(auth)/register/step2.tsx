@@ -93,7 +93,7 @@ export default function Step2() {
                     minimumValue={140}
                     maximumValue={220}
                     step={1}
-                    value={localHeight} // Slider очікує number
+                    value={localHeight}
                     onValueChange={handleHeightChange}
                     onSlidingComplete={handleHeightComplete}
                     minimumTrackTintColor={Colors.primary}

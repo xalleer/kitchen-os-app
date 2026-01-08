@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import {
     View,
     Text,
@@ -9,19 +9,26 @@ import {
     KeyboardAvoidingView,
     Platform,
     ScrollView,
-    Alert
+    Alert,
 } from 'react-native';
 import { useRouter, Stack } from 'expo-router';
+import { Ionicons } from '@expo/vector-icons';
+import { useTranslation } from 'react-i18next';
+
 import { Colors } from '@/constants/Colors';
 import { SharedStyles } from '@/constants/SharedStyles';
 import { ThemeInput } from '@/components/ui/ThemeInput';
 import { PrimaryButton } from '@/components/ui/PrimaryButton';
 import { SocialButton } from '@/components/ui/SocialButton';
-import { Ionicons } from '@expo/vector-icons';
-import { useTranslation } from "react-i18next";
 import authService from '@/services/auth.service';
 import { useAuthStore } from '@/store/authStore';
 import { useGoogleAuth } from '@/hooks/useGoogleAuth';
+import { validateEmail, validatePassword } from '@/utils/validation';
+
+interface TouchedFields {
+    email: boolean;
+    password: boolean;
+}
 
 export default function Login() {
     const router = useRouter();
@@ -32,34 +39,28 @@ export default function Login() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [isLoading, setIsLoading] = useState(false);
-    const [errors, setErrors] = useState({ email: '', password: '' });
+    const [touched, setTouched] = useState<TouchedFields>({
+        email: false,
+        password: false,
+    });
 
-    const validateEmail = (email: string): boolean => {
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        return emailRegex.test(email);
-    };
+    const validation = useMemo(() => {
+        const emailValid = validateEmail(email);
+        const passwordValid = validatePassword(password);
+
+        return {
+            email: emailValid,
+            password: passwordValid,
+            isFormValid: emailValid && passwordValid,
+        };
+    }, [email, password]);
 
     const handleLogin = async () => {
-        const newErrors = { email: '', password: '' };
-
-        if (!email.trim()) {
-            newErrors.email = t('VALIDATORS.EMAIL');
-        } else if (!validateEmail(email)) {
-            newErrors.email = t('VALIDATORS.EMAIL');
-        }
-
-        if (!password.trim()) {
-            newErrors.password = t('VALIDATORS.PASSWORD');
-        } else if (password.length < 6) {
-            newErrors.password = t('VALIDATORS.PASSWORD');
-        }
-
-        if (newErrors.email || newErrors.password) {
-            setErrors(newErrors);
+        if (!validation.isFormValid) {
+            setTouched({ email: true, password: true });
             return;
         }
 
-        setErrors({ email: '', password: '' });
         setIsLoading(true);
 
         try {
@@ -68,8 +69,8 @@ export default function Login() {
             router.replace('/(tabs)');
         } catch (error: any) {
             Alert.alert(
-                'Помилка входу',
-                error.message || 'Невірний email або пароль',
+                t('ERRORS.LOGIN_FAILED'),
+                error.message || t('ERRORS.INVALID_CREDENTIALS'),
                 [{ text: 'OK' }]
             );
         } finally {
@@ -80,10 +81,13 @@ export default function Login() {
     const handleGoogleLogin = async () => {
         try {
             await googleLogin();
-            console.log(process.env.IOS_GOOGLE_CLIENT_ID)
         } catch (error: any) {
-            Alert.alert('Помилка', error.message);
+            Alert.alert(t('ERRORS.GENERIC'), error.message);
         }
+    };
+
+    const handleBlur = (field: keyof TouchedFields) => {
+        setTouched((prev) => ({ ...prev, [field]: true }));
     };
 
     return (
@@ -99,10 +103,7 @@ export default function Login() {
                     }}
                 />
 
-                <KeyboardAvoidingView
-                    behavior={Platform.OS === 'ios' ? 'padding' : undefined}
-                    style={{ flex: 1 }}
-                >
+                <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : undefined} style={{ flex: 1 }}>
                     <ScrollView
                         automaticallyAdjustKeyboardInsets={true}
                         contentContainerStyle={[SharedStyles.containerMain, { flexGrow: 1 }]}
@@ -126,7 +127,8 @@ export default function Login() {
                             autoCapitalize="none"
                             value={email}
                             onChangeText={setEmail}
-                            error={errors.email}
+                            onBlur={() => handleBlur('email')}
+                            error={touched.email && !validation.email ? t('VALIDATORS.EMAIL') : undefined}
                         />
 
                         <ThemeInput
@@ -135,7 +137,8 @@ export default function Login() {
                             secureTextEntry
                             value={password}
                             onChangeText={setPassword}
-                            error={errors.password}
+                            onBlur={() => handleBlur('password')}
+                            error={touched.password && !validation.password ? t('VALIDATORS.PASSWORD') : undefined}
                         />
 
                         <TouchableOpacity style={{ alignSelf: 'flex-end', marginBottom: 30 }}>
@@ -157,19 +160,13 @@ export default function Login() {
                         </View>
 
                         <View style={styles.socials}>
-                            <SocialButton
-                                title="Google"
-                                icon="logo-google"
-                                onPress={handleGoogleLogin}
-                            />
+                            <SocialButton title="Google" icon="logo-google" onPress={handleGoogleLogin} />
                         </View>
 
                         <View style={styles.footer}>
                             <Text style={{ color: Colors.textGray }}>{t('DONT_HAVE_ACCOUNT')}</Text>
                             <TouchableOpacity onPress={() => router.push('/(auth)/register/step1')}>
-                                <Text style={{ color: Colors.primary, fontWeight: '600' }}>
-                                    {t('SIGN_UP')}
-                                </Text>
+                                <Text style={{ color: Colors.primary, fontWeight: '600' }}>{t('SIGN_UP')}</Text>
                             </TouchableOpacity>
                         </View>
                     </ScrollView>
@@ -203,6 +200,6 @@ const styles = StyleSheet.create({
     },
     socials: {
         alignItems: 'center',
-        gap: 16
-    }
+        gap: 16,
+    },
 });

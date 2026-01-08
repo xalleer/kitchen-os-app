@@ -98,6 +98,12 @@
     "PASSWORD": "Password must be at least 6 characters long"
   },
   "ERRORS": {
-    "REGISTRATION_FAILED": "Registration failed. Please try again."
+    "REGISTRATION_FAILED": "Registration failed. Please try again.",
+    "LOGIN_FAILED": "Login failed",
+    "INVALID_CREDENTIALS": "Invalid email or password",
+    "EMAIL_EXISTS": "Email already exists",
+    "EMAIL_EXISTS_MESSAGE": "This email is already registered. Please use another one or sign in.",
+    "GENERIC": "Error",
+    "TRY_AGAIN": "Something went wrong. Please try again."
   }
 }
