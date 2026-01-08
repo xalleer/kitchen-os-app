@@ -158,7 +158,6 @@ export default function ProfileScreen() {
                         <Ionicons name="chevron-forward" size={20} color={Colors.textGray} />
                     </TouchableOpacity>
 
-
                     <TouchableOpacity
                         style={styles.menuItem}
                         onPress={() => router.push('/profile/budget')}
@@ -181,7 +180,10 @@ export default function ProfileScreen() {
                 <View style={styles.section}>
                     <Text style={styles.sectionTitle}>{t('APP_SETTINGS')}</Text>
 
-                    <TouchableOpacity style={styles.menuItem}>
+                    <TouchableOpacity
+                        style={styles.menuItem}
+                        onPress={() => router.push('/profile/language')}
+                    >
                         <View style={styles.menuItemLeft}>
                             <View style={[styles.iconCircle, { backgroundColor: '#E0F2F1' }]}>
                                 <Ionicons name="language-outline" size={20} color="#009688" />
@@ -191,15 +193,6 @@ export default function ProfileScreen() {
                         <Ionicons name="chevron-forward" size={20} color={Colors.textGray} />
                     </TouchableOpacity>
 
-                    <TouchableOpacity style={styles.menuItem}>
-                        <View style={styles.menuItemLeft}>
-                            <View style={[styles.iconCircle, { backgroundColor: '#FCE4EC' }]}>
-                                <Ionicons name="notifications-outline" size={20} color="#E91E63" />
-                            </View>
-                            <Text style={styles.menuItemText}>{t('NOTIFICATIONS')}</Text>
-                        </View>
-                        <Ionicons name="chevron-forward" size={20} color={Colors.textGray} />
-                    </TouchableOpacity>
                 </View>
 
                 <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>

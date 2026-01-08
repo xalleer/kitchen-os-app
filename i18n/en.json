@@ -21,7 +21,7 @@
   "WEIGHT": "Weight",
   "ESTIMATED": "Estimated",
   "YOUR_TARGET": "What is your goal?",
-  "STEP3_TITLE": "We’ll adapt plans based on your choice",
+  "STEP3_TITLE": "We'll adapt plans based on your choice",
   "FAMILY_AND_PREFERENCES": "Family & Preferences",
   "STEP4_SUBTITLE": "Manage members, meals, and allergies",
   "EDIT_PREFERENCES": "Edit preferences",
@@ -48,7 +48,7 @@
   "ALLERGIES_FOR": "Allergies for",
   "ADD_FAMILY_MEMBER": "Add family member",
   "WEEKLY_BUDGET": "Weekly budget",
-  "BUDGET_HINT": "We’ll build a menu within this limit",
+  "BUDGET_HINT": "We'll build a menu within this limit",
   "SUMMARY": "Summary",
   "ACCOUNT": "Account",
   "GOAL": "Goal",
@@ -97,7 +97,8 @@
     "CANCEL": "Cancel",
     "SAVE": "Save",
     "CLOSE": "Close",
-    "CHANGE_PASSWORD": "Change password"
+    "CHANGE_PASSWORD": "Change password",
+    "DELETE": "Delete"
   },
   "VALIDATORS": {
     "NAME": "Name must be longer than 1 character",
@@ -116,7 +117,8 @@
     "FAILED_TO_LOAD_ALLERGIES": "Failed to load allergies",
     "NAME_REQUIRED": "Name is required",
     "ACCEPT_TERMS": "Please accept the Terms of Use and Privacy Policy",
-    "PROFILE_NOT_LOADED": "Failed to load profile"
+    "PROFILE_NOT_LOADED": "Failed to load profile",
+    "INVALID_BUDGET": "Please enter a valid budget amount"
   },
   "SUCCESS": {
     "MEMBER_ADDED": "Family member successfully added",
@@ -124,7 +126,9 @@
     "PREFERENCES_SAVED": "Preferences saved",
     "REGISTRATION_COMPLETE": "Welcome to Kitchen OS!",
     "PROFILE_UPDATED": "Profile updated",
-    "PASSWORD_CHANGED": "Password successfully changed"
+    "PASSWORD_CHANGED": "Password successfully changed",
+    "BUDGET_UPDATED": "Budget successfully updated",
+    "LANGUAGE_CHANGED": "Language changed successfully"
   },
   "I_AGREE_TO": "I agree to the",
   "AND": "and",
@@ -146,5 +150,10 @@
   "CONFIRM_NEW_PASSWORD": "Confirm new password",
   "CHANGE_PASSWORD_DESCRIPTION": "Please enter your current password and a new password",
   "CONFIRM_DELETE": "Confirm deletion",
-  "CONFIRM_DELETE_MEMBER": "Are you sure you want to remove {{name}} from the family?"
+  "CONFIRM_DELETE_MEMBER": "Are you sure you want to remove {{name}} from the family?",
+  "BUDGET_DESCRIPTION": "Set your weekly meal planning budget. We'll help you create delicious meal plans that fit within your budget.",
+  "CURRENT_BUDGET": "Current weekly budget",
+  "NEW_BUDGET": "New budget",
+  "LANGUAGE_DESCRIPTION": "Choose your preferred language for the app interface",
+  "LANGUAGE_INFO": "Changes will take effect immediately. All menus, settings, and content will be displayed in the selected language."
 }

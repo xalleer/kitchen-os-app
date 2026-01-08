@@ -16,7 +16,7 @@ export default function ProfileLayout() {
             <Stack.Screen name="change-password" />
             <Stack.Screen name="family-members" />
             <Stack.Screen name="budget" />
-            <Stack.Screen name="preferences" />
+            <Stack.Screen name="language" />
         </Stack>
     );
 }
