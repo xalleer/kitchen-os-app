@@ -158,18 +158,6 @@ export default function ProfileScreen() {
                         <Ionicons name="chevron-forward" size={20} color={Colors.textGray} />
                     </TouchableOpacity>
 
-                    <TouchableOpacity
-                        style={styles.menuItem}
-                        onPress={() => router.push('/profile/preferences')}
-                    >
-                        <View style={styles.menuItemLeft}>
-                            <View style={[styles.iconCircle, { backgroundColor: '#E8F5E9' }]}>
-                                <Ionicons name="restaurant-outline" size={20} color="#4CAF50" />
-                            </View>
-                            <Text style={styles.menuItemText}>{t('MY_PREFERENCES')}</Text>
-                        </View>
-                        <Ionicons name="chevron-forward" size={20} color={Colors.textGray} />
-                    </TouchableOpacity>
 
                     <TouchableOpacity
                         style={styles.menuItem}
@@ -190,7 +178,6 @@ export default function ProfileScreen() {
                     </TouchableOpacity>
                 </View>
 
-                {/* Налаштування додатку */}
                 <View style={styles.section}>
                     <Text style={styles.sectionTitle}>{t('APP_SETTINGS')}</Text>
 
