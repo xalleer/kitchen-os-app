@@ -52,6 +52,8 @@ export default function EditProfileScreen() {
         }
 
         try {
+            router.back();
+
             await updateProfile({ name, email });
 
             await updatePreferences({
@@ -65,7 +67,6 @@ export default function EditProfileScreen() {
                 type: 'success',
                 icon: 'checkmark-circle',
             });
-            router.back();
         } catch (error: any) {
             showToast({
                 message: error.message || t('ERRORS.GENERIC'),
