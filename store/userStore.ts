@@ -63,6 +63,7 @@ export const useUserStore = create<UserState>((set, get) => ({
         set({ isLoading: true, error: null });
         try {
             await userService.updateUserPreferences(data);
+            await get().fetchFamilyMembers()
             await get().fetchProfile();
         } catch (error: any) {
             set({ error: error.message, isLoading: false });

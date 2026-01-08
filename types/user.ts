@@ -57,7 +57,7 @@ export interface UpdateUserPreferencesDto {
     height?: number;
     age?: number;
     goal?: Goal;
-    allergies?: string[];
+    allergyIds?: string[];
     eatsBreakfast?: boolean;
     eatsLunch?: boolean;
     eatsDinner?: boolean;
