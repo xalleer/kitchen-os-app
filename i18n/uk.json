@@ -94,12 +94,14 @@
     "ADD": "Додати",
     "CANCEL": "Скасувати",
     "SAVE": "Зберегти",
-    "CLOSE": "Закрити"
+    "CLOSE": "Закрити",
+    "CHANGE_PASSWORD": "Змінити пароль"
   },
   "VALIDATORS": {
     "NAME": "Ім'я має бути довшим за 1 символ",
     "EMAIL": "Введіть коректну адресу",
-    "PASSWORD": "Пароль має бути мінімум 6 символів"
+    "PASSWORD": "Пароль має бути мінімум 6 символів",
+    "PASSWORD_MISMATCH": "Паролі не співпадають"
   },
   "ERRORS": {
     "REGISTRATION_FAILED": "Помилка реєстрації. Спробуйте ще раз.",
@@ -111,16 +113,38 @@
     "TRY_AGAIN": "Щось пішло не так. Спробуйте ще раз.",
     "FAILED_TO_LOAD_ALLERGIES": "Не вдалося завантажити алергії",
     "NAME_REQUIRED": "Введіть ім'я",
-    "ACCEPT_TERMS": "Будь ласка, прийміть Умови використання та Політику конфіденційності"
+    "ACCEPT_TERMS": "Будь ласка, прийміть Умови використання та Політику конфіденційності",
+    "PROFILE_NOT_LOADED": "Не вдалося завантажити профіль"
   },
   "SUCCESS": {
     "MEMBER_ADDED": "Члена сім'ї успішно додано",
     "MEMBER_REMOVED": "Члена сім'ї видалено",
     "PREFERENCES_SAVED": "Налаштування збережено",
-    "REGISTRATION_COMPLETE": "Ласкаво просимо до Kitchen OS!"
+    "REGISTRATION_COMPLETE": "Ласкаво просимо до Kitchen OS!",
+    "PROFILE_UPDATED": "Профіль оновлено",
+    "PASSWORD_CHANGED": "Пароль успішно змінено"
   },
   "I_AGREE_TO": "Я погоджуюсь з",
   "AND": "та",
   "TERMS_OF_USE": "Умовами використання",
-  "PRIVACY_POLICY": "Політикою конфіденційності"
+  "PRIVACY_POLICY": "Політикою конфіденційності",
+
+  "ACCOUNT_SETTINGS": "Налаштування акаунту",
+  "EDIT_PROFILE": "Редагувати профіль",
+  "CHANGE_PASSWORD": "Змінити пароль",
+  "FAMILY_SETTINGS": "Налаштування сім'ї",
+  "FAMILY_MEMBERS": "Члени сім'ї",
+  "MY_PREFERENCES": "Мої вподобання",
+  "APP_SETTINGS": "Налаштування додатку",
+  "LANGUAGE": "Мова",
+  "NOTIFICATIONS": "Сповіщення",
+  "LOGOUT": "Вийти",
+  "BASIC_INFO": "Основна інформація",
+  "CURRENT_PASSWORD": "Поточний пароль",
+  "NEW_PASSWORD": "Новий пароль",
+  "CONFIRM_NEW_PASSWORD": "Підтвердіть новий пароль",
+  "CHANGE_PASSWORD_DESCRIPTION": "Будь ласка, введіть ваш поточний пароль та новий пароль",
+  "CONFIRM_DELETE": "Підтвердження видалення",
+  "CONFIRM_DELETE_MEMBER": "Ви впевнені, що хочете видалити {{name}} з сім'ї?",
+
 }

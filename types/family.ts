@@ -17,14 +17,29 @@ export interface OwnerProfileDto extends BaseMemberSettingsDto {
     goal?: Goal;
 }
 
-export interface FamilyMemberDto extends BaseMemberSettingsDto {}
-
 export interface FamilyMember {
     id: string;
     name: string;
+    familyId: string;
+    userId?: string;
     gender: Gender;
-    age?: number;
     weight?: number;
     height?: number;
+    age?: number;
     goal: Goal;
+    eatsBreakfast: boolean;
+    eatsLunch: boolean;
+    eatsDinner: boolean;
+    eatsSnack: boolean;
+    allergies: Array<{
+        id: string;
+        name: string;
+        slug: string;
+    }>;
+    user?: {
+        id: string;
+        email: string;
+    };
+    createdAt: string;
+    updatedAt: string;
 }
