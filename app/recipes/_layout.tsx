@@ -16,6 +16,7 @@ export default function RecipesLayout() {
             <Stack.Screen name="generate-custom" />
             <Stack.Screen name="expiring-products" />
             <Stack.Screen name="save-recipe" />
+            <Stack.Screen name="cook-recipe" />
             <Stack.Screen name="[id]" />
         </Stack>
     );

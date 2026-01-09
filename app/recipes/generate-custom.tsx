@@ -19,21 +19,32 @@ import { useToast } from '@/components/ui/ToastProvider';
 import { useRecipeStore } from '@/store/recipeStore';
 import { GeneratedRecipe } from '@/types/recipe';
 
-export default function GenerateFromInventoryScreen() {
+export default function GenerateCustomScreen() {
     const router = useRouter();
     const { t } = useTranslation();
     const { showToast } = useToast();
-    const { generateFromInventory, isGenerating } = useRecipeStore();
+    const { generateCustom, isGenerating } = useRecipeStore();
 
+    const [dishName, setDishName] = useState('');
     const [portions, setPortions] = useState('2');
     const [generatedRecipe, setGeneratedRecipe] = useState<GeneratedRecipe | null>(null);
 
     const handleGenerate = async () => {
+        if (!dishName.trim()) {
+            showToast({
+                message: t('ERRORS.DISH_NAME_REQUIRED'),
+                type: 'warning',
+            });
+            return;
+        }
+
         try {
             const portionsNum = parseInt(portions) || 2;
-            const recipe = await generateFromInventory({ portions: portionsNum });
+            const recipe = await generateCustom({
+                dishName: dishName.trim(),
+                portions: portionsNum
+            });
             setGeneratedRecipe(recipe);
-            console.log(recipe)
 
             showToast({
                 message: t('SUCCESS.RECIPE_GENERATED'),
@@ -48,14 +59,19 @@ export default function GenerateFromInventoryScreen() {
         }
     };
 
-    const handleCookNow = () => {
-        router.push('/recipes/cook-recipe');
-    }
-
     const handleSaveRecipe = () => {
         if (generatedRecipe) {
             router.push({
                 pathname: '/recipes/save-recipe',
+                params: { recipeData: JSON.stringify(generatedRecipe) },
+            });
+        }
+    };
+
+    const handleCookNow = () => {
+        if (generatedRecipe) {
+            router.push({
+                pathname: '/recipes/cook-recipe',
                 params: { recipeData: JSON.stringify(generatedRecipe) },
             });
         }
@@ -85,7 +101,7 @@ export default function GenerateFromInventoryScreen() {
             <Stack.Screen
                 options={{
                     headerShown: true,
-                    headerTitle: t('RECIPES.FROM_INVENTORY'),
+                    headerTitle: t('RECIPES.CUSTOM'),
                     headerTintColor: Colors.secondary,
                     headerShadowVisible: false,
                     headerBackTitle: '',
@@ -101,14 +117,21 @@ export default function GenerateFromInventoryScreen() {
                     <>
                         <View style={styles.infoCard}>
                             <Ionicons
-                                name="information-circle"
+                                name="bulb"
                                 size={24}
                                 color={Colors.primary}
                             />
                             <Text style={styles.infoText}>
-                                {t('RECIPES.FROM_INVENTORY_INFO')}
+                                {t('RECIPES.CUSTOM_INFO')}
                             </Text>
                         </View>
+
+                        <Text style={styles.label}>{t('RECIPES.DISH_NAME')}</Text>
+                        <ThemeInput
+                            placeholder={t('RECIPES.DISH_NAME_PLACEHOLDER')}
+                            value={dishName}
+                            onChangeText={setDishName}
+                        />
 
                         <Text style={styles.label}>{t('RECIPES.PORTIONS')}</Text>
                         <ThemeInput
@@ -131,7 +154,7 @@ export default function GenerateFromInventoryScreen() {
                             <PrimaryButton
                                 title={t('RECIPES.GENERATE_BUTTON')}
                                 onPress={handleGenerate}
-                                disabled={isGenerating}
+                                disabled={isGenerating || !dishName.trim()}
                             />
                         )}
                     </>
@@ -231,6 +254,10 @@ export default function GenerateFromInventoryScreen() {
                             <PrimaryButton
                                 title={t('RECIPES.SAVE')}
                                 onPress={handleSaveRecipe}
+                                style={{
+                                    backgroundColor: Colors.secondary,
+                                    marginTop: generatedRecipe.canCook ? 12 : 0
+                                }}
                             />
                             <PrimaryButton
                                 title={t('RECIPES.GENERATE_NEW')}

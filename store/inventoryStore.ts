@@ -35,9 +35,6 @@ export const useInventoryStore = create<InventoryState>((set, get) => ({
         set({ isLoading: true, error: null });
         try {
             const data = await inventoryService.getInventory();
-            data.items.forEach((item) => {
-                console.log(item.product.image)
-            });
             set({
                 items: data.items,
                 grouped: data.grouped,

@@ -17,18 +17,48 @@ import { Colors } from '@/constants/Colors';
 import { useRecipeStore } from '@/store/recipeStore';
 import { useToast } from '@/components/ui/ToastProvider';
 import { SavedRecipe } from '@/types/recipe';
+import inventoryService from '@/services/inventory.service';
+
 
 export default function RecipesScreen() {
     const router = useRouter();
     const { t } = useTranslation();
     const { showToast } = useToast();
+    const [expiringProducts, setExpiringProducts] = useState<any>([])
 
     const { savedRecipes, isLoading, fetchSavedRecipes, deleteRecipe } = useRecipeStore();
+
     const [refreshing, setRefreshing] = useState(false);
 
     useEffect(() => {
         loadRecipes();
+        loadExpiringProducts()
     }, []);
+
+    const loadExpiringProducts = async () => {
+        try {
+            const products = await inventoryService.getExpiringProducts();
+            setExpiringProducts(products)
+        } catch (error: any) {
+            showToast({
+                message: error.message || t('ERRORS.GENERIC'),
+                type: 'error'
+            })
+        }
+    }
+
+    const routeToExpiringProducts = () => {
+        if (expiringProducts.length === 0) {
+            showToast({
+                message: 'У вас немає продуктів у яких скоро закінчиться термін придатності',
+                type: 'info'
+            })
+            return
+        }
+        router.push(
+            `/recipes/expiring-products`
+        )
+    }
 
     const loadRecipes = async () => {
         try {
@@ -133,8 +163,8 @@ export default function RecipesScreen() {
                     </TouchableOpacity>
 
                     <TouchableOpacity
-                        style={styles.quickActionCard}
-                        onPress={() => router.push('/recipes/expiring-products')}
+                        style={[styles.quickActionCard]}
+                        onPress={routeToExpiringProducts}
                     >
                         <View style={[styles.iconCircle, { backgroundColor: '#FFF3E0' }]}>
                             <Ionicons name="warning" size={24} color="#FF9800" />

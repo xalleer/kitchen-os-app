@@ -34,6 +34,7 @@ export default function TabsLayout() {
                 options={{
                     tabBarLabel: 'Рецепти',
                     headerTitle: 'Список покупок',
+                    header: () => <ProfileHeader />,
                     tabBarIcon: ({ color }) => (
                         <Ionicons name="cart" size={24} color={color} />
                     ),
