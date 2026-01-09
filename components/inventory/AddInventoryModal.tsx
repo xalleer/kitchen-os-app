@@ -7,6 +7,7 @@ import {
     TouchableOpacity,
     ActivityIndicator,
     TextInput,
+    Image
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useTranslation } from 'react-i18next';
@@ -19,6 +20,8 @@ import { useToast } from '@/components/ui/ToastProvider';
 import productService, { Product } from '@/services/product.service';
 import { useInventoryStore } from '@/store/inventoryStore';
 import { Unit } from '@/types/enums';
+
+import DateTimePickerModal from "react-native-modal-datetime-picker";
 
 interface AddInventoryModalProps {
     visible: boolean;
@@ -39,18 +42,19 @@ export const AddInventoryModal: React.FC<AddInventoryModalProps> = ({
     const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
 
     const [quantity, setQuantity] = useState('');
-    const [expiryDate, setExpiryDate] = useState('');
+    const [expiryDate, setExpiryDate] = useState<Date | null>(null);
+    const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
     const [isSubmitting, setIsSubmitting] = useState(false);
 
     useEffect(() => {
         if (visible) {
             loadProducts();
         } else {
-            // Reset on close
             setSearchQuery('');
             setSelectedProduct(null);
             setQuantity('');
-            setExpiryDate('');
+            setExpiryDate(null);
+            setDatePickerVisibility(false);
         }
     }, [visible]);
 
@@ -85,6 +89,20 @@ export const AddInventoryModal: React.FC<AddInventoryModalProps> = ({
         setSelectedProduct(product);
     };
 
+    const showDatePicker = () => {
+        setDatePickerVisibility(true);
+    };
+
+    const hideDatePicker = () => {
+        setDatePickerVisibility(false);
+    };
+
+
+    const handleConfirmDate = (date: Date) => {
+        setExpiryDate(date);
+        hideDatePicker();
+    };
+
     const handleAddToInventory = async () => {
         if (!selectedProduct || !quantity) {
             showToast({
@@ -108,7 +126,7 @@ export const AddInventoryModal: React.FC<AddInventoryModalProps> = ({
             await addItem({
                 productId: selectedProduct.id,
                 quantity: quantityNum,
-                expiryDate: expiryDate || undefined,
+                expiryDate: expiryDate ? expiryDate.toISOString().split('T')[0] : undefined,
             });
 
             showToast({
@@ -195,6 +213,16 @@ export const AddInventoryModal: React.FC<AddInventoryModalProps> = ({
                                             style={styles.productCard}
                                             onPress={() => handleSelectProduct(product)}
                                         >
+                                            {product.image ? (
+                                                <Image
+                                                    source={{ uri: product.image }}
+                                                    style={styles.searchProductImage}
+                                                />
+                                            ) : (
+                                                <View style={styles.searchProductPlaceholder}>
+                                                    <Ionicons name="fast-food-outline" size={20} color={Colors.textGray} />
+                                                </View>
+                                            )}
                                             <View style={styles.productInfo}>
                                                 <Text style={styles.productName}>
                                                     {product.name}
@@ -261,12 +289,28 @@ export const AddInventoryModal: React.FC<AddInventoryModalProps> = ({
                             <Text style={styles.label}>
                                 {t('EXPIRY_DATE')} ({t('OPTIONAL')})
                             </Text>
-                            <ThemeInput
-                                placeholder="YYYY-MM-DD"
-                                value={expiryDate}
-                                onChangeText={setExpiryDate}
+                            <TouchableOpacity
+                                onPress={showDatePicker}
+                                activeOpacity={0.7}
+                                style={styles.datePickerButton}
+                            >
+                                <Text style={[
+                                    styles.dateText,
+                                    !expiryDate && styles.placeholderText
+                                ]}>
+                                    {expiryDate
+                                        ? expiryDate.toLocaleDateString()
+                                        : 'YYYY-MM-DD'}
+                                </Text>
+                                <Ionicons name="calendar-outline" size={20} color={Colors.textGray} />
+                            </TouchableOpacity>
+                            <DateTimePickerModal
+                                isVisible={isDatePickerVisible}
+                                mode="date"
+                                onConfirm={handleConfirmDate}
+                                onCancel={hideDatePicker}
+                                minimumDate={new Date()}
                             />
-                            <Text style={styles.hint}>{t('EXPIRY_DATE_FORMAT')}</Text>
                         </>
                     )}
                 </ScrollView>
@@ -423,5 +467,40 @@ const styles = StyleSheet.create({
         borderTopWidth: 1,
         borderTopColor: Colors.inputBorder,
         backgroundColor: Colors.white,
+    },
+    datePickerButton: {
+        height: 56,
+        backgroundColor: Colors.inputBackground,
+        borderRadius: 12,
+        paddingHorizontal: 16,
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        borderWidth: 1,
+        borderColor: Colors.inputBorder,
+        marginBottom: 24,
+    },
+    dateText: {
+        fontSize: 16,
+        color: Colors.secondary,
+    },
+    placeholderText: {
+        color: Colors.textGray,
+    },
+    searchProductImage: {
+        width: 40,
+        height: 40,
+        borderRadius: 8,
+        marginRight: 12,
+        backgroundColor: Colors.inputBackground,
+    },
+    searchProductPlaceholder: {
+        width: 40,
+        height: 40,
+        borderRadius: 8,
+        marginRight: 12,
+        backgroundColor: Colors.inputBackground,
+        justifyContent: 'center',
+        alignItems: 'center',
     },
 });

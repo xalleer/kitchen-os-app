@@ -17,6 +17,7 @@ import { useToast } from '@/components/ui/ToastProvider';
 import { useInventoryStore } from '@/store/inventoryStore';
 import { InventoryItem } from '@/types/inventory';
 import { Unit } from '@/types/enums';
+import DateTimePickerModal from "react-native-modal-datetime-picker";
 
 interface EditInventoryModalProps {
     visible: boolean;
@@ -34,22 +35,35 @@ export const EditInventoryModal: React.FC<EditInventoryModalProps> = ({
     const { updateItem } = useInventoryStore();
 
     const [quantity, setQuantity] = useState('');
-    const [expiryDate, setExpiryDate] = useState('');
+    const [expiryDate, setExpiryDate] = useState<Date | null>(null);
+    const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
     const [isSubmitting, setIsSubmitting] = useState(false);
 
     useEffect(() => {
         if (visible && item) {
             setQuantity(item.quantity.toString());
             setExpiryDate(
-                item.expiryDate
-                    ? new Date(item.expiryDate).toISOString().split('T')[0]
-                    : ''
+                item.expiryDate ? new Date(item.expiryDate) : null
             );
         } else {
             setQuantity('');
-            setExpiryDate('');
+            setExpiryDate(null);
+            setDatePickerVisibility(false);
         }
     }, [visible, item]);
+
+    const showDatePicker = () => {
+        setDatePickerVisibility(true);
+    };
+
+    const hideDatePicker = () => {
+        setDatePickerVisibility(false);
+    };
+
+    const handleConfirmDate = (date: Date) => {
+        setExpiryDate(date);
+        hideDatePicker();
+    };
 
     const handleUpdate = async () => {
         if (!item || !quantity) {
@@ -73,7 +87,7 @@ export const EditInventoryModal: React.FC<EditInventoryModalProps> = ({
         try {
             await updateItem(item.id, {
                 quantity: quantityNum,
-                expiryDate: expiryDate || undefined,
+                expiryDate: expiryDate ? expiryDate.toISOString().split('T')[0] : undefined,
             });
 
             showToast({
@@ -150,12 +164,29 @@ export const EditInventoryModal: React.FC<EditInventoryModalProps> = ({
                     <Text style={styles.label}>
                         {t('EXPIRY_DATE')} ({t('OPTIONAL')})
                     </Text>
-                    <ThemeInput
-                        placeholder="YYYY-MM-DD"
-                        value={expiryDate}
-                        onChangeText={setExpiryDate}
+                    <TouchableOpacity
+                        onPress={showDatePicker}
+                        activeOpacity={0.7}
+                        style={styles.datePickerButton}
+                    >
+                        <Text style={[
+                            styles.dateText,
+                            !expiryDate && styles.placeholderText
+                        ]}>
+                            {expiryDate
+                                ? expiryDate.toLocaleDateString()
+                                : 'YYYY-MM-DD'}
+                        </Text>
+                        <Ionicons name="calendar-outline" size={20} color={Colors.textGray} />
+                    </TouchableOpacity>
+                    <DateTimePickerModal
+                        isVisible={isDatePickerVisible}
+                        mode="date"
+                        onConfirm={handleConfirmDate}
+                        onCancel={hideDatePicker}
+                        minimumDate={new Date()}
+                        date={expiryDate || new Date()}
                     />
-                    <Text style={styles.hint}>{t('EXPIRY_DATE_FORMAT')}</Text>
                 </ScrollView>
 
                 <View style={styles.footer}>
@@ -235,5 +266,24 @@ const styles = StyleSheet.create({
         borderTopWidth: 1,
         borderTopColor: Colors.inputBorder,
         backgroundColor: Colors.white,
+    },
+    datePickerButton: {
+        height: 56,
+        backgroundColor: Colors.inputBackground,
+        borderRadius: 12,
+        paddingHorizontal: 16,
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        borderWidth: 1,
+        borderColor: Colors.inputBorder,
+        marginBottom: 24,
+    },
+    dateText: {
+        fontSize: 16,
+        color: Colors.secondary,
+    },
+    placeholderText: {
+        color: Colors.textGray,
     },
 });

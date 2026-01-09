@@ -121,7 +121,9 @@
     "NAME_REQUIRED": "Name is required",
     "ACCEPT_TERMS": "Please accept the Terms of Use and Privacy Policy",
     "PROFILE_NOT_LOADED": "Failed to load profile",
-    "INVALID_BUDGET": "Please enter a valid budget amount"
+    "INVALID_BUDGET": "Please enter a valid budget amount",
+    "FILL_REQUIRED_FIELDS": "Please fill in all required fields",
+    "INVALID_QUANTITY": "Please enter a valid quantity"
   },
   "SUCCESS": {
     "MEMBER_ADDED": "Family member successfully added",
@@ -182,5 +184,14 @@
     "EXPIRING_SOON": "Expiring soon",
     "EXPIRES_ON": "Expires on {{date}}"
   },
-  "CONFIRM_DELETE_ITEM": "Are you sure you want to delete {{name}}?"
+  "CONFIRM_DELETE_ITEM": "Are you sure you want to delete {{name}}?",
+  "ADD_TO_INVENTORY": "Add to Inventory",
+  "EDIT_ITEM": "Edit Item",
+  "SELECT_PRODUCT": "Select Product",
+  "SEARCH_PRODUCTS": "Search products...",
+  "NO_PRODUCTS_FOUND": "No products found",
+  "CHANGE_PRODUCT": "Change Product",
+  "QUANTITY": "Quantity",
+  "EXPIRY_DATE": "Expiry Date",
+  "EXPIRY_DATE_FORMAT": "Format: YYYY-MM-DD (e.g. 2024-12-31)"
 }

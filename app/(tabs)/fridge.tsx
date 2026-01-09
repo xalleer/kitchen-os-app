@@ -8,6 +8,7 @@ import {
     RefreshControl,
     ActivityIndicator,
     Alert,
+    Image
 } from 'react-native';
 import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
@@ -19,6 +20,10 @@ import { useToast } from '@/components/ui/ToastProvider';
 import { InventoryItem as InventoryItemType } from '@/types/inventory';
 import { Unit } from '@/types/enums';
 
+// Імпортуємо модальні вікна
+import { AddInventoryModal } from '@/components/inventory/AddInventoryModal';
+import { EditInventoryModal } from '@/components/inventory/EditInventoryModal';
+
 export default function FridgeScreen() {
     const router = useRouter();
     const { t } = useTranslation();
@@ -26,6 +31,10 @@ export default function FridgeScreen() {
 
     const { items, grouped, total, isLoading, fetchInventory, deleteItem } = useInventoryStore();
     const [refreshing, setRefreshing] = useState(false);
+
+    // Стани для керування модальними вікнами
+    const [isAddModalVisible, setAddModalVisible] = useState(false);
+    const [editingItem, setEditingItem] = useState<InventoryItemType | null>(null);
 
     useEffect(() => {
         loadInventory();
@@ -145,7 +154,8 @@ export default function FridgeScreen() {
                                         key={item.id}
                                         item={item}
                                         onDelete={() => handleDeleteItem(item.id, item.product.name)}
-                                        onEdit={() => router.push(`/inventory/${item.id}`)}
+                                        // Відкриваємо модалку редагування замість переходу
+                                        onEdit={() => setEditingItem(item)}
                                         getUnitLabel={getUnitLabel}
                                         isExpiringSoon={isExpiringSoon(item.expiryDate)}
                                         isExpired={isExpired(item.expiryDate)}
@@ -159,11 +169,24 @@ export default function FridgeScreen() {
 
             <TouchableOpacity
                 style={styles.fab}
-                onPress={() => router.push('/inventory/add')}
+                // Відкриваємо модалку додавання замість переходу
+                onPress={() => setAddModalVisible(true)}
                 activeOpacity={0.8}
             >
                 <Ionicons name="add" size={28} color={Colors.white} />
             </TouchableOpacity>
+
+            {/* Підключення модальних вікон */}
+            <AddInventoryModal
+                visible={isAddModalVisible}
+                onClose={() => setAddModalVisible(false)}
+            />
+
+            <EditInventoryModal
+                visible={!!editingItem}
+                item={editingItem}
+                onClose={() => setEditingItem(null)}
+            />
         </View>
     );
 }
@@ -194,6 +217,18 @@ const InventoryItemCard: React.FC<InventoryItemCardProps> = ({
             isExpiringSoon && styles.itemCardExpiring
         ]}>
             <View style={styles.itemHeader}>
+                <View style={styles.imageContainer}>
+                    {item.product.image ? (
+                        <Image
+                            source={{ uri: item.product.image }}
+                            style={styles.productImage}
+                        />
+                    ) : (
+                        <View style={styles.placeholderImage}>
+                            <Ionicons name="nutrition-outline" size={24} color={Colors.primary} />
+                        </View>
+                    )}
+                </View>
                 <View style={styles.itemInfo}>
                     <Text style={styles.itemName}>{item.product.name}</Text>
                     <Text style={styles.itemQuantity}>
@@ -308,8 +343,8 @@ const styles = StyleSheet.create({
     },
     itemHeader: {
         flexDirection: 'row',
-        justifyContent: 'space-between',
         alignItems: 'center',
+        gap: 12,
     },
     itemInfo: {
         flex: 1,
@@ -368,4 +403,28 @@ const styles = StyleSheet.create({
         shadowRadius: 8,
         elevation: 8,
     },
+    imageContainer: {
+        width: 48,
+        height: 48,
+        borderRadius: 12,
+        overflow: 'hidden',
+        backgroundColor: Colors.inputBackground,
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderWidth: 1,
+        borderColor: Colors.inputBorder,
+    },
+    productImage: {
+        width: '100%',
+        height: '100%',
+        resizeMode: 'cover',
+    },
+    placeholderImage: {
+        width: '100%',
+        height: '100%',
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: '#E8F5E9', // Світло-зелений фон для плейсхолдера
+    },
+
 });

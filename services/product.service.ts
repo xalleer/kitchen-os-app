@@ -6,6 +6,7 @@ export interface Product {
     name: string;
     category: string | null;
     baseUnit: Unit;
+    image?: string;
     caloriesPer100: number | null;
     standardAmount: number | null;
 }

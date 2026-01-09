@@ -11,6 +11,7 @@ export interface InventoryItem {
     product: {
         id: string;
         name: string;
+        image: string | null;
         category: string | null;
         baseUnit: Unit;
         caloriesPer100: number | null;
