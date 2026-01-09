@@ -30,9 +30,9 @@ export default function TabsLayout() {
             />
 
             <Tabs.Screen
-                name="shop"
+                name="recipes"
                 options={{
-                    tabBarLabel: 'Магазин',
+                    tabBarLabel: 'Рецепти',
                     headerTitle: 'Список покупок',
                     tabBarIcon: ({ color }) => (
                         <Ionicons name="cart" size={24} color={color} />
