@@ -4,7 +4,7 @@ import {
     Text,
     StyleSheet,
     ScrollView,
-    TouchableOpacity,
+    TouchableOpacity, Image,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useTranslation } from 'react-i18next';
@@ -143,12 +143,25 @@ export const EditInventoryModal: React.FC<EditInventoryModalProps> = ({
                     keyboardShouldPersistTaps="handled"
                 >
                     <View style={styles.productCard}>
-                        <Text style={styles.productName}>{item.product.name}</Text>
-                        {item.product.category && (
-                            <Text style={styles.productCategory}>
-                                {item.product.category}
-                            </Text>
+                        {item.product.image ? (
+                            <Image
+                                source={{ uri: item.product.image }}
+                                style={styles.searchProductImage}
+                            />
+                        ) : (
+                            <View style={styles.searchProductPlaceholder}>
+                                <Ionicons name="fast-food-outline" size={20} color={Colors.textGray} />
+                            </View>
                         )}
+                        <View style={styles.productInfo}>
+                            <Text style={styles.productName}>{item.product.name}</Text>
+                            {item.product.category && (
+                                <Text style={styles.productCategory}>
+                                    {item.product.category}
+                                </Text>
+                            )}
+                        </View>
+
                     </View>
 
                     <Text style={styles.label}>
@@ -231,6 +244,8 @@ const styles = StyleSheet.create({
     productCard: {
         backgroundColor: Colors.lightGreen,
         padding: 16,
+        flexDirection: 'row',
+        alignItems: 'center',
         borderRadius: 12,
         marginBottom: 24,
         borderWidth: 1,
@@ -285,5 +300,24 @@ const styles = StyleSheet.create({
     },
     placeholderText: {
         color: Colors.textGray,
+    },
+    searchProductImage: {
+        width: 40,
+        height: 40,
+        borderRadius: 8,
+        marginRight: 12,
+        backgroundColor: Colors.inputBackground,
+    },
+    searchProductPlaceholder: {
+        width: 40,
+        height: 40,
+        borderRadius: 8,
+        marginRight: 12,
+        backgroundColor: Colors.inputBackground,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    productInfo: {
+        flex: 1,
     },
 });

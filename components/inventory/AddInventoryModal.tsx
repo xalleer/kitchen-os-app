@@ -266,14 +266,27 @@ export const AddInventoryModal: React.FC<AddInventoryModalProps> = ({
                             </TouchableOpacity>
 
                             <View style={styles.selectedProductCard}>
-                                <Text style={styles.selectedProductName}>
-                                    {selectedProduct.name}
-                                </Text>
-                                {selectedProduct.category && (
-                                    <Text style={styles.selectedProductCategory}>
-                                        {selectedProduct.category}
-                                    </Text>
+                                {selectedProduct.image ? (
+                                    <Image
+                                        source={{ uri: selectedProduct.image }}
+                                        style={styles.searchProductImage}
+                                    />
+                                ) : (
+                                    <View style={styles.searchProductPlaceholder}>
+                                        <Ionicons name="fast-food-outline" size={20} color={Colors.textGray} />
+                                    </View>
                                 )}
+                                <View>
+                                    <Text style={styles.selectedProductName}>
+                                        {selectedProduct.name}
+                                    </Text>
+                                    {selectedProduct.category && (
+                                        <Text style={styles.selectedProductCategory}>
+                                            {selectedProduct.category}
+                                        </Text>
+                                    )}
+                                </View>
+
                             </View>
 
                             <Text style={styles.label}>
@@ -432,6 +445,7 @@ const styles = StyleSheet.create({
     selectedProductCard: {
         backgroundColor: Colors.lightGreen,
         padding: 16,
+        flexDirection: 'row',
         borderRadius: 12,
         marginBottom: 24,
         borderWidth: 1,

@@ -137,11 +137,7 @@ export default function FridgeScreen() {
                     </View>
                 ) : (
                     <>
-                        <View style={styles.header}>
-                            <Text style={styles.headerTitle}>
-                                {t('FRIDGE.TOTAL_ITEMS')}: {total}
-                            </Text>
-                        </View>
+                        
 
                         {Object.entries(grouped).map(([category, categoryItems]) => (
                             <View key={category} style={styles.categorySection}>
