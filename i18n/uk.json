@@ -75,7 +75,10 @@
   },
   "UNITS": {
     "KG": "кг",
-    "SM": "см"
+    "SM": "см",
+    "G": "г",
+    "ML": "мл",
+    "PCS": "шт"
   },
   "BMI": {
     "NORMAL": "Норма",
@@ -128,7 +131,10 @@
     "PROFILE_UPDATED": "Профіль оновлено",
     "PASSWORD_CHANGED": "Пароль успішно змінено",
     "BUDGET_UPDATED": "Бюджет успішно оновлено",
-    "LANGUAGE_CHANGED": "Мову успішно змінено"
+    "LANGUAGE_CHANGED": "Мову успішно змінено",
+    "ITEM_DELETED": "Продукт видалено з холодильника",
+    "ITEM_ADDED": "Продукт додано до холодильника",
+    "ITEM_UPDATED": "Продукт оновлено"
   },
   "I_AGREE_TO": "Я погоджуюсь з",
   "AND": "та",
@@ -166,5 +172,15 @@
   "BUTTONS.SEND_CODE": "Надіслати код",
   "BUTTONS.RESET_PASSWORD": "Скинути пароль",
   "SUCCESS.CODE_SENT": "Код підтвердження надіслано на вашу пошту",
-  "SUCCESS.PASSWORD_RESET": "Пароль успішно скинуто"
+  "SUCCESS.PASSWORD_RESET": "Пароль успішно скинуто",
+  "FRIDGE": {
+    "EMPTY_TITLE": "Холодильник порожній",
+    "EMPTY_SUBTITLE": "Додайте продукти після походу в магазин",
+    "TOTAL_ITEMS": "Всього продуктів",
+    "OTHER": "Інше",
+    "EXPIRED": "Прострочено",
+    "EXPIRING_SOON": "Скоро зіпсується",
+    "EXPIRES_ON": "Придатний до {{date}}"
+  },
+  "CONFIRM_DELETE_ITEM": "Ви впевнені, що хочете видалити {{name}}?"
 }

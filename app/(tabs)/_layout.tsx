@@ -45,6 +45,7 @@ export default function TabsLayout() {
                 options={{
                     tabBarLabel: 'Холодильник',
                     headerTitle: 'Мої продукти',
+                    header: () => <ProfileHeader />,
                     tabBarIcon: ({ color }) => (
                         <MaterialCommunityIcons name="fridge-outline" size={24} color={color} />
                     ),

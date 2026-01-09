@@ -75,7 +75,10 @@
   },
   "UNITS": {
     "KG": "kg",
-    "SM": "cm"
+    "SM": "cm",
+    "G": "g",
+    "ML": "ml",
+    "PCS": "pcs"
   },
   "BMI": {
     "NORMAL": "Normal",
@@ -128,7 +131,10 @@
     "PROFILE_UPDATED": "Profile updated",
     "PASSWORD_CHANGED": "Password successfully changed",
     "BUDGET_UPDATED": "Budget successfully updated",
-    "LANGUAGE_CHANGED": "Language changed successfully"
+    "LANGUAGE_CHANGED": "Language changed successfully",
+    "ITEM_DELETED": "Item removed from fridge",
+    "ITEM_ADDED": "Item added to fridge",
+    "ITEM_UPDATED": "Item updated"
   },
   "I_AGREE_TO": "I agree to the",
   "AND": "and",
@@ -166,5 +172,15 @@
   "BUTTONS.SEND_CODE": "Send Code",
   "BUTTONS.RESET_PASSWORD": "Reset Password",
   "SUCCESS.CODE_SENT": "Verification code sent to your email",
-  "SUCCESS.PASSWORD_RESET": "Password successfully reset"
+  "SUCCESS.PASSWORD_RESET": "Password successfully reset",
+  "FRIDGE": {
+    "EMPTY_TITLE": "Fridge is empty",
+    "EMPTY_SUBTITLE": "Add products after shopping",
+    "TOTAL_ITEMS": "Total items",
+    "OTHER": "Other",
+    "EXPIRED": "Expired",
+    "EXPIRING_SOON": "Expiring soon",
+    "EXPIRES_ON": "Expires on {{date}}"
+  },
+  "CONFIRM_DELETE_ITEM": "Are you sure you want to delete {{name}}?"
 }
