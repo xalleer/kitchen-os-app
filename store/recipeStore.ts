@@ -21,7 +21,7 @@ interface RecipeState {
     generateFromInventory: (data?: GenerateRecipeFromInventoryDto) => Promise<GeneratedRecipe>;
     generateFromProducts: (data: GenerateRecipeFromProductsDto) => Promise<GeneratedRecipe>;
     generateCustom: (data: GenerateCustomRecipeDto) => Promise<GeneratedRecipe>;
-    saveRecipe: (data: SaveRecipeDto) => Promise<void>;
+    saveRecipe: (data: SaveRecipeDto) => Promise<SavedRecipe>;
     cookRecipe: (recipeId: string) => Promise<void>;
     deleteRecipe: (recipeId: string) => Promise<void>;
     setCurrentRecipe: (recipe: GeneratedRecipe | SavedRecipe | null) => void;
@@ -102,6 +102,7 @@ export const useRecipeStore = create<RecipeState>((set, get) => ({
                 savedRecipes: [recipe, ...get().savedRecipes],
                 isLoading: false
             });
+            return recipe;
         } catch (error: any) {
             set({ error: error.message, isLoading: false });
             throw error;

@@ -21,7 +21,7 @@ export default function CookRecipeScreen() {
     const { t } = useTranslation();
     const { showToast } = useToast();
     const params = useLocalSearchParams();
-    const { cookRecipe } = useRecipeStore();
+    const { cookRecipe, saveRecipe } = useRecipeStore();
 
     const [isLoading, setIsLoading] = useState(false);
 
@@ -38,13 +38,7 @@ export default function CookRecipeScreen() {
     }
 
     const handleCookNow = async () => {
-        if (!recipe.id) {
-            showToast({
-                message: t('ERRORS.RECIPE_NOT_SAVED'),
-                type: 'warning',
-            });
-            return;
-        }
+        if (!recipe) return;
 
         Alert.alert(
             t('RECIPES.CONFIRM_COOK'),
@@ -59,7 +53,38 @@ export default function CookRecipeScreen() {
                     onPress: async () => {
                         setIsLoading(true);
                         try {
-                            await cookRecipe(recipe.id!);
+                            // Якщо рецепт вже збережений (має ID), використовуємо cookRecipe
+                            if (recipe.id) {
+                                await cookRecipe(recipe.id);
+                            } else {
+                                // Якщо рецепт не збережений, спочатку зберігаємо його
+                                const instructionsStr = Array.isArray(recipe.instructions)
+                                    ? recipe.instructions.join('\n')
+                                    : recipe.instructions;
+
+                                const ingredients = recipe.ingredients
+                                    .map(ing => ({
+                                        productId: ing.productId || '',
+                                        amount: ing.amount,
+                                    }))
+                                    .filter(ing => ing.productId);
+
+                                const savedRecipe = await saveRecipe({
+                                    name: recipe.name,
+                                    description: recipe.description,
+                                    instructions: instructionsStr,
+                                    cookingTime: recipe.cookingTime,
+                                    servings: recipe.servings,
+                                    calories: recipe.calories,
+                                    category: recipe.category,
+                                    ingredients,
+                                });
+
+                                // Тепер готуємо збережений рецепт
+                                if (savedRecipe?.id) {
+                                    await cookRecipe(savedRecipe.id);
+                                }
+                            }
 
                             showToast({
                                 message: t('SUCCESS.RECIPE_COOKED'),

@@ -49,8 +49,13 @@ export default function GenerateFromInventoryScreen() {
     };
 
     const handleCookNow = () => {
-        router.push('/recipes/cook-recipe');
-    }
+        if (generatedRecipe) {
+            router.push({
+                pathname: '/recipes/cook-recipe',
+                params: { recipeData: JSON.stringify(generatedRecipe) },
+            });
+        }
+    };
 
     const handleSaveRecipe = () => {
         if (generatedRecipe) {
@@ -231,6 +236,10 @@ export default function GenerateFromInventoryScreen() {
                             <PrimaryButton
                                 title={t('RECIPES.SAVE')}
                                 onPress={handleSaveRecipe}
+                                style={{
+                                    backgroundColor: Colors.secondary,
+                                    marginTop: generatedRecipe.canCook ? 12 : 0
+                                }}
                             />
                             <PrimaryButton
                                 title={t('RECIPES.GENERATE_NEW')}

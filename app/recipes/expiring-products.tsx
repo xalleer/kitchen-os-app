@@ -93,7 +93,7 @@ export default function ExpiringProductsScreen() {
         );
     }
 
-    if (!data || data.expiringProducts) {
+    if (!data || data.expiringProducts.length === 0) {
         return (
             <View style={styles.container}>
                 <Stack.Screen
