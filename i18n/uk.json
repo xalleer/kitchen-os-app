@@ -203,6 +203,7 @@
   },
   "CONFIRM_DELETE_ITEM": "Ви впевнені, що хочете видалити {{name}}?",
   "RECIPES": {
+    "PARTIALLY_AVAILABLE": "Частково доступно",
     "GENERATE": "Генерувати рецепт",
     "FROM_INVENTORY": "З холодильника",
     "FROM_INVENTORY_DESC": "Згенеруйте рецепт з продуктів у вашому холодильнику",
@@ -250,7 +251,12 @@
     "COOKING_TIME": "Час приготування",
     "CALORIES": "Калорії",
     "CATEGORY": "Категорія",
-    "CATEGORY_PLACEHOLDER": "наприклад, Основна страва, Десерт"
+    "CATEGORY_PLACEHOLDER": "наприклад, Основна страва, Десерт",
+    "NOT_IN_INVENTORY": "немає в холодильнику",
+    "MISSING_AMOUNT": "бракує {{amount}} {{unit}}",
+    "AVAILABLE": "Доступно",
+    "INSUFFICIENT_INGREDIENTS": "Недостатньо інгредієнтів...",
+    "INSUFFICIENT_INGREDIENTS_DESC": "Деякі інгредієнти відсутні..."
   },
   "CONFIRM_DELETE_RECIPE": "Ви впевнені, що хочете видалити {{name}}?"
 }

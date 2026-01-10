@@ -5,6 +5,7 @@ import {
     StyleSheet,
     ScrollView,
     ActivityIndicator,
+    TouchableOpacity,
 } from 'react-native';
 import { useRouter, Stack } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
@@ -15,6 +16,9 @@ import { PrimaryButton } from '@/components/ui/PrimaryButton';
 import { useToast } from '@/components/ui/ToastProvider';
 import recipeService from '@/services/recipe.service';
 import { ExpiringProductsRecipe } from '@/types/recipe';
+import { RecipeMetaCard } from '@/components/recipes/RecipeMetaCard';
+import { RecipeIngredientCard, IngredientStatus } from '@/components/recipes/RecipeIngredientCard';
+import { RecipeInstructionsCard } from '@/components/recipes/RecipeInstructionsCard';
 
 export default function ExpiringProductsScreen() {
     const router = useRouter();
@@ -61,19 +65,14 @@ export default function ExpiringProductsScreen() {
         }
     };
 
-    const renderInstructions = (instructions: string | string[]) => {
-        const instructionArray = Array.isArray(instructions)
-            ? instructions
-            : instructions.split('\n').filter(i => i.trim());
+    const getIngredientStatus = (): IngredientStatus[] => {
+        if (!data?.suggestedRecipe) return [];
 
-        return instructionArray.map((instruction, index) => (
-            <View key={index} style={styles.instructionItem}>
-                <View style={styles.instructionNumber}>
-                    <Text style={styles.instructionNumberText}>{index + 1}</Text>
-                </View>
-                <Text style={styles.instructionText}>{instruction}</Text>
-            </View>
-        ));
+        return data.suggestedRecipe.ingredients.map(ing => ({
+            productName: ing.productName,
+            amount: ing.amount,
+            unit: ing.unit,
+        }));
     };
 
     if (isLoading) {
@@ -86,6 +85,11 @@ export default function ExpiringProductsScreen() {
                         headerTintColor: Colors.secondary,
                         headerShadowVisible: false,
                         headerBackTitle: '',
+                        headerLeft: () => (
+                            <TouchableOpacity onPress={() => router.back()} style={styles.headerButton}>
+                                <Ionicons name="arrow-back" size={24} color={Colors.secondary} />
+                            </TouchableOpacity>
+                        ),
                     }}
                 />
                 <ActivityIndicator size="large" color={Colors.primary} />
@@ -103,6 +107,11 @@ export default function ExpiringProductsScreen() {
                         headerTintColor: Colors.secondary,
                         headerShadowVisible: false,
                         headerBackTitle: '',
+                        headerLeft: () => (
+                            <TouchableOpacity onPress={() => router.back()} style={styles.headerButton}>
+                                <Ionicons name="arrow-back" size={24} color={Colors.secondary} />
+                            </TouchableOpacity>
+                        ),
                     }}
                 />
                 <View style={styles.emptyState}>
@@ -127,6 +136,11 @@ export default function ExpiringProductsScreen() {
                     headerTintColor: Colors.secondary,
                     headerShadowVisible: false,
                     headerBackTitle: '',
+                    headerLeft: () => (
+                        <TouchableOpacity onPress={() => router.back()} style={styles.headerButton}>
+                            <Ionicons name="arrow-back" size={24} color={Colors.secondary} />
+                        </TouchableOpacity>
+                    ),
                 }}
             />
 
@@ -165,78 +179,29 @@ export default function ExpiringProductsScreen() {
                     ))}
                 </View>
 
-                <View style={styles.recipeCard}>
-                    <View style={styles.recipeHeader}>
-                        <Ionicons name="restaurant" size={24} color={Colors.primary} />
-                        <Text style={styles.recipeHeaderText}>
-                            {t('RECIPES.SUGGESTED_RECIPE')}
-                        </Text>
-                    </View>
-
-                    <Text style={styles.recipeName}>{recipe.name}</Text>
-
-                    {recipe.description && (
-                        <Text style={styles.recipeDescription}>
-                            {recipe.description}
-                        </Text>
-                    )}
-
-                    <View style={styles.recipeMetaContainer}>
-                        {recipe.servings && (
-                            <View style={styles.recipeMeta}>
-                                <Ionicons
-                                    name="people-outline"
-                                    size={16}
-                                    color={Colors.textGray}
-                                />
-                                <Text style={styles.recipeMetaText}>
-                                    {recipe.servings} {t('RECIPES.SERVINGS')}
-                                </Text>
-                            </View>
-                        )}
-                        {recipe.cookingTime && (
-                            <View style={styles.recipeMeta}>
-                                <Ionicons
-                                    name="time-outline"
-                                    size={16}
-                                    color={Colors.textGray}
-                                />
-                                <Text style={styles.recipeMetaText}>
-                                    {recipe.cookingTime} {t('RECIPES.MINUTES')}
-                                </Text>
-                            </View>
-                        )}
-                        {recipe.calories && (
-                            <View style={styles.recipeMeta}>
-                                <Ionicons
-                                    name="flame-outline"
-                                    size={16}
-                                    color={Colors.textGray}
-                                />
-                                <Text style={styles.recipeMetaText}>
-                                    {recipe.calories} {t('RECIPES.KCAL')}
-                                </Text>
-                            </View>
-                        )}
-                    </View>
+                <View style={styles.suggestedRecipeHeader}>
+                    <Ionicons name="restaurant" size={24} color={Colors.primary} />
+                    <Text style={styles.suggestedRecipeText}>
+                        {t('RECIPES.SUGGESTED_RECIPE')}
+                    </Text>
                 </View>
+
+                <RecipeMetaCard
+                    name={recipe.name}
+                    description={recipe.description}
+                    category={recipe.category}
+                    servings={recipe.servings}
+                    cookingTime={recipe.cookingTime}
+                    calories={recipe.calories}
+                />
 
                 <Text style={styles.sectionTitle}>{t('RECIPES.INGREDIENTS')}</Text>
-                <View style={styles.ingredientsContainer}>
-                    {recipe.ingredients.map((ing, index) => (
-                        <View key={index} style={styles.ingredientItem}>
-                            <View style={styles.ingredientDot} />
-                            <Text style={styles.ingredientText}>
-                                {ing.productName} - {ing.amount} {ing.unit}
-                            </Text>
-                        </View>
-                    ))}
-                </View>
+                <RecipeIngredientCard ingredients={getIngredientStatus()} />
+
+                <View style={{ height: 24 }} />
 
                 <Text style={styles.sectionTitle}>{t('RECIPES.INSTRUCTIONS')}</Text>
-                <View style={styles.instructionsContainer}>
-                    {renderInstructions(recipe.instructions)}
-                </View>
+                <RecipeInstructionsCard instructions={recipe.instructions} />
 
                 <View style={styles.buttonsContainer}>
                     <PrimaryButton
@@ -264,6 +229,10 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         backgroundColor: Colors.background,
+    },
+    headerButton: {
+        padding: 8,
+        marginLeft: 8,
     },
     scrollView: {
         flex: 1,
@@ -346,110 +315,24 @@ const styles = StyleSheet.create({
         fontSize: 13,
         color: Colors.textGray,
     },
-    recipeCard: {
+    suggestedRecipeHeader: {
+        flexDirection: 'row',
+        alignItems: 'center',
         backgroundColor: Colors.lightGreen,
-        borderRadius: 16,
-        padding: 20,
-        marginBottom: 24,
+        padding: 12,
+        borderRadius: 12,
+        marginBottom: 16,
         borderWidth: 1,
         borderColor: Colors.primary,
     },
-    recipeHeader: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        marginBottom: 12,
-    },
-    recipeHeaderText: {
+    suggestedRecipeText: {
         fontSize: 14,
         fontWeight: '600',
         color: Colors.primary,
         marginLeft: 8,
         textTransform: 'uppercase',
     },
-    recipeName: {
-        fontSize: 24,
-        fontWeight: '700',
-        color: Colors.secondary,
-        marginBottom: 8,
-    },
-    recipeDescription: {
-        fontSize: 16,
-        color: Colors.textGray,
-        marginBottom: 16,
-        lineHeight: 24,
-    },
-    recipeMetaContainer: {
-        flexDirection: 'row',
-        flexWrap: 'wrap',
-        gap: 16,
-    },
-    recipeMeta: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        gap: 6,
-    },
-    recipeMetaText: {
-        fontSize: 14,
-        color: Colors.textGray,
-    },
-    ingredientsContainer: {
-        backgroundColor: Colors.white,
-        borderRadius: 16,
-        padding: 16,
-        marginBottom: 24,
-        borderWidth: 1,
-        borderColor: Colors.inputBorder,
-    },
-    ingredientItem: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        marginBottom: 12,
-    },
-    ingredientDot: {
-        width: 6,
-        height: 6,
-        borderRadius: 3,
-        backgroundColor: Colors.primary,
-        marginRight: 12,
-    },
-    ingredientText: {
-        flex: 1,
-        fontSize: 15,
-        color: Colors.secondary,
-    },
-    instructionsContainer: {
-        marginBottom: 24,
-    },
-    instructionItem: {
-        flexDirection: 'row',
-        marginBottom: 16,
-        backgroundColor: Colors.white,
-        borderRadius: 12,
-        padding: 16,
-        borderWidth: 1,
-        borderColor: Colors.inputBorder,
-    },
-    instructionNumber: {
-        width: 28,
-        height: 28,
-        borderRadius: 14,
-        backgroundColor: Colors.primary,
-        justifyContent: 'center',
-        alignItems: 'center',
-        marginRight: 12,
-    },
-    instructionNumberText: {
-        color: Colors.white,
-        fontWeight: '700',
-        fontSize: 14,
-    },
-    instructionText: {
-        flex: 1,
-        fontSize: 15,
-        color: Colors.secondary,
-        lineHeight: 22,
-    },
     buttonsContainer: {
-        marginTop: 16,
+        marginTop: 24,
     },
 });

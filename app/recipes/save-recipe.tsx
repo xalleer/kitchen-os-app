@@ -6,8 +6,10 @@ import {
     ScrollView,
     KeyboardAvoidingView,
     Platform,
+    TouchableOpacity,
 } from 'react-native';
 import { useRouter, Stack, useLocalSearchParams } from 'expo-router';
+import { Ionicons } from '@expo/vector-icons';
 import { useTranslation } from 'react-i18next';
 
 import { Colors } from '@/constants/Colors';
@@ -120,6 +122,11 @@ export default function SaveRecipeScreen() {
                     headerTintColor: Colors.secondary,
                     headerShadowVisible: false,
                     headerBackTitle: '',
+                    headerLeft: () => (
+                        <TouchableOpacity onPress={() => router.back()} style={styles.headerButton}>
+                            <Ionicons name="arrow-back" size={24} color={Colors.secondary} />
+                        </TouchableOpacity>
+                    ),
                 }}
             />
 
@@ -129,6 +136,7 @@ export default function SaveRecipeScreen() {
                 keyboardShouldPersistTaps="handled"
             >
                 <View style={styles.infoCard}>
+                    <Ionicons name="information-circle" size={20} color={Colors.primary} />
                     <Text style={styles.infoText}>
                         {t('RECIPES.SAVE_RECIPE_INFO')}
                     </Text>
@@ -208,6 +216,10 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         backgroundColor: Colors.background,
     },
+    headerButton: {
+        padding: 8,
+        marginLeft: 8,
+    },
     scrollView: {
         flex: 1,
     },
@@ -220,14 +232,18 @@ const styles = StyleSheet.create({
         color: Colors.textGray,
     },
     infoCard: {
+        flexDirection: 'row',
         backgroundColor: Colors.lightGreen,
         padding: 16,
         borderRadius: 12,
         marginBottom: 24,
         borderWidth: 1,
         borderColor: Colors.primary,
+        alignItems: 'flex-start',
     },
     infoText: {
+        flex: 1,
+        marginLeft: 12,
         fontSize: 14,
         color: Colors.secondary,
         lineHeight: 20,

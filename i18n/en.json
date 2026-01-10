@@ -250,7 +250,12 @@
     "COOKING_TIME": "Cooking Time",
     "CALORIES": "Calories",
     "CATEGORY": "Category",
-    "CATEGORY_PLACEHOLDER": "e.g., Main Course, Dessert"
+    "CATEGORY_PLACEHOLDER": "e.g., Main Course, Dessert",
+    "NOT_IN_INVENTORY": "not in inventory",
+    "MISSING_AMOUNT": "missing {{amount}} {{unit}}",
+    "AVAILABLE": "Available",
+    "INSUFFICIENT_INGREDIENTS": "Insufficient ingredients to cook",
+    "INSUFFICIENT_INGREDIENTS_DESC": "Some ingredients are missing..."
   },
   "CONFIRM_DELETE_RECIPE": "Are you sure you want to delete {{name}}?"
 }
