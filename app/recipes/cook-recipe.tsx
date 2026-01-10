@@ -55,21 +55,23 @@ export default function CookRecipeScreen() {
                     onPress: async () => {
                         setIsLoading(true);
                         try {
-                            // Якщо рецепт вже збережений (має ID), використовуємо cookRecipe
                             if (recipe.id) {
                                 await cookRecipe(recipe.id);
                             } else {
-                                // Якщо рецепт не збережений, спочатку зберігаємо його
                                 const instructionsStr = Array.isArray(recipe.instructions)
                                     ? recipe.instructions.join('\n')
                                     : recipe.instructions;
 
                                 const ingredients = recipe.ingredients
+                                    .filter(ing => ing.productId) // Видаляємо інгредієнти без ID
                                     .map(ing => ({
-                                        productId: ing.productId || '',
+                                        productId: ing.productId!,
                                         amount: ing.amount,
-                                    }))
-                                    .filter(ing => ing.productId);
+                                    }));
+
+                                if (ingredients.length === 0) {
+                                    throw new Error(t('ERRORS.NO_VALID_INGREDIENTS'));
+                                }
 
                                 const savedRecipe = await saveRecipe({
                                     name: recipe.name,
@@ -82,7 +84,6 @@ export default function CookRecipeScreen() {
                                     ingredients,
                                 });
 
-                                // Тепер готуємо збережений рецепт
                                 if (savedRecipe?.id) {
                                     await cookRecipe(savedRecipe.id);
                                 }

@@ -127,7 +127,8 @@
     "DISH_NAME_REQUIRED": "Please enter a dish name",
     "RECIPE_NOT_FOUND": "Recipe not found",
     "RECIPE_NOT_SAVED": "Please save the recipe first",
-    "RECIPE_NAME_REQUIRED": "Recipe name is required"
+    "RECIPE_NAME_REQUIRED": "Recipe name is required",
+    "NO_VALID_INGREDIENTS": "No valid ingredients found to save recipe"
   },
   "SUCCESS": {
     "MEMBER_ADDED": "Family member successfully added",
