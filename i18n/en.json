@@ -101,7 +101,12 @@
     "SAVE": "Save",
     "CLOSE": "Close",
     "CHANGE_PASSWORD": "Change password",
-    "DELETE": "Delete"
+    "DELETE": "Delete",
+    "REGENERATE": "Regenerate",
+    "VIEW_RECIPE": "Recipe",
+    "COOK": "Cook",
+    "SAVE_RECIPE": "Save",
+    "SHARE": "Share"
   },
   "VALIDATORS": {
     "NAME": "Name must be longer than 1 character",
@@ -145,7 +150,11 @@
     "RECIPE_GENERATED": "Recipe successfully generated!",
     "RECIPE_SAVED": "Recipe saved successfully",
     "RECIPE_COOKED": "Great! Ingredients deducted from inventory",
-    "RECIPE_DELETED": "Recipe deleted"
+    "RECIPE_DELETED": "Recipe deleted",
+    "MEAL_PLAN_REGENERATED": "Meal plan regenerated",
+    "MEAL_REGENERATED": "Meal regenerated",
+    "DAY_REGENERATED": "Day regenerated",
+    "MEAL_MARKED_COOKED": "Meal marked as cooked"
   },
   "I_AGREE_TO": "I agree to the",
   "AND": "and",
@@ -258,5 +267,25 @@
     "INSUFFICIENT_INGREDIENTS": "Insufficient ingredients to cook",
     "INSUFFICIENT_INGREDIENTS_DESC": "Some ingredients are missing..."
   },
-  "CONFIRM_DELETE_RECIPE": "Are you sure you want to delete {{name}}?"
+  "CONFIRM_DELETE_RECIPE": "Are you sure you want to delete {{name}}?",
+  "MEAL_PLAN": {
+    "EMPTY_TITLE": "No meal plan",
+    "EMPTY_SUBTITLE": "Generate a weekly plan to see your menu",
+    "GENERATE_WEEK": "Generate weekly plan",
+    "GENERATING": "Generating meal plan...",
+    "MEALS": "meals",
+    "REGENERATE_DAY": "Regenerate day",
+    "REGENERATE_DAY_CONFIRM": "Are you sure you want to generate new meals for this day?",
+    "REGENERATE_MEAL": "Regenerate meal",
+    "REGENERATE_MEAL_CONFIRM": "Are you sure you want to change {{meal}}?",
+    "DELETE_PLAN": "Delete plan",
+    "DELETE_PLAN_CONFIRM": "Are you sure you want to delete the entire meal plan?",
+    "GENERATE_NEW": "Generate new plan",
+    "TITLE": "Meal Plan",
+    "REGENERATE_WEEK": "Regenerate Week",
+    "REGENERATE_DAY_TITLE": "Regenerate today's menu?",
+    "REGENERATE_DAY_DESC": "All meals for this day will be replaced with new ones. Continue?",
+    "VIEW_SHOPPING_LIST": "Shopping List",
+    "NUTRITION_SUMMARY": "Nutrition Summary",
+  }
 }

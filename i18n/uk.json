@@ -258,5 +258,19 @@
     "INSUFFICIENT_INGREDIENTS": "Недостатньо інгредієнтів...",
     "INSUFFICIENT_INGREDIENTS_DESC": "Деякі інгредієнти відсутні..."
   },
-  "CONFIRM_DELETE_RECIPE": "Ви впевнені, що хочете видалити {{name}}?"
+  "CONFIRM_DELETE_RECIPE": "Ви впевнені, що хочете видалити {{name}}?",
+  "MEAL_PLAN": {
+    "EMPTY_TITLE": "Немає плану харчування",
+    "EMPTY_SUBTITLE": "Згенеруйте план на тиждень, щоб побачити ваше меню",
+    "GENERATE_WEEK": "Згенерувати план на тиждень",
+    "GENERATING": "Генеруємо план харчування...",
+    "MEALS": "страв",
+    "REGENERATE_DAY": "Регенерувати день",
+    "REGENERATE_DAY_CONFIRM": "Ви впевнені, що хочете згенерувати нові страви на цей день?",
+    "REGENERATE_MEAL": "Регенерувати страву",
+    "REGENERATE_MEAL_CONFIRM": "Ви впевнені, що хочете змінити {{meal}}?",
+    "DELETE_PLAN": "Видалити план",
+    "DELETE_PLAN_CONFIRM": "Ви впевнені, що хочете видалити весь план харчування?",
+    "GENERATE_NEW": "Згенерувати новий план"
+  }
 }
