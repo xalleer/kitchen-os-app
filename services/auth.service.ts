@@ -63,6 +63,10 @@ class AuthService {
         await apiClient.post('/auth/reset-password', data);
     }
 
+    async joinFamily(data: JoinFamilyDto) {
+
+    }
+
     async isExistentUser(email: string): Promise<boolean> {
         const response = await apiClient.get(`/auth/check-if-exist-user?email=${email}`);
         return response.data;

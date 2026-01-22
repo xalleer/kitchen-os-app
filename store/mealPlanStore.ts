@@ -1,5 +1,5 @@
 import mealPlanService from '@/services/mealplan.service';
-import { MealPlan } from '@/types/mealplan';
+import { MealPlan } from '@/types/meal-plan';
 import { create } from 'zustand';
 
 interface MealPlanState {
@@ -49,7 +49,10 @@ export const useMealPlanStore = create<MealPlanState>((set, get) => ({
     generateMealPlan: async (daysCount = 7) => {
         set({ isGenerating: true, error: null });
         try {
+            // Запускаємо генерацію (це триває 2-3 хвилини)
             await mealPlanService.generateMealPlan(daysCount);
+
+            // Оновлюємо дані після генерації
             await get().fetchMealPlan();
             set({ isGenerating: false });
         } catch (error: any) {
@@ -62,7 +65,10 @@ export const useMealPlanStore = create<MealPlanState>((set, get) => ({
         set({ isLoading: true, error: null });
         try {
             await mealPlanService.regenerateDay(date);
+
+            // Оновлюємо дані після регенерації
             await get().fetchMealPlan();
+            set({ isLoading: false });
         } catch (error: any) {
             set({ error: error.message, isLoading: false });
             throw error;
@@ -73,7 +79,10 @@ export const useMealPlanStore = create<MealPlanState>((set, get) => ({
         set({ isLoading: true, error: null });
         try {
             await mealPlanService.regenerateMeal(mealPlanId);
+
+            // Оновлюємо дані після регенерації
             await get().fetchMealPlan();
+            set({ isLoading: false });
         } catch (error: any) {
             set({ error: error.message, isLoading: false });
             throw error;

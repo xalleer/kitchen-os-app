@@ -1,21 +1,21 @@
 import apiClient from '@/config/api';
-import { MealPlan, MealPlanResponse } from '@/types/mealplan';
+import { MealPlan } from '@/types/meal-plan';
 
 class MealPlanService {
-    async generateMealPlan(daysCount: number = 7): Promise<MealPlanResponse> {
-        const response = await apiClient.post<MealPlanResponse>(
+    async generateMealPlan(daysCount: number = 7) {
+        const response = await apiClient.post(
             '/meal-plan/generate',
             { daysCount }
         );
         return response.data;
     }
 
-    async getMealPlan(startDate?: string, endDate?: string): Promise<MealPlanResponse> {
+    async getMealPlan(startDate?: string, endDate?: string) {
         const params = new URLSearchParams();
         if (startDate) params.append('startDate', startDate);
         if (endDate) params.append('endDate', endDate);
 
-        const response = await apiClient.get<MealPlanResponse>(
+        const response = await apiClient.get(
             `/meal-plan?${params.toString()}`
         );
         return response.data;

@@ -1,4 +1,5 @@
 import { FamilyMemberDto, OwnerProfileDto } from './family';
+import {Goal} from "@/types/enums";
 
 export interface RegisterDto {
     email: string;
@@ -12,6 +13,16 @@ export interface RegisterDto {
 export interface LoginDto {
     email: string;
     password: string;
+}
+
+export interface JoinFamilyDto {
+    inviteCode: string;
+    email: string;
+    password: string
+    name?: string;
+    weight?: number;
+    height?: number;
+    goal?: Goal
 }
 
 export interface AuthResponse {
