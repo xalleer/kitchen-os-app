@@ -2,10 +2,11 @@ import apiClient from '@/config/api';
 import { MealPlan } from '@/types/meal-plan';
 
 class MealPlanService {
-    async generateMealPlan(daysCount: number = 7) {
+    
+    async generateMealPlan(familyId: string, days: number = 7) {
+        console.log(familyId, days)
         const response = await apiClient.post(
             '/meal-plan/generate',
-            { daysCount }
         );
         return response.data;
     }

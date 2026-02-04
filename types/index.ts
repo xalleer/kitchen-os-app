@@ -5,3 +5,4 @@ export * from './family'
 export * from './user'
 export * from './recipe'
 export * from './meal-plan';
+export * from './weekly-budget';

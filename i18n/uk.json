@@ -101,7 +101,13 @@
     "SAVE": "Зберегти",
     "CLOSE": "Закрити",
     "CHANGE_PASSWORD": "Змінити пароль",
-    "DELETE": "Видалити"
+    "DELETE": "Видалити",
+    "COMPLETE": "Завершити",
+    "REGENERATE": "Регенерувати",
+    "VIEW_RECIPE": "Рецепт",
+    "COOK": "Готувати",
+    "SAVE_RECIPE": "Зберегти рецепт",
+    "SHARE": "Поділитися"
   },
   "VALIDATORS": {
     "NAME": "Ім'я має бути довшим за 1 символ",
@@ -127,7 +133,8 @@
     "DISH_NAME_REQUIRED": "Будь ласка, введіть назву страви",
     "RECIPE_NOT_FOUND": "Рецепт не знайдено",
     "RECIPE_NOT_SAVED": "Будь ласка, спочатку збережіть рецепт",
-    "RECIPE_NAME_REQUIRED": "Назва рецепту обов'язкова"
+    "RECIPE_NAME_REQUIRED": "Назва рецепту обов'язкова",
+    "NO_VALID_INGREDIENTS": "Не знайдено коректних інгредієнтів для збереження рецепту"
   },
   "SUCCESS": {
     "MEMBER_ADDED": "Члена сім'ї успішно додано",
@@ -144,7 +151,13 @@
     "RECIPE_GENERATED": "Рецепт успішно згенеровано!",
     "RECIPE_SAVED": "Рецепт успішно збережено",
     "RECIPE_COOKED": "Чудово! Інгредієнти віднято з інвентаря",
-    "RECIPE_DELETED": "Рецепт видалено"
+    "RECIPE_DELETED": "Рецепт видалено",
+    "MEAL_PLAN_REGENERATED": "План харчування регенеровано",
+    "MEAL_REGENERATED": "Страву регенеровано",
+    "DAY_REGENERATED": "День регенеровано",
+    "MEAL_MARKED_COOKED": "Страву позначено як приготовану",
+    "SHOPPING_LIST_GENERATED": "Список покупок згенеровано",
+    "SHOPPING_COMPLETED": "Покупки завершено"
   },
   "I_AGREE_TO": "Я погоджуюсь з",
   "AND": "та",
@@ -167,6 +180,7 @@
   "CHANGE_PASSWORD_DESCRIPTION": "Будь ласка, введіть ваш поточний пароль та новий пароль",
   "CONFIRM_DELETE": "Підтвердження видалення",
   "CONFIRM_DELETE_MEMBER": "Ви впевнені, що хочете видалити {{name}} з сім'ї?",
+  "CONFIRM_DELETE_SHOPPING_ITEM": "Ви впевнені, що хочете видалити {{name}}?",
   "BUDGET_DESCRIPTION": "Встановіть свій тижневий бюджет на харчування. Ми допоможемо створити смачні плани харчування, що відповідають вашому бюджету.",
   "CURRENT_BUDGET": "Поточний тижневий бюджет",
   "NEW_BUDGET": "Новий бюджет",
@@ -200,6 +214,39 @@
     "EXPIRED": "Прострочено",
     "EXPIRING_SOON": "Скоро зіпсується",
     "EXPIRES_ON": "Придатний до {{date}}"
+  },
+  "SHOPPING_LIST": {
+    "TOTAL_ITEMS": "Всього продуктів",
+    "BOUGHT": "Куплено",
+    "ESTIMATED_COST": "Орієнтовна вартість",
+    "EMPTY_TITLE": "Список покупок порожній",
+    "EMPTY_SUBTITLE": "Згенеруйте список покупок на основі плану харчування",
+    "GENERATE": "Згенерувати список покупок",
+    "COMPLETE": "Завершити покупки",
+    "COMPLETE_TITLE": "Завершити покупки?",
+    "COMPLETE_CONFIRM": "Це видалить {{count}} куплених позицій зі списку. Продовжити?",
+    "REGENERATE": "Регенерувати список покупок",
+    "NO_BOUGHT_ITEMS": "Немає куплених позицій"
+  },
+  "DASHBOARD": {
+    "WEEKLY_BUDGET": "Тижневий бюджет",
+    "OVER_BUDGET": "Перевищено бюджет",
+    "ON_TRACK": "Все за планом",
+    "LOADING": "Завантаження...",
+    "SPENT": "Витрачено",
+    "REMAINING": "Залишилось",
+    "TOTAL": "Всього",
+    "NO_BUDGET_DATA": "Немає даних по бюджету"
+  },
+  "TABS": {
+    "HOME": "Головна",
+    "RECIPES": "Рецепти",
+    "SHOPPING": "Покупки",
+    "FRIDGE": "Холодильник",
+    "PLANS": "Меню",
+    "SHOPPING_LIST_TITLE": "Список покупок",
+    "MY_PRODUCTS_TITLE": "Мої продукти",
+    "MEAL_PLAN_TITLE": "План харчування"
   },
   "CONFIRM_DELETE_ITEM": "Ви впевнені, що хочете видалити {{name}}?",
   "RECIPES": {
@@ -271,6 +318,12 @@
     "REGENERATE_MEAL_CONFIRM": "Ви впевнені, що хочете змінити {{meal}}?",
     "DELETE_PLAN": "Видалити план",
     "DELETE_PLAN_CONFIRM": "Ви впевнені, що хочете видалити весь план харчування?",
-    "GENERATE_NEW": "Згенерувати новий план"
+    "GENERATE_NEW": "Згенерувати новий план",
+    "TITLE": "План харчування",
+    "REGENERATE_WEEK": "Регенерувати тиждень",
+    "REGENERATE_DAY_TITLE": "Регенерувати сьогоднішнє меню?",
+    "REGENERATE_DAY_DESC": "Всі страви цього дня будуть замінені новими. Продовжити?",
+    "VIEW_SHOPPING_LIST": "Список покупок",
+    "NUTRITION_SUMMARY": "Підсумок харчової цінності"
   }
 }

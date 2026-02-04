@@ -102,6 +102,7 @@
     "CLOSE": "Close",
     "CHANGE_PASSWORD": "Change password",
     "DELETE": "Delete",
+    "COMPLETE": "Complete",
     "REGENERATE": "Regenerate",
     "VIEW_RECIPE": "Recipe",
     "COOK": "Cook",
@@ -154,7 +155,9 @@
     "MEAL_PLAN_REGENERATED": "Meal plan regenerated",
     "MEAL_REGENERATED": "Meal regenerated",
     "DAY_REGENERATED": "Day regenerated",
-    "MEAL_MARKED_COOKED": "Meal marked as cooked"
+    "MEAL_MARKED_COOKED": "Meal marked as cooked",
+    "SHOPPING_LIST_GENERATED": "Shopping list generated",
+    "SHOPPING_COMPLETED": "Shopping completed"
   },
   "I_AGREE_TO": "I agree to the",
   "AND": "and",
@@ -177,6 +180,7 @@
   "CHANGE_PASSWORD_DESCRIPTION": "Please enter your current password and a new password",
   "CONFIRM_DELETE": "Confirm deletion",
   "CONFIRM_DELETE_MEMBER": "Are you sure you want to remove {{name}} from the family?",
+  "CONFIRM_DELETE_SHOPPING_ITEM": "Are you sure you want to delete {{name}}?",
   "BUDGET_DESCRIPTION": "Set your weekly meal planning budget. We'll help you create delicious meal plans that fit within your budget.",
   "CURRENT_BUDGET": "Current weekly budget",
   "NEW_BUDGET": "New budget",
@@ -202,6 +206,39 @@
     "EXPIRING_SOON": "Expiring soon",
     "EXPIRES_ON": "Expires on {{date}}"
   },
+  "SHOPPING_LIST": {
+    "TOTAL_ITEMS": "Total items",
+    "BOUGHT": "Bought",
+    "ESTIMATED_COST": "Estimated cost",
+    "EMPTY_TITLE": "Shopping list is empty",
+    "EMPTY_SUBTITLE": "Generate a shopping list based on your meal plan",
+    "GENERATE": "Generate shopping list",
+    "COMPLETE": "Complete shopping",
+    "COMPLETE_TITLE": "Complete shopping?",
+    "COMPLETE_CONFIRM": "This will remove {{count}} bought items from the list. Continue?",
+    "REGENERATE": "Regenerate shopping list",
+    "NO_BOUGHT_ITEMS": "No bought items"
+  },
+  "DASHBOARD": {
+    "WEEKLY_BUDGET": "Weekly budget",
+    "OVER_BUDGET": "Over budget",
+    "ON_TRACK": "On track",
+    "LOADING": "Loading...",
+    "SPENT": "Spent",
+    "REMAINING": "Remaining",
+    "TOTAL": "Total",
+    "NO_BUDGET_DATA": "No budget data"
+  },
+  "TABS": {
+    "HOME": "Home",
+    "RECIPES": "Recipes",
+    "SHOPPING": "Shopping",
+    "FRIDGE": "Fridge",
+    "PLANS": "Menu",
+    "SHOPPING_LIST_TITLE": "Shopping list",
+    "MY_PRODUCTS_TITLE": "My products",
+    "MEAL_PLAN_TITLE": "Meal plan"
+  },
   "CONFIRM_DELETE_ITEM": "Are you sure you want to delete {{name}}?",
   "ADD_TO_INVENTORY": "Add to Inventory",
   "EDIT_ITEM": "Edit Item",
@@ -213,6 +250,7 @@
   "EXPIRY_DATE": "Expiry Date",
   "EXPIRY_DATE_FORMAT": "Format: YYYY-MM-DD (e.g. 2024-12-31)",
   "RECIPES": {
+    "PARTIALLY_AVAILABLE": "Partially available",
     "GENERATE": "Generate Recipe",
     "FROM_INVENTORY": "From Inventory",
     "FROM_INVENTORY_DESC": "Generate a recipe using products from your fridge",
@@ -286,6 +324,6 @@
     "REGENERATE_DAY_TITLE": "Regenerate today's menu?",
     "REGENERATE_DAY_DESC": "All meals for this day will be replaced with new ones. Continue?",
     "VIEW_SHOPPING_LIST": "Shopping List",
-    "NUTRITION_SUMMARY": "Nutrition Summary",
+    "NUTRITION_SUMMARY": "Nutrition Summary"
   }
 }

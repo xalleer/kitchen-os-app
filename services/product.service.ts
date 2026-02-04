@@ -7,6 +7,7 @@ export interface Product {
     category: string | null;
     baseUnit: Unit;
     image?: string;
+    averagePrice?: number | null;
     caloriesPer100: number | null;
     standardAmount: number | null;
 }
@@ -52,6 +53,17 @@ class ProductService {
 
     async getCategories(): Promise<string[]> {
         const response = await apiClient.get<string[]>('/products/categories');
+        return response.data;
+    }
+
+    async updateProductPrice(productId: string, averagePrice: number): Promise<Product> {
+        if (typeof averagePrice !== 'number' || Number.isNaN(averagePrice) || averagePrice < 0) {
+            throw new Error('averagePrice must be a number >= 0');
+        }
+
+        const response = await apiClient.patch<Product>(`/products/${productId}`, {
+            averagePrice,
+        });
         return response.data;
     }
 }

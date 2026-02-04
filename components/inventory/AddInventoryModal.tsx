@@ -77,6 +77,7 @@ export const AddInventoryModal: React.FC<AddInventoryModalProps> = ({
                 search,
                 limit: 20,
             });
+            console.log(data)
             setProducts(data.products);
         } catch (error) {
             console.error(error);

@@ -19,6 +19,7 @@ import { PrimaryButton } from '@/components/ui/PrimaryButton';
 import { useToast } from '@/components/ui/ToastProvider';
 import { useMealPlanStore } from '@/store/mealPlanStore';
 import { MealType } from '@/types/enums';
+import {useUserStore} from "@/store/userStore";
 
 export default function MealPlanScreen() {
     const router = useRouter();
@@ -42,6 +43,7 @@ export default function MealPlanScreen() {
     const [selectedDate, setSelectedDate] = useState<string | null>(null);
     const [regeneratingDay, setRegeneratingDay] = useState<string | null>(null);
     const [regeneratingMeal, setRegeneratingMeal] = useState<string | null>(null);
+    const familyId = useUserStore((state) => state.profile?.familyId);
 
     // Завантаження плану при монтуванні
     useEffect(() => {
@@ -89,7 +91,7 @@ export default function MealPlanScreen() {
                     onPress: async () => {
                         try {
                             // Запускаємо генерацію (вона продовжиться у фоні)
-                            generateMealPlan(7);
+                            generateMealPlan(familyId!, 7);
 
                             showToast({
                                 message: t('MEAL_PLAN.GENERATING') + ' Це займе 2-3 хвилини.',

@@ -156,7 +156,7 @@ export const TermsPrivacyAgreement: React.FC<TermsPrivacyAgreementProps> = ({
                         We retain your personal information for as long as necessary to provide our services and fulfill the purposes outlined in this policy, unless a longer retention period is required by law.
                     </Text>
 
-                    <Text style={styles.sectionTitle}>7. Children's Privacy</Text>
+                    <Text style={styles.sectionTitle}>7. Children&apos;s Privacy</Text>
                     <Text style={styles.paragraph}>
                         Our service is not intended for children under 13. We do not knowingly collect personal information from children under 13.
                     </Text>

@@ -2,6 +2,7 @@ import mealPlanService from '@/services/mealplan.service';
 import { MealPlan } from '@/types/meal-plan';
 import { create } from 'zustand';
 
+
 interface MealPlanState {
     mealPlans: MealPlan[];
     groupedByDay: { [date: string]: MealPlan[] };
@@ -12,7 +13,7 @@ interface MealPlanState {
     error: string | null;
 
     fetchMealPlan: (startDate?: string, endDate?: string) => Promise<void>;
-    generateMealPlan: (daysCount?: number) => Promise<void>;
+    generateMealPlan: (familyId: string, daysCount?: number) => Promise<void>;
     regenerateDay: (date: string) => Promise<void>;
     regenerateMeal: (mealPlanId: string) => Promise<void>;
     deleteMealPlan: () => Promise<void>;
@@ -46,11 +47,12 @@ export const useMealPlanStore = create<MealPlanState>((set, get) => ({
         }
     },
 
-    generateMealPlan: async (daysCount = 7) => {
+    generateMealPlan: async (familyId: string, daysCount = 7) => {
         set({ isGenerating: true, error: null });
         try {
             // Запускаємо генерацію (це триває 2-3 хвилини)
-            await mealPlanService.generateMealPlan(daysCount);
+            const res = await mealPlanService.generateMealPlan(familyId, daysCount);
+            console.log(res);
 
             // Оновлюємо дані після генерації
             await get().fetchMealPlan();
